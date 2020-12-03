@@ -33,6 +33,8 @@ dependencies {
 	compile group: 'org.springframework.data', name: 'spring-data-redis', version: '2.4.1'
 	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-redis
 	compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-redis', version: '2.4.0'
+	// https://mvnrepository.com/artifact/org.modelmapper/modelmapper
+	compile group: 'org.modelmapper', name: 'modelmapper', version: '2.3.9'
 }
 
 test {
