@@ -22,7 +22,7 @@ dependencies {
 	runtimeOnly 'com.h2database:h2'
 	runtimeOnly 'org.postgresql:postgresql'
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
-		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+		exclude group: 'junit', module: 'junit'
 	}
 	testImplementation 'org.springframework.security:spring-security-test'
 	// https://mvnrepository.com/artifact/redis.clients/jedis
@@ -45,6 +45,20 @@ dependencies {
 	compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '3.0.0'
 	// https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml
 	compile group: 'org.apache.poi', name: 'poi-ooxml', version: '4.1.2'
+	// https://mvnrepository.com/artifact/org.apache.commons/commons-csv
+	compile group: 'org.apache.commons', name: 'commons-csv', version: '1.8'
+	// https://mvnrepository.com/artifact/org.mockito/mockito-junit-jupiter
+	testCompile group: 'org.mockito', name: 'mockito-junit-jupiter', version: '3.6.28'
+	// https://mvnrepository.com/artifact/org.junit.platform/junit-platform-launcher
+	testCompile group: 'org.junit.platform', name: 'junit-platform-launcher', version: '1.7.0'
+	// https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-engine
+	testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.7.0'
+	// https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
+	testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.7.0'
+	// https://mvnrepository.com/artifact/org.junit.platform/junit-platform-runner
+	testCompile group: 'org.junit.platform', name: 'junit-platform-runner', version: '1.7.0'
+
+
 
 }
 
