@@ -45,7 +45,7 @@ import java.util.Arrays;
 
 @ExtendWith(MockitoExtension.class)
 @RunWith(JUnitPlatform.class)
-class AddStudentsExcelControllerTest {
+class AddStudentsControllerTest {
 
     @InjectMocks
     AddStudentsController addStudentsController;
