@@ -24,6 +24,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +35,9 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -39,13 +46,22 @@ import org.springframework.web.multipart.MultipartFile;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 
 
 @ExtendWith(MockitoExtension.class)
 @RunWith(JUnitPlatform.class)
+@SpringBootTest
+@AutoConfigureMockMvc
 class AddStudentsControllerTest {
+
+    @Autowired
+    MockMvc mockMvc;
+
+    @MockBean
+    AddStudentsExcelService addStudentsExcelService;
 
     @InjectMocks
     AddStudentsController addStudentsController;
@@ -72,6 +88,17 @@ class AddStudentsControllerTest {
 
     @Test
     void uploadFile() throws Exception {
+
+        MockMultipartFile file = new MockMultipartFile("file","students.xlsx", String.valueOf(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")), "excelfile".getBytes(StandardCharsets.UTF_8));
+
+        MockHttpServletRequestBuilder builder =
+                multipart("/api/upload")
+                        .file(file);
+        this.mockMvc.perform(builder).andExpect(status().isOk())
+                .andDo(MockMvcResultHandlers.print());
+
+        assertThat(file.isEmpty()).isEqualTo(false);
+
 
     }
 
@@ -116,6 +143,21 @@ class AddStudentsControllerTest {
 
 
         assertThat(studentDAO.get(stringToUserIdConverter.convert("dc1e6d1b-6551-4a36-8c97-87ff831d154b")).getFirst_name())
+                .isEqualTo(student.getFirst_name());
+    }
+
+    @Test
+    void getStudentByEmail() {
+
+        // given
+        Student student = new Student(stringToUserIdConverter.convert("dc1e6d1b-6551-4a36-8c97-87ff831d154b"),"William", "Kwakye", "william@gmail.com");
+        Students students = new Students();
+        students.setStudentList(Arrays.asList(student));
+
+        when(studentDAO.getByEmail("william@gmail.com")).thenReturn(students.getStudentByEmail("william@gmail.com"));
+
+
+        assertThat(studentDAO.getByEmail("william@gmail.com").getFirst_name())
                 .isEqualTo(student.getFirst_name());
     }
 }

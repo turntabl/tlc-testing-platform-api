@@ -31,4 +31,17 @@ public class Students {
 
         return studentR;
     }
+
+    public Student getStudentByEmail(String email){
+        Student student1 = new Student();
+
+        for (Student student:this.studentList) {
+            if(student.getEmail().matches(email)){
+                student1 =  student;
+            }
+        }
+
+        return student1;
+
+    }
 }
