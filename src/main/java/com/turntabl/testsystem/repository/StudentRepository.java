@@ -11,4 +11,6 @@ import java.util.UUID;
 @Repository
 public interface StudentRepository extends JpaRepository<Student, UUID> {
 
+    @Query("select s from Student s where s.email = ?1")
+    Optional<Student> findByEmail(String email);
 }

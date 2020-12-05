@@ -6,7 +6,9 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 
@@ -43,7 +45,14 @@ public class Student implements Serializable {
     @Column(name = "time_created")
     private Date createdAt;
 
+
     public Student() {
+    }
+
+    public Student(String first_name, String last_name, String email) {
+        this.first_name = first_name;
+        this.last_name = last_name;
+        this.email = email;
     }
 
     public Student(UUID student_id, String first_name, String last_name, String email) {
@@ -100,6 +109,7 @@ public class Student implements Serializable {
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
     }
+
 
     @Override
     public String toString() {

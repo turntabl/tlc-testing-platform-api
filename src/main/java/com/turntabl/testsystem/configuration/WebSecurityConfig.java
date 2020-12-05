@@ -1,5 +1,7 @@
 package com.turntabl.testsystem.configuration;
 
+import com.turntabl.testsystem.dao.DAO;
+import com.turntabl.testsystem.dao.StudentDAO;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -17,11 +19,14 @@ import javax.sql.DataSource;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable();
     }
 
+    //configuring CORS
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         UrlBasedCorsConfigurationSource source = new
@@ -30,8 +35,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return source;
     }
 
+
+    //defining student dao bean
     @Bean
-    public ModelMapper modelMapper() {
-        return new ModelMapper();
-    }
+    public StudentDAO studentDAO(){return new StudentDAO();}
 }
