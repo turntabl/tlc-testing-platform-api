@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class AddStudentsExcelService {
@@ -24,15 +25,24 @@ public class AddStudentsExcelService {
     public void save(MultipartFile file) {
             if(AddStudentsExcelHelper.hasExcelFormat(file)) {
                 try {
-                    List<Student> students = AddStudentsExcelHelper.excelToStudents(file.getInputStream());
-                    studentDAO.addAll(students);
+                AddStudentsExcelHelper.excelToStudents(file.getInputStream()).stream()
+                        .map(student -> {if(!studentDAO.findByEmail(student.getEmail())){
+                            studentDAO.add(student);
+                        }
+                        return student;
+                        }).collect(Collectors.toList());
+
                 } catch (IOException e) {
                     throw new RuntimeException("fail to store excel data: " + e.getMessage());
                 }
             }else if(AddStudentsCSVHelper.hasCSVFormat(file)){
                 try {
-                    List<Student> students = AddStudentsCSVHelper.csvToStudents(file.getInputStream());
-                    studentDAO.addAll(students);
+                  AddStudentsCSVHelper.csvToStudents(file.getInputStream()).stream()
+                            .map(student -> {if(!studentDAO.findByEmail(student.getEmail())){
+                                studentDAO.add(student);
+                            }
+                                return student;
+                            }).collect(Collectors.toList());
                 } catch (IOException e) {
                     throw new RuntimeException("fail to store csv data: " + e.getMessage());
                 }

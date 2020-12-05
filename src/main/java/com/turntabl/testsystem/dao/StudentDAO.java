@@ -71,6 +71,10 @@ public class StudentDAO implements DAO<Student>{
 
     }
 
+    public boolean findByEmail(String email){
+       return studentRepository.findByEmail(email).isPresent();
+    }
+
     @Override
     public List<Student> getAll() {
         return studentRepository.findAll();
