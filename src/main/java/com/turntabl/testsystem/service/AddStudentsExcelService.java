@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,13 +24,15 @@ public class AddStudentsExcelService {
         this.studentDAO = studentDAO;
     }
 
-    public List<Student> save(MultipartFile file) {
-        List<Student> studentList = new ArrayList<>();
+    public AtomicInteger save(MultipartFile file) {
+        AtomicInteger total_record_inserted = new AtomicInteger();
+
             if(AddStudentsExcelHelper.hasExcelFormat(file)) {
                 try {
-                    studentList =  AddStudentsExcelHelper.excelToStudents(file.getInputStream()).stream()
+                    AddStudentsExcelHelper.excelToStudents(file.getInputStream()).stream()
                         .map(student -> {if(!studentDAO.findByEmail(student.getEmail())){
                             studentDAO.add(student);
+                            total_record_inserted.addAndGet(1);
                         }
                         return student;
                         }).collect(Collectors.toList());
@@ -39,9 +42,10 @@ public class AddStudentsExcelService {
                 }
             }else if(AddStudentsCSVHelper.hasCSVFormat(file)){
                 try {
-                    studentList =  AddStudentsCSVHelper.csvToStudents(file.getInputStream()).stream()
+                    AddStudentsCSVHelper.csvToStudents(file.getInputStream()).stream()
                             .map(student -> {if(!studentDAO.findByEmail(student.getEmail())){
                                 studentDAO.add(student);
+                                total_record_inserted.addAndGet(1);
                             }
                                 return student;
                             }).collect(Collectors.toList());
@@ -50,7 +54,7 @@ public class AddStudentsExcelService {
                 }
             }
 
-            return studentList;
+            return total_record_inserted;
         }
 
         public List<Student> getStudents() {
