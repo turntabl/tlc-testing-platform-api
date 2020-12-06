@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -41,20 +42,21 @@ public class AddStudentsController {
     @PostMapping(value = "/upload", consumes = {"multipart/form-data"})
     public ResponseEntity<ResponseMessage> uploadFile(@RequestPart("file") MultipartFile file) {
         String message = "";
+        List<Student> students = new ArrayList<>();
 
         if (AddStudentsExcelHelper.hasExcelFormat(file) || AddStudentsCSVHelper.hasCSVFormat(file)) {
             try {
-                fileService.save(file);
+                students = fileService.save(file);
                 message = "Uploaded the file successfully: " + file.getOriginalFilename();
-                return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message, 200));
+                return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message, 200, students.size()));
             } catch (Exception e) {
                 message = "Could not upload the file: " + file.getOriginalFilename() + "!";
-                return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message, 203));
+                return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message, 203, 0));
             }
         }
 
         message = "Please upload an excel or csv file!";
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage(message, 203));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage(message, 203, 0));
     }
 
     @GetMapping("/students")

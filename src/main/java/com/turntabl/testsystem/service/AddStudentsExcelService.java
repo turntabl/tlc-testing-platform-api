@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,10 +23,11 @@ public class AddStudentsExcelService {
         this.studentDAO = studentDAO;
     }
 
-    public void save(MultipartFile file) {
+    public List<Student> save(MultipartFile file) {
+        List<Student> studentList = new ArrayList<>();
             if(AddStudentsExcelHelper.hasExcelFormat(file)) {
                 try {
-                AddStudentsExcelHelper.excelToStudents(file.getInputStream()).stream()
+                    studentList =  AddStudentsExcelHelper.excelToStudents(file.getInputStream()).stream()
                         .map(student -> {if(!studentDAO.findByEmail(student.getEmail())){
                             studentDAO.add(student);
                         }
@@ -37,7 +39,7 @@ public class AddStudentsExcelService {
                 }
             }else if(AddStudentsCSVHelper.hasCSVFormat(file)){
                 try {
-                  AddStudentsCSVHelper.csvToStudents(file.getInputStream()).stream()
+                    studentList =  AddStudentsCSVHelper.csvToStudents(file.getInputStream()).stream()
                             .map(student -> {if(!studentDAO.findByEmail(student.getEmail())){
                                 studentDAO.add(student);
                             }
@@ -47,6 +49,8 @@ public class AddStudentsExcelService {
                     throw new RuntimeException("fail to store csv data: " + e.getMessage());
                 }
             }
+
+            return studentList;
         }
 
         public List<Student> getStudents() {
