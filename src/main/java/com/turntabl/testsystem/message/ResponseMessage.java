@@ -6,15 +6,15 @@ public class ResponseMessage {
 
     private String message;
     private int status_code;
-    private AtomicInteger total_number;
+    private AddStudentSaveResponse addStudentSaveResponse;
 
     public ResponseMessage() {
     }
 
-    public ResponseMessage(String message, int status_code, AtomicInteger total_number) {
+    public ResponseMessage(String message, int status_code, AddStudentSaveResponse addStudentSaveResponse) {
         this.message = message;
         this.status_code = status_code;
-        this.total_number = total_number;
+        this.addStudentSaveResponse = addStudentSaveResponse;
     }
 
     public int getStatus_code() {
@@ -25,12 +25,12 @@ public class ResponseMessage {
         this.status_code = status_code;
     }
 
-    public AtomicInteger getTotal_number() {
-        return total_number;
+    public AddStudentSaveResponse getAddStudentSaveResponse() {
+        return addStudentSaveResponse;
     }
 
-    public void setTotal_number(AtomicInteger total_number) {
-        this.total_number = total_number;
+    public void setAddStudentSaveResponse(AddStudentSaveResponse addStudentSaveResponse) {
+        this.addStudentSaveResponse = addStudentSaveResponse;
     }
 
     public String getMessage() {

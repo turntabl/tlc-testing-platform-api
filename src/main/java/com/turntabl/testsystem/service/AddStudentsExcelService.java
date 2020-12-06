@@ -3,6 +3,7 @@ package com.turntabl.testsystem.service;
 import com.turntabl.testsystem.dao.StudentDAO;
 import com.turntabl.testsystem.helper.AddStudentsCSVHelper;
 import com.turntabl.testsystem.helper.AddStudentsExcelHelper;
+import com.turntabl.testsystem.message.AddStudentSaveResponse;
 import com.turntabl.testsystem.model.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,14 +25,18 @@ public class AddStudentsExcelService {
         this.studentDAO = studentDAO;
     }
 
-    public AtomicInteger save(MultipartFile file) {
+    public AddStudentSaveResponse save(MultipartFile file) {
         AtomicInteger total_record_inserted = new AtomicInteger();
+        AddStudentSaveResponse addStudentSaveResponse = new AddStudentSaveResponse();
+
+        List<Student> students = new ArrayList<>();
 
             if(AddStudentsExcelHelper.hasExcelFormat(file)) {
                 try {
                     AddStudentsExcelHelper.excelToStudents(file.getInputStream()).stream()
                         .map(student -> {if(!studentDAO.findByEmail(student.getEmail())){
                             studentDAO.add(student);
+                            students.add(student);
                             total_record_inserted.addAndGet(1);
                         }
                         return student;
@@ -45,6 +50,7 @@ public class AddStudentsExcelService {
                     AddStudentsCSVHelper.csvToStudents(file.getInputStream()).stream()
                             .map(student -> {if(!studentDAO.findByEmail(student.getEmail())){
                                 studentDAO.add(student);
+                                students.add(student);
                                 total_record_inserted.addAndGet(1);
                             }
                                 return student;
@@ -54,7 +60,10 @@ public class AddStudentsExcelService {
                 }
             }
 
-            return total_record_inserted;
+            addStudentSaveResponse.setAtomicInteger(total_record_inserted);
+            addStudentSaveResponse.setStudentList(students);
+
+            return addStudentSaveResponse;
         }
 
         public List<Student> getStudents() {

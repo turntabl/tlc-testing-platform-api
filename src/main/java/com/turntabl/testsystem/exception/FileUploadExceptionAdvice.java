@@ -32,7 +32,7 @@ public class FileUploadExceptionAdvice extends ResponseEntityExceptionHandler {
     //This exception is thrown when the request file size is larger than 2MB
     @ExceptionHandler(MaxUploadSizeExceededException.class)
     public ResponseEntity<ResponseMessage> handleMaxSizeException(MaxUploadSizeExceededException exc) {
-        return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage("File too large!", 203, new AtomicInteger()));
+        return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage("File too large!", 203, null));
     }
 
 
