@@ -5,6 +5,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 @Entity
 @Table(name = "student")
@@ -29,6 +31,8 @@ public class Student implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "time_created")
     private Date createdAt;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "student")
+    private Set<Feedback> feedbacks = new HashSet<>(0);
     public Student() {
     }
     public Student(String first_name, String last_name, String email) {
@@ -78,6 +82,13 @@ public class Student implements Serializable {
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
     }
+    public Set<Feedback> getFeedbacks() {
+        return feedbacks;
+    }
+    public void setFeedbacks(Set<Feedback> feedbacks) {
+        this.feedbacks = feedbacks;
+    }
+    public void addFeedback(Feedback feedback){this.feedbacks.add(feedback);}
     @Override
     public String toString() {
         return "Student{" +
