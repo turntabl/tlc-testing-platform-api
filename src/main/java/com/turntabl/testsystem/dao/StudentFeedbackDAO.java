@@ -1,10 +1,8 @@
 package com.turntabl.testsystem.dao;
 
 import com.turntabl.testsystem.model.Feedback;
-import com.turntabl.testsystem.model.Student;
 import com.turntabl.testsystem.repository.FeedbackRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;

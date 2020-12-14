@@ -1,9 +1,6 @@
 package com.turntabl.testsystem.dao;
-
 import com.turntabl.testsystem.model.Feedback;
-
 import java.util.List;
-
 public interface FeedbackDAO {
     Feedback get(Long id);
     List<Feedback> addAll(List<Feedback> t);
