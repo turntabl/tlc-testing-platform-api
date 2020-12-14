@@ -1,5 +1,6 @@
 package com.turntabl.testsystem.configuration;
 import com.turntabl.testsystem.dao.StudentDAO;
+import com.turntabl.testsystem.dao.StudentFeedbackDAO;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -29,4 +30,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     //defining student dao bean
     @Bean
     public StudentDAO studentDAO(){return new StudentDAO();}
+    @Bean
+    public StudentFeedbackDAO studentFeedbackDAO(){return new StudentFeedbackDAO();}
 }
