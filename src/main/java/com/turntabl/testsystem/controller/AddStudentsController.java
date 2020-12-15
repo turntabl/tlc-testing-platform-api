@@ -4,6 +4,7 @@ import com.turntabl.testsystem.helper.AddStudentsCSVHelper;
 import com.turntabl.testsystem.helper.AddStudentsExcelHelper;
 import com.turntabl.testsystem.message.AddStudentSaveResponse;
 import com.turntabl.testsystem.message.ResponseMessage;
+import com.turntabl.testsystem.message.StudentDetails;
 import com.turntabl.testsystem.model.Student;
 import com.turntabl.testsystem.service.AddStudentsExcelService;
 import org.apache.tomcat.util.http.fileupload.FileUploadException;
@@ -46,9 +47,9 @@ public class AddStudentsController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage(message, 203, null));
     }
     @GetMapping("/students")
-    public ResponseEntity<List<Student>> getAllStudents() {
+    public ResponseEntity<List<StudentDetails>> getAllStudents() {
         try {
-            List<Student> students = fileService.getStudents();
+            List<StudentDetails> students = fileService.getStudents();
             if (students.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }

@@ -5,10 +5,10 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 public class AddStudentSaveResponse {
     private AtomicInteger atomicInteger;
-    private List<Student> studentList = new ArrayList<>();
+    private List<StudentDetails> studentList = new ArrayList<>();
     public AddStudentSaveResponse() {
     }
-    public AddStudentSaveResponse(AtomicInteger atomicInteger, List<Student> studentList) {
+    public AddStudentSaveResponse(AtomicInteger atomicInteger, List<StudentDetails> studentList) {
         this.atomicInteger = atomicInteger;
         this.studentList = studentList;
     }
@@ -18,10 +18,10 @@ public class AddStudentSaveResponse {
     public void setAtomicInteger(AtomicInteger atomicInteger) {
         this.atomicInteger = atomicInteger;
     }
-    public List<Student> getStudentList() {
+    public List<StudentDetails> getStudentList() {
         return studentList;
     }
-    public void setStudentList(List<Student> studentList) {
+    public void setStudentList(List<StudentDetails> studentList) {
         this.studentList = studentList;
     }
 }

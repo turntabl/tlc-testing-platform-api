@@ -3,6 +3,7 @@ import com.turntabl.testsystem.dao.StudentDAO;
 import com.turntabl.testsystem.helper.AddStudentsCSVHelper;
 import com.turntabl.testsystem.helper.AddStudentsExcelHelper;
 import com.turntabl.testsystem.message.AddStudentSaveResponse;
+import com.turntabl.testsystem.message.StudentDetails;
 import com.turntabl.testsystem.model.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,13 +24,18 @@ public class AddStudentsExcelService {
     public AddStudentSaveResponse save(MultipartFile file) {
         AtomicInteger total_record_inserted = new AtomicInteger();
         AddStudentSaveResponse addStudentSaveResponse = new AddStudentSaveResponse();
-        List<Student> students = new ArrayList<>();
+        List<StudentDetails> students = new ArrayList<>();
             if(AddStudentsExcelHelper.hasExcelFormat(file)) {
                 try {
                     AddStudentsExcelHelper.excelToStudents(file.getInputStream()).stream()
                         .map(student -> {if(!studentDAO.findByEmail(student.getEmail())){
+                            StudentDetails studentDetails = new StudentDetails();
                             studentDAO.add(student);
-                            students.add(student);
+                            studentDetails.setEmail(student.getEmail());
+                            studentDetails.setFirst_name(student.getFirst_name());
+                            studentDetails.setStudent_id(student.getStudent_id());
+                            studentDetails.setLast_name(student.getLast_name());
+                            students.add(studentDetails);
                             total_record_inserted.addAndGet(1);
                         }
                         return student;
@@ -41,8 +47,13 @@ public class AddStudentsExcelService {
                 try {
                     AddStudentsCSVHelper.csvToStudents(file.getInputStream()).stream()
                             .map(student -> {if(!studentDAO.findByEmail(student.getEmail())){
+                                StudentDetails studentDetails = new StudentDetails();
                                 studentDAO.add(student);
-                                students.add(student);
+                                studentDetails.setEmail(student.getEmail());
+                                studentDetails.setFirst_name(student.getFirst_name());
+                                studentDetails.setStudent_id(student.getStudent_id());
+                                studentDetails.setLast_name(student.getLast_name());
+                                students.add(studentDetails);
                                 total_record_inserted.addAndGet(1);
                             }
                                 return student;
@@ -55,7 +66,17 @@ public class AddStudentsExcelService {
             addStudentSaveResponse.setStudentList(students);
             return addStudentSaveResponse;
         }
-        public List<Student> getStudents() {
-            return studentDAO.getAll();
+        public List<StudentDetails> getStudents() {
+            return studentDAO.getAll()
+                    .stream()
+                    .map(student -> {
+                                StudentDetails studentDetails = new StudentDetails();
+                                studentDetails.setEmail(student.getEmail());
+                                studentDetails.setFirst_name(student.getFirst_name());
+                                studentDetails.setStudent_id(student.getStudent_id());
+                                studentDetails.setLast_name(student.getLast_name());
+                                return studentDetails;
+                    }
+                    ).collect(Collectors.toList());
         }
 }
