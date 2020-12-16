@@ -20,15 +20,13 @@ public class Test implements Serializable {
     @JoinColumn(name = "course_id", nullable = false)
     private Course course;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "test")
-    private Set<TestRule> testRules = new HashSet<>(0);
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "test")
     private Set<StudentAnswer> studentAnswers  = new HashSet<>(0);
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "test")
     private Set<QuestionsInTest> questionsInTests  = new HashSet<>(0);
     @Column(name = "test_title")
     private String test_title;
-    @Column(name = "test_description")
-    private String test_description;
+    @Column(name = "test_rules")
+    private String test_rules;
     @Column(name = "test_date_and_time")
     private Date test_date_and_time;
     @UpdateTimestamp
@@ -41,11 +39,11 @@ public class Test implements Serializable {
     private Date createdAt;
     public Test() {
     }
-    public Test(long test_id, Course course, String test_title, String test_description, Date test_date_and_time, Date updatedAt, Date createdAt) {
+    public Test(long test_id, Course course, String test_title, String test_rules, Date test_date_and_time, Date updatedAt, Date createdAt) {
         this.test_id = test_id;
         this.course = course;
         this.test_title = test_title;
-        this.test_description = test_description;
+        this.test_rules = test_rules;
         this.test_date_and_time = test_date_and_time;
         this.updatedAt = updatedAt;
         this.createdAt = createdAt;
@@ -69,15 +67,7 @@ public class Test implements Serializable {
         this.test_title = test_title;
     }
     public String getTest_description() {
-        return test_description;
-    }
-
-    public Set<TestRule> getTestRules() {
-        return testRules;
-    }
-
-    public void setTestRules(Set<TestRule> testRules) {
-        this.testRules = testRules;
+        return test_rules;
     }
 
     public Set<QuestionsInTest> getQuestionsInTests() {
@@ -89,7 +79,7 @@ public class Test implements Serializable {
     }
 
     public void setTest_description(String test_description) {
-        this.test_description = test_description;
+        this.test_rules = test_description;
     }
     public Date getTest_date_and_time() {
         return test_date_and_time;
