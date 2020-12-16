@@ -64,4 +64,5 @@ public class Course implements Serializable {
     public void setTests(Set<Test> tests) {
         this.tests = tests;
     }
+    public void addTest(Test test){this.tests.add(test);}
 }
