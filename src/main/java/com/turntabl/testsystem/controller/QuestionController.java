@@ -56,14 +56,10 @@ import java.util.stream.Collectors;
         @PostMapping("/question/add")
         public ResponseEntity<GeneralAddResponse> addQuestion(@RequestBody QuestionRequest addQuestionRequest){
         try {
-            System.out.println(addQuestionRequest.getQuestion());
-            System.out.println(addQuestionRequest.getTestId());
-            System.out.println(addQuestionRequest.getOption().get(0));
             addQuestionRequest.getOption().stream().forEach(s ->System.out.println(s));
             Question questionSave = new Question();
             ValidAnswer validAnswer  = new ValidAnswer();
             Test test = testDAO.get(addQuestionRequest.getTestId());
-            System.out.println("course id : "+test.getCourse().getCourse_id());
             questionSave.assignTest(test);
             questionSave.setQuestion(addQuestionRequest.getQuestion());
             questionSave = questionDAO.add(questionSave);
@@ -80,8 +76,9 @@ import java.util.stream.Collectors;
                         return option;
                     }).collect(Collectors.toList());
             optionDAO.addAll(optionToSave);
+           Option option = optionDAO.getValidAnswer(questionSave.getQuestion_id(), addQuestionRequest.getValidAnswer());
             validAnswer.setQuestion(questionSave);
-            validAnswer.setValid_answer(addQuestionRequest.getValidAnswer());
+            validAnswer.setOption(option);
             validAnswerDAO.add(validAnswer);
             GeneralAddResponse generalAddResponse = new GeneralAddResponse();
             generalAddResponse.setMessage("Success");

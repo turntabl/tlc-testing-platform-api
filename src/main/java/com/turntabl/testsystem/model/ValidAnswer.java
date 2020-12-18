@@ -13,16 +13,17 @@ public class ValidAnswer implements Serializable {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "question_id", nullable = false)
     private Question question;
-    @Column(name = "valid_answer")
-    private String valid_answer;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "option_id", nullable = false)
+    private Option option;
 
     public ValidAnswer() {
     }
 
-    public ValidAnswer(long valid_answer_id, Question question, String valid_answer) {
+    public ValidAnswer(long valid_answer_id, Question question, Option option) {
         this.valid_answer_id = valid_answer_id;
         this.question = question;
-        this.valid_answer = valid_answer;
+        this.option = option;
     }
 
     public long getValid_answer_id() {
@@ -41,11 +42,11 @@ public class ValidAnswer implements Serializable {
         this.question = question;
     }
 
-    public String getValid_answer() {
-        return valid_answer;
+    public Option getOption() {
+        return option;
     }
 
-    public void setValid_answer(String valid_answer) {
-        this.valid_answer = valid_answer;
+    public void setOption(Option option) {
+        this.option = option;
     }
 }

@@ -15,6 +15,8 @@ public class Option implements Serializable {
     private Question question;
     @Column(name = "option")
     private String option;
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "option")
+    private ValidAnswer validAnswer;
     public Option() {
     }
     public Option(long optionId, Question question, String option) {
@@ -40,5 +42,14 @@ public class Option implements Serializable {
     public void setOption(String option) {
         this.option = option;
     }
+
+    public ValidAnswer getValidAnswer() {
+        return validAnswer;
+    }
+
+    public void setValidAnswer(ValidAnswer validAnswer) {
+        this.validAnswer = validAnswer;
+    }
+
     public void assignQuestion(Question question){this.question = question; this.question.addOption(this);}
 }

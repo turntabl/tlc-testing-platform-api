@@ -24,4 +24,7 @@ public class OptionDAO {
     public Option add(Option option) {
         return optionRepository.save(option);
     }
+    public Option getValidAnswer(Long question_id, String option){
+        return optionRepository.findByQuestionIdAndOption(question_id, option).get();
+    }
 }
