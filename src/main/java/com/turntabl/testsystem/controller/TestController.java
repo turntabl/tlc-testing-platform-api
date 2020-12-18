@@ -69,7 +69,7 @@ public class TestController {
     }
 
     @PostMapping("/test/add")
-    public ResponseEntity<TestResponse> addTest(TestRequest addTestRequest){
+    public ResponseEntity<TestResponse> addTest(@RequestBody TestRequest addTestRequest){
        try {
            Test testSave = new Test();
            Course course = new Course();
@@ -97,7 +97,7 @@ public class TestController {
     }
 
     @PostMapping("/test/update")
-    public ResponseEntity<TestResponse> updateTest(TestRequest testRequest){
+    public ResponseEntity<TestResponse> updateTest(@RequestBody TestRequest testRequest){
         try {
             Test test = new Test();
             TestResponse testResponse = new TestResponse();

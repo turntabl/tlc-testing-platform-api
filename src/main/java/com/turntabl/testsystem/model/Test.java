@@ -23,6 +23,8 @@ public class Test implements Serializable {
     private Set<StudentAnswer> studentAnswers  = new HashSet<>(0);
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "test")
     private Set<QuestionsInTest> questionsInTests  = new HashSet<>(0);
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "testId")
+    private Set<Question> questions  = new HashSet<>(0);
     @Column(name = "test_title")
     private String test_title;
     @Column(name = "test_rules")
@@ -44,11 +46,12 @@ public class Test implements Serializable {
     public Test() {
     }
 
-    public Test(long test_id, Course course, Set<StudentAnswer> studentAnswers, Set<QuestionsInTest> questionsInTests, String test_title, String test_rules, String test_date, String test_time_start, String test_time_end, Date updatedAt, Date createdAt) {
+    public Test(long test_id, Course course, Set<StudentAnswer> studentAnswers, Set<QuestionsInTest> questionsInTests, Set<Question> questions, String test_title, String test_rules, String test_date, String test_time_start, String test_time_end, Date updatedAt, Date createdAt) {
         this.test_id = test_id;
         this.course = course;
         this.studentAnswers = studentAnswers;
         this.questionsInTests = questionsInTests;
+        this.questions = questions;
         this.test_title = test_title;
         this.test_rules = test_rules;
         this.test_date = test_date;
@@ -88,6 +91,14 @@ public class Test implements Serializable {
 
     public void setQuestionsInTests(Set<QuestionsInTest> questionsInTests) {
         this.questionsInTests = questionsInTests;
+    }
+
+    public Set<Question> getQuestions() {
+        return questions;
+    }
+
+    public void setQuestions(Set<Question> questions) {
+        this.questions = questions;
     }
 
     public String getTest_title() {
@@ -146,5 +157,6 @@ public class Test implements Serializable {
         this.createdAt = createdAt;
     }
 
+    public void addQuestion(Question question){this.questions.add(question);}
     public void assignCourse(Course course){this.course = course; this.course.addTest(this);}
 }

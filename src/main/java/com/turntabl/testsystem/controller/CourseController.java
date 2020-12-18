@@ -57,8 +57,10 @@ public class CourseController {
     }
 
     @PostMapping("/course/add")
-    public ResponseEntity<CourseResponse> addCourse(CourseRequest courseRequest) {
+    public ResponseEntity<CourseResponse> addCourse(@RequestBody CourseRequest courseRequest) {
         try {
+//            System.out.println(courseRequest.getCourseName());
+//            System.out.println(courseRequest.getCourseId());
             Course course = new Course();
             CourseResponse courseResponse = new CourseResponse();
             course.setCourse_name(courseRequest.getCourseName());
@@ -73,11 +75,11 @@ public class CourseController {
     }
 
     @PostMapping("/course/update")
-    public ResponseEntity<CourseResponse> updateCourse(CourseRequest courseRequest){
+    public ResponseEntity<CourseResponse> updateCourse(@RequestBody CourseRequest courseRequest){
         try {
             Course course = new Course();
             CourseResponse courseResponse = new CourseResponse();
-            course.setCourse_id(courseRequest.getCourseId());
+//            course.setCourse_id(courseRequest.getCourseId());
             course.setCourse_name(courseRequest.getCourseName());
             course = courseDAO.update(course);
             courseResponse.setCourseId(course.getCourse_id());
