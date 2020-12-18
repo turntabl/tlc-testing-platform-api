@@ -1,8 +1,6 @@
 package com.turntabl.testsystem.configuration;
-import com.turntabl.testsystem.dao.CourseDAO;
-import com.turntabl.testsystem.dao.StudentDAO;
-import com.turntabl.testsystem.dao.StudentFeedbackDAO;
-import com.turntabl.testsystem.dao.TestDAO;
+import com.turntabl.testsystem.dao.*;
+import com.turntabl.testsystem.model.ValidAnswer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -38,4 +36,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public TestDAO testDAO(){return new TestDAO();}
     @Bean
     public CourseDAO courseDAO(){return new CourseDAO();}
+    @Bean
+    public QuestionDAO questionDAO(){return new QuestionDAO();}
+    @Bean
+    public OptionDAO optionDAO(){return new OptionDAO();}
+    @Bean
+    public ValidAnswerDAO validAnswerDAO(){return new ValidAnswerDAO();}
+
 }

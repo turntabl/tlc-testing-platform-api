@@ -16,8 +16,8 @@ public class QuestionType implements Serializable {
     private long question_type_id;
     @Column(name = "question_type")
     private String question_type;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "questionType")
-    private Set<Question> questions = new HashSet<>(0);
+//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "questionType")
+//    private Set<Question> questions = new HashSet<>(0);
 
     public QuestionType() {
     }
@@ -25,7 +25,7 @@ public class QuestionType implements Serializable {
     public QuestionType(long question_type_id, String question_type, Set<Question> questions) {
         this.question_type_id = question_type_id;
         this.question_type = question_type;
-        this.questions = questions;
+        //this.questions = questions;
     }
 
     public long getQuestion_type_id() {
@@ -43,12 +43,12 @@ public class QuestionType implements Serializable {
     public void setQuestion_type(String question_type) {
         this.question_type = question_type;
     }
-
-    public Set<Question> getQuestions() {
-        return questions;
-    }
-
-    public void setQuestions(Set<Question> questions) {
-        this.questions = questions;
-    }
+//
+//    public Set<Question> getQuestions() {
+//        return questions;
+//    }
+//
+//    public void setQuestions(Set<Question> questions) {
+//        this.questions = questions;
+//    }
 }

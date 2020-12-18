@@ -62,7 +62,7 @@ public class StudentFeedbackController {
         return new ResponseEntity<>(addFeedbackResponse, HttpStatus.OK);
     }
     @PostMapping("/feedback")
-    public ResponseEntity<AddFeedbackResponse> addFeedback(AddFeedbackRequest addFeedbackRequest){
+    public ResponseEntity<AddFeedbackResponse> addFeedback(@RequestBody AddFeedbackRequest addFeedbackRequest){
         try {
             AddFeedbackResponse addFeedbackResponse = new AddFeedbackResponse();
             Feedback feedback = new Feedback();

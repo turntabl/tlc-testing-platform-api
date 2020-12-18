@@ -2,14 +2,14 @@ package com.turntabl.testsystem.message;
 
 public class CourseRequest {
     private String courseName;
-    private long courseId;
+//    private long courseId;
 
     public CourseRequest() {
     }
 
-    public CourseRequest(String courseName, long courseId) {
+    public CourseRequest(String courseName) {
         this.courseName = courseName;
-        this.courseId = courseId;
+        //this.courseId = courseId;
     }
 
     public String getCourseName() {
@@ -20,11 +20,11 @@ public class CourseRequest {
         this.courseName = courseName;
     }
 
-    public long getCourseId() {
-        return courseId;
-    }
-
-    public void setCourseId(long courseId) {
-        this.courseId = courseId;
-    }
+//    public long getCourseId() {
+//        return courseId;
+//    }
+//
+//    public void setCourseId(long courseId) {
+//        this.courseId = courseId;
+//    }
 }
