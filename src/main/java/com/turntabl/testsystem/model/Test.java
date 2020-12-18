@@ -27,8 +27,12 @@ public class Test implements Serializable {
     private String test_title;
     @Column(name = "test_rules")
     private String test_rules;
-    @Column(name = "test_date_and_time")
-    private Date test_date_and_time;
+    @Column(name = "test_date")
+    private String test_date;
+    @Column(name = "test_time_start")
+    private String test_time_start;
+    @Column(name = "test_time_end")
+    private String test_time_end;
     @UpdateTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "time_updated")
@@ -39,35 +43,43 @@ public class Test implements Serializable {
     private Date createdAt;
     public Test() {
     }
-    public Test(long test_id, Course course, String test_title, String test_rules, Date test_date_and_time, Date updatedAt, Date createdAt) {
+
+    public Test(long test_id, Course course, Set<StudentAnswer> studentAnswers, Set<QuestionsInTest> questionsInTests, String test_title, String test_rules, String test_date, String test_time_start, String test_time_end, Date updatedAt, Date createdAt) {
         this.test_id = test_id;
         this.course = course;
+        this.studentAnswers = studentAnswers;
+        this.questionsInTests = questionsInTests;
         this.test_title = test_title;
         this.test_rules = test_rules;
-        this.test_date_and_time = test_date_and_time;
+        this.test_date = test_date;
+        this.test_time_start = test_time_start;
+        this.test_time_end = test_time_end;
         this.updatedAt = updatedAt;
         this.createdAt = createdAt;
     }
+
     public long getTest_id() {
         return test_id;
     }
+
     public void setTest_id(long test_id) {
         this.test_id = test_id;
     }
+
     public Course getCourse() {
         return course;
     }
+
     public void setCourse(Course course) {
         this.course = course;
     }
-    public String getTest_title() {
-        return test_title;
+
+    public Set<StudentAnswer> getStudentAnswers() {
+        return studentAnswers;
     }
-    public void setTest_title(String test_title) {
-        this.test_title = test_title;
-    }
-    public String getTest_description() {
-        return test_rules;
+
+    public void setStudentAnswers(Set<StudentAnswer> studentAnswers) {
+        this.studentAnswers = studentAnswers;
     }
 
     public Set<QuestionsInTest> getQuestionsInTests() {
@@ -78,25 +90,61 @@ public class Test implements Serializable {
         this.questionsInTests = questionsInTests;
     }
 
-    public void setTest_description(String test_description) {
-        this.test_rules = test_description;
+    public String getTest_title() {
+        return test_title;
     }
-    public Date getTest_date_and_time() {
-        return test_date_and_time;
+
+    public void setTest_title(String test_title) {
+        this.test_title = test_title;
     }
-    public void setTest_date_and_time(Date test_date_and_time) {
-        this.test_date_and_time = test_date_and_time;
+
+    public String getTest_rules() {
+        return test_rules;
     }
+
+    public void setTest_rules(String test_rules) {
+        this.test_rules = test_rules;
+    }
+
+    public String getTest_date() {
+        return test_date;
+    }
+
+    public void setTest_date(String test_date) {
+        this.test_date = test_date;
+    }
+
+    public String getTest_time_start() {
+        return test_time_start;
+    }
+
+    public void setTest_time_start(String test_time_start) {
+        this.test_time_start = test_time_start;
+    }
+
+    public String getTest_time_end() {
+        return test_time_end;
+    }
+
+    public void setTest_time_end(String test_time_end) {
+        this.test_time_end = test_time_end;
+    }
+
     public Date getUpdatedAt() {
         return updatedAt;
     }
+
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
     }
+
     public Date getCreatedAt() {
         return createdAt;
     }
+
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
+
+    public void assignCourse(Course course){this.course = course; this.course.addTest(this);}
 }
