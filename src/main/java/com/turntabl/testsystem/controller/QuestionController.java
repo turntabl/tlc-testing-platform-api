@@ -30,14 +30,12 @@ import java.util.stream.Collectors;
         private final TestDAO testDAO;
         @Autowired
         private final ValidAnswerDAO validAnswerDAO;
-
         public QuestionController(QuestionDAO questionDAO, OptionDAO optionDAO, TestDAO testDAO, ValidAnswerDAO validAnswerDAO) {
             this.questionDAO = questionDAO;
             this.optionDAO = optionDAO;
             this.testDAO = testDAO;
             this.validAnswerDAO = validAnswerDAO;
         }
-
         @GetMapping("/question/{test_id}")
         public ResponseEntity<List<QuestionResponse>> getQuestionByTestId(@PathVariable long test_id) {
             try {
@@ -55,11 +53,9 @@ import java.util.stream.Collectors;
                 return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
-
-    @PostMapping("/question/add")
-    public ResponseEntity<GeneralAddResponse> addQuestion(@RequestBody QuestionRequest addQuestionRequest){
+        @PostMapping("/question/add")
+        public ResponseEntity<GeneralAddResponse> addQuestion(@RequestBody QuestionRequest addQuestionRequest){
         try {
-            //System.out.println(addQuestionRequest.getOption().get(0));
             System.out.println(addQuestionRequest.getQuestion());
             System.out.println(addQuestionRequest.getTestId());
             System.out.println(addQuestionRequest.getOption().get(0));
@@ -94,5 +90,4 @@ import java.util.stream.Collectors;
             return new ResponseEntity<>(new GeneralAddResponse(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
     }

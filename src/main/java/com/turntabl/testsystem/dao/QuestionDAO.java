@@ -10,13 +10,10 @@ import java.util.Optional;
 public class QuestionDAO {
     @Autowired
     private QuestionRepository questionRepository;
-
     public QuestionDAO(){}
-
     public QuestionDAO(QuestionRepository questionRepository) {
         this.questionRepository = questionRepository;
     }
-
     public Question get(Long id){
         return questionRepository.findById(id).get();
     }

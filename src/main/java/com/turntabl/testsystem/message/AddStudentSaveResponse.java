@@ -1,5 +1,4 @@
 package com.turntabl.testsystem.message;
-import com.turntabl.testsystem.model.Student;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;

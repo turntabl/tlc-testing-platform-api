@@ -8,13 +8,10 @@ import java.util.List;
 public class OptionDAO {
     @Autowired
     private OptionRepository optionRepository;
-
     public OptionDAO(){}
-
     public OptionDAO(OptionRepository optionRepository) {
         this.optionRepository = optionRepository;
     }
-
     public Option get(Long id){
         return optionRepository.findById(id).get();
     }

@@ -1,24 +1,17 @@
 package com.turntabl.testsystem.dao;
 
-import com.turntabl.testsystem.model.Option;
 import com.turntabl.testsystem.model.ValidAnswer;
-import com.turntabl.testsystem.repository.OptionRepository;
 import com.turntabl.testsystem.repository.ValidAnswerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import java.util.List;
 
 public class ValidAnswerDAO {
-
     @Autowired
     private ValidAnswerRepository validAnswerRepository;
-
     public ValidAnswerDAO(){}
-
     public ValidAnswerDAO(ValidAnswerRepository validAnswerRepository) {
         this.validAnswerRepository = validAnswerRepository;
     }
-
     public ValidAnswer get(Long id){
         return validAnswerRepository.findById(id).get();
     }

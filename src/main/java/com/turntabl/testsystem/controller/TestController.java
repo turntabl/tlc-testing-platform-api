@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,7 +19,6 @@ public class TestController {
     private final TestDAO testDAO;
     @Autowired
     private final CourseDAO courseDAO;
-
     public TestController(TestDAO testDAO, CourseDAO courseDAO) {
         this.testDAO = testDAO;
         this.courseDAO = courseDAO;
@@ -48,7 +46,6 @@ public class TestController {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
     @GetMapping("/test/get/{id}")
     public ResponseEntity<TestResponse> getTest(@PathVariable long id) {
         try {
@@ -67,7 +64,6 @@ public class TestController {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
     @PostMapping("/test/add")
     public ResponseEntity<TestResponse> addTest(@RequestBody TestRequest addTestRequest){
        try {
@@ -82,7 +78,6 @@ public class TestController {
            testSave.setTest_time_start(addTestRequest.getTest_time_start());
            testSave.setTest_time_end(addTestRequest.getTest_time_end());
            testSave = testDAO.add(testSave);
-
            testResponse.setCourse_id(testSave.getCourse().getCourse_id());
            testResponse.setTest_id(testSave.getTest_id());
            testResponse.setTest_title(testSave.getTest_title());
@@ -95,7 +90,6 @@ public class TestController {
            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
        }
     }
-
     @PostMapping("/test/update")
     public ResponseEntity<TestResponse> updateTest(@RequestBody TestRequest testRequest){
         try {
@@ -109,7 +103,6 @@ public class TestController {
             test.setTest_rules(testRequest.getTest_rule());
             test.setTest_date(testRequest.getTest_date());
             test = testDAO.update(test);
-
             testResponse.setTest_id(test.getTest_id());
             testResponse.setTest_title(test.getTest_title());
             testResponse.setTest_rules(test.getTest_rules());
@@ -117,13 +110,11 @@ public class TestController {
             testResponse.setTest_date(test.getTest_date());
             testResponse.setTest_time_start(test.getTest_time_start());
             testResponse.setTest_time_end(test.getTest_time_end());
-
             return new ResponseEntity<>(testResponse, HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
     @DeleteMapping("/test/delete/{id}")
     public ResponseEntity<Boolean> deleteTest(@PathVariable long id){
         try {
@@ -136,5 +127,4 @@ public class TestController {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
 }

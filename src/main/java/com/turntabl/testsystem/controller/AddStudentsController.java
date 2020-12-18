@@ -7,18 +7,13 @@ import com.turntabl.testsystem.message.ResponseMessage;
 import com.turntabl.testsystem.message.StudentDetails;
 import com.turntabl.testsystem.model.Student;
 import com.turntabl.testsystem.service.AddStudentsExcelService;
-import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicInteger;
 @RestController
 @RequestMapping("/api")
 public class AddStudentsController {

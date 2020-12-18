@@ -1,7 +1,4 @@
 package com.turntabl.testsystem.message;
-
-import java.util.UUID;
-
 public class AddFeedbackRequest {
     private String message;
     private String student_id;
