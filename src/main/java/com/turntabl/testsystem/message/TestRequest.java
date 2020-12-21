@@ -5,16 +5,18 @@ public class TestRequest {
     private long test_id;
     private String test_title;
     private String test_rule;
+    private String questions_type;
     private String test_date;
     private String test_time_start;
     private String test_time_end;
     public TestRequest() {
     }
-    public TestRequest(long course_id, long test_id, String test_title, String test_rule, String test_date, String test_time_start, String test_time_end) {
+    public TestRequest(long course_id, long test_id, String test_title, String test_rule, String questions_type, String test_date, String test_time_start, String test_time_end) {
         this.course_id = course_id;
         this.test_id = test_id;
         this.test_title = test_title;
         this.test_rule = test_rule;
+        this.questions_type = questions_type;
         this.test_date = test_date;
         this.test_time_start = test_time_start;
         this.test_time_end = test_time_end;
@@ -60,5 +62,11 @@ public class TestRequest {
     }
     public void setTest_time_end(String test_time_end) {
         this.test_time_end = test_time_end;
+    }
+    public String getQuestions_type() {
+        return questions_type;
+    }
+    public void setQuestions_type(String questions_type) {
+        this.questions_type = questions_type;
     }
 }

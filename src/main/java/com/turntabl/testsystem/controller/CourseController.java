@@ -3,7 +3,9 @@ package com.turntabl.testsystem.controller;
 import com.turntabl.testsystem.dao.CourseDAO;
 import com.turntabl.testsystem.message.CourseRequest;
 import com.turntabl.testsystem.message.CourseResponse;
+import com.turntabl.testsystem.message.GeneralAddResponse;
 import com.turntabl.testsystem.model.Course;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -11,10 +13,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Controller
+@RestController
 @RequestMapping("/api")
 public class CourseController {
-    CourseDAO courseDAO;
+    @Autowired
+    private final CourseDAO courseDAO;
     public CourseController(CourseDAO courseDAO) {
         this.courseDAO = courseDAO;
     }
@@ -50,15 +53,16 @@ public class CourseController {
         }
     }
     @PostMapping("/course/add")
-    public ResponseEntity<CourseResponse> addCourse(@RequestBody CourseRequest courseRequest) {
+    public ResponseEntity<GeneralAddResponse> addCourse(@RequestBody CourseRequest courseRequest) {
         try {
-            Course course = new Course();
-            CourseResponse courseResponse = new CourseResponse();
-            course.setCourse_name(courseRequest.getCourseName());
-            course = courseDAO.add(course);
-            courseResponse.setCourseId(course.getCourse_id());
-            courseResponse.setCourseName(course.getCourse_name());
-            return new ResponseEntity<>(courseResponse, HttpStatus.OK);
+            if(!courseDAO.getByName(courseRequest.getCourseName())){
+                Course course = new Course();
+                course.setCourse_name(courseRequest.getCourseName());
+                courseDAO.add(course);
+                return new ResponseEntity<>(new GeneralAddResponse("success"), HttpStatus.OK);
+            }else{
+                return new ResponseEntity<>(new GeneralAddResponse("duplicate course name"), HttpStatus.OK);
+            }
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }

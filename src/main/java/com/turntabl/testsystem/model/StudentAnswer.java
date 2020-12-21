@@ -1,7 +1,6 @@
 package com.turntabl.testsystem.model;
 
 import org.hibernate.annotations.CreationTimestamp;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -98,5 +97,19 @@ public class StudentAnswer implements Serializable {
 
     public void setDateAnswered(Date dateAnswered) {
         this.dateAnswered = dateAnswered;
+    }
+
+    public void assignTest(Test test){
+        this.test = test;
+        this.test.addStudentAnswer(this);
+    }
+
+    public void assignStudent(Student student){
+        this.student = student;
+        this.student.addStudentAnswer(this);
+    }
+
+    public void assignQuestion(Question question){
+        this.question = question;
     }
 }

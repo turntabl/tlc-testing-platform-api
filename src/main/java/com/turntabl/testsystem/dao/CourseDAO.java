@@ -16,6 +16,9 @@ public class CourseDAO {
     public Course get(Long id){
         return courseRepository.findById(id).get();
     }
+    public Boolean getByName(String course_name){
+        return courseRepository.findByCourseName(course_name).isPresent();
+    }
     public List<Course> addAll(List<Course> t){
         return courseRepository.saveAll(t);
     }

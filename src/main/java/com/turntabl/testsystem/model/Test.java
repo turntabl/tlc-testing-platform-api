@@ -25,6 +25,9 @@ public class Test implements Serializable {
     private Set<QuestionsInTest> questionsInTests  = new HashSet<>(0);
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "testId")
     private Set<Question> questions  = new HashSet<>(0);
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "test")
+    private Set<TestResult> testResults  = new HashSet<>(0);
+    private QuestionType questionType;
     @Column(name = "test_title")
     private String test_title;
     @Column(name = "test_rules")
@@ -46,12 +49,14 @@ public class Test implements Serializable {
     public Test() {
     }
 
-    public Test(long test_id, Course course, Set<StudentAnswer> studentAnswers, Set<QuestionsInTest> questionsInTests, Set<Question> questions, String test_title, String test_rules, String test_date, String test_time_start, String test_time_end, Date updatedAt, Date createdAt) {
+    public Test(long test_id, Course course, Set<StudentAnswer> studentAnswers, Set<QuestionsInTest> questionsInTests, Set<Question> questions, Set<TestResult> testResults, QuestionType questionType, String test_title, String test_rules, String test_date, String test_time_start, String test_time_end, Date updatedAt, Date createdAt) {
         this.test_id = test_id;
         this.course = course;
         this.studentAnswers = studentAnswers;
         this.questionsInTests = questionsInTests;
         this.questions = questions;
+        this.testResults = testResults;
+        this.questionType = questionType;
         this.test_title = test_title;
         this.test_rules = test_rules;
         this.test_date = test_date;
@@ -145,6 +150,22 @@ public class Test implements Serializable {
         return updatedAt;
     }
 
+    public Set<TestResult> getTestResults() {
+        return testResults;
+    }
+
+    public void setTestResults(Set<TestResult> testResults) {
+        this.testResults = testResults;
+    }
+
+    public QuestionType getQuestionType() {
+        return questionType;
+    }
+
+    public void setQuestionType(QuestionType questionType) {
+        this.questionType = questionType;
+    }
+
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
     }
@@ -159,4 +180,10 @@ public class Test implements Serializable {
 
     public void addQuestion(Question question){this.questions.add(question);}
     public void assignCourse(Course course){this.course = course; this.course.addTest(this);}
+    public void addStudentAnswer(StudentAnswer studentAnswer){
+        this.studentAnswers.add(studentAnswer);
+    }
+    public void addTestResult(TestResult testResult){
+        this.testResults.add(testResult);
+    }
 }
