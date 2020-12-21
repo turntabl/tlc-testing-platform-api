@@ -11,5 +11,5 @@ import java.util.Optional;
 @Repository
 public interface OptionRepository extends JpaRepository<Option, Long> {
     @Query("select o from Option o where o.question.question_id = ?1 and o.option = ?2")
-    Optional<Option> findByQuestionIdAndOption(Long question_id, String option);
+    Optional<Option> findByQuestionIdAndOption(long question_id, String option);
 }

@@ -16,6 +16,9 @@ public class TestDAO {
     public  Test get(Long id){
         return testRepository.findById(id).get();
     }
+    public Boolean getByTestTitle(String test_title){
+        return testRepository.findByTestTitle(test_title).isPresent();
+    }
     public List<Test> addAll(List<Test> t){
         return testRepository.saveAll(t);
     }

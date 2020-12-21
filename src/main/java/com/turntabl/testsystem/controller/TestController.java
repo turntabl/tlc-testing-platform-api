@@ -4,6 +4,7 @@ import com.turntabl.testsystem.dao.CourseDAO;
 import com.turntabl.testsystem.dao.TestDAO;
 import com.turntabl.testsystem.message.*;
 import com.turntabl.testsystem.model.Course;
+import com.turntabl.testsystem.model.QuestionType;
 import com.turntabl.testsystem.model.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -65,27 +66,34 @@ public class TestController {
         }
     }
     @PostMapping("/test/add")
-    public ResponseEntity<TestResponse> addTest(@RequestBody TestRequest addTestRequest){
+    public ResponseEntity<GeneralAddResponse> addTest(@RequestBody TestRequest addTestRequest){
        try {
-           Test testSave = new Test();
-           Course course = new Course();
-           TestResponse testResponse = new TestResponse();
-           course = courseDAO.get(addTestRequest.getCourse_id());
-           testSave.assignCourse(course);
-           testSave.setTest_title(addTestRequest.getTest_title());
-           testSave.setTest_rules(addTestRequest.getTest_rule());
-           testSave.setTest_date(addTestRequest.getTest_date());
-           testSave.setTest_time_start(addTestRequest.getTest_time_start());
-           testSave.setTest_time_end(addTestRequest.getTest_time_end());
-           testSave = testDAO.add(testSave);
-           testResponse.setCourse_id(testSave.getCourse().getCourse_id());
-           testResponse.setTest_id(testSave.getTest_id());
-           testResponse.setTest_title(testSave.getTest_title());
-           testResponse.setTest_rules(testSave.getTest_rules());
-           testResponse.setTest_date(testSave.getTest_date());
-           testResponse.setTest_time_start(testSave.getTest_time_start());
-           testResponse.setTest_time_end(testSave.getTest_time_end());
-           return new ResponseEntity<>(testResponse, HttpStatus.OK);
+           if(!testDAO.getByTestTitle(addTestRequest.getTest_title())){
+               Test testSave = new Test();
+               Course course = new Course();
+               course = courseDAO.get(addTestRequest.getCourse_id());
+               testSave.assignCourse(course);
+               testSave.setTest_title(addTestRequest.getTest_title());
+               testSave.setTest_rules(addTestRequest.getTest_rule());
+               testSave.setTest_date(addTestRequest.getTest_date());
+               testSave.setTest_time_start(addTestRequest.getTest_time_start());
+               testSave.setTest_time_end(addTestRequest.getTest_time_end());
+               switch(addTestRequest.getQuestions_type()){
+                   case ("MC"):
+                       testSave.setQuestionType(QuestionType.MULTIPLE_CHOICE);
+                       break;
+                   case("CS"):
+                       testSave.setQuestionType(QuestionType.CODE_SNIPPET);
+                       break;
+                   case("E"):
+                       testSave.setQuestionType(QuestionType.ESSAY);
+                       break;
+               }
+               testDAO.add(testSave);
+               return new ResponseEntity<>(new GeneralAddResponse("success"), HttpStatus.OK);
+           }else{
+               return new ResponseEntity<>(new GeneralAddResponse("duplicate test title"), HttpStatus.OK);
+           }
        }catch (Exception e){
            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
        }

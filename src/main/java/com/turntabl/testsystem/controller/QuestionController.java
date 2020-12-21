@@ -5,6 +5,7 @@ import com.turntabl.testsystem.dao.QuestionDAO;
 import com.turntabl.testsystem.dao.TestDAO;
 import com.turntabl.testsystem.dao.ValidAnswerDAO;
 import com.turntabl.testsystem.message.GeneralAddResponse;
+import com.turntabl.testsystem.message.OptionResponse;
 import com.turntabl.testsystem.message.QuestionRequest;
 import com.turntabl.testsystem.message.QuestionResponse;
 import com.turntabl.testsystem.model.Option;
@@ -15,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,13 +39,18 @@ import java.util.stream.Collectors;
         @GetMapping("/question/{test_id}")
         public ResponseEntity<List<QuestionResponse>> getQuestionByTestId(@PathVariable long test_id) {
             try {
-                Question question = new Question();
                  List<QuestionResponse> questionResponses = questionDAO.getQuestionsByTestId(test_id).stream()
                          .map(question1 -> {
                              QuestionResponse questionResponse =new QuestionResponse();
-                             questionResponse.setOptions(question1.getOptions());
+                             questionResponse.setOptions(question1.getOptions().stream().map(option -> {
+                                 OptionResponse optionResponse = new OptionResponse();
+                                 optionResponse.setOption(option.getOption());
+                                 optionResponse.setOptionId(option.getOptionId());
+                                 return optionResponse;
+                             }).collect(Collectors.toSet()));
                              questionResponse.setQuestion(question1.getQuestion());
                              questionResponse.setQuestionId(question1.getQuestion_id());
+                             questionResponse.setMark_allocated(question1.getMark_allocated());
                              return questionResponse;
                          }).collect(Collectors.toList());
                 return new ResponseEntity<>(questionResponses, HttpStatus.OK);
@@ -56,11 +61,11 @@ import java.util.stream.Collectors;
         @PostMapping("/question/add")
         public ResponseEntity<GeneralAddResponse> addQuestion(@RequestBody QuestionRequest addQuestionRequest){
         try {
-            addQuestionRequest.getOption().stream().forEach(s ->System.out.println(s));
             Question questionSave = new Question();
             ValidAnswer validAnswer  = new ValidAnswer();
             Test test = testDAO.get(addQuestionRequest.getTestId());
             questionSave.assignTest(test);
+            questionSave.setMark_allocated(addQuestionRequest.getMark_allocated());
             questionSave.setQuestion(addQuestionRequest.getQuestion());
             questionSave = questionDAO.add(questionSave);
             List<Option> options = addQuestionRequest.getOption().stream()

@@ -9,6 +9,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface QuestionRepository extends JpaRepository<Question, Long> {
-    @Query("select q from Question q where q.testId = ?1")
+    @Query("select q from Question q where q.testId.test_id = ?1")
     List<Question> findQuestionByTestId(long id);
 }

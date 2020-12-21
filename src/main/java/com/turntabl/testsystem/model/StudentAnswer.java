@@ -1,7 +1,6 @@
 package com.turntabl.testsystem.model;
 
 import org.hibernate.annotations.CreationTimestamp;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -22,8 +21,12 @@ public class StudentAnswer implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "student_id", nullable = false)
     private Student student;
+    @Column(name = "multiple_choice_answer_option_id")
+    private long student_answer_option_id;
     @Column(name = "student_answer")
     private String student_answer;
+    @Column(name = "answer_mark")
+    private Double answer_mark;
     @Column(name = "comment")
     private String comment;
     @CreationTimestamp
@@ -31,12 +34,14 @@ public class StudentAnswer implements Serializable {
     @Column(name = "time_created")
     private Date dateAnswered;
 
-    public StudentAnswer(long student_answer_id, Question question, Test test, Student student, String student_answer, String comment, Date dateAnswered) {
+    public StudentAnswer(long student_answer_id, Question question, Test test, Student student, Long student_answer_option_id, String student_answer, Double answer_mark, String comment, Date dateAnswered) {
         this.student_answer_id = student_answer_id;
         this.question = question;
         this.test = test;
         this.student = student;
+        this.student_answer_option_id = student_answer_option_id;
         this.student_answer = student_answer;
+        this.answer_mark = answer_mark;
         this.comment = comment;
         this.dateAnswered = dateAnswered;
     }
@@ -80,6 +85,14 @@ public class StudentAnswer implements Serializable {
         return student_answer;
     }
 
+    public Double getAnswer_mark() {
+        return answer_mark;
+    }
+
+    public void setAnswer_mark(Double answer_mark) {
+        this.answer_mark = answer_mark;
+    }
+
     public void setStudent_answer(String student_answer) {
         this.student_answer = student_answer;
     }
@@ -98,5 +111,27 @@ public class StudentAnswer implements Serializable {
 
     public void setDateAnswered(Date dateAnswered) {
         this.dateAnswered = dateAnswered;
+    }
+
+    public void assignTest(Test test){
+        this.test = test;
+        this.test.addStudentAnswer(this);
+    }
+
+    public void assignStudent(Student student){
+        this.student = student;
+        this.student.addStudentAnswer(this);
+    }
+
+    public long getStudent_answer_option_id() {
+        return student_answer_option_id;
+    }
+
+    public void setStudent_answer_option_id(Long student_answer_option_id) {
+        this.student_answer_option_id = student_answer_option_id;
+    }
+
+    public void assignQuestion(Question question){
+        this.question = question;
     }
 }

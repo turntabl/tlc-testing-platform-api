@@ -12,14 +12,13 @@ public class Question implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "question_id")
     private long question_id;
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "question_type_id", nullable = false)
-//    private QuestionType questionType;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "test_id", nullable = false)
     private Test testId;
     @Column(name = "question")
     private String question;
+    @Column(name = "mark_allocated")
+    private double mark_allocated;
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "question")
     private StudentAnswer studentAnswer;
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "question")
@@ -30,10 +29,11 @@ public class Question implements Serializable {
     private Set<Option> options = new HashSet<>(0);
     public Question() {
     }
-    public Question(long question_id, QuestionType questionType, String question, StudentAnswer studentAnswer, ValidAnswer validAnswer, Set<QuestionsInTest> questionsInTests, Set<Option> options) {
+    public Question(long question_id, Test testId, String question, Double mark_allocated, StudentAnswer studentAnswer, ValidAnswer validAnswer, Set<QuestionsInTest> questionsInTests, Set<Option> options) {
         this.question_id = question_id;
-        //this.questionType = questionType;
+        this.testId = testId;
         this.question = question;
+        this.mark_allocated = mark_allocated;
         this.studentAnswer = studentAnswer;
         this.validAnswer = validAnswer;
         this.questionsInTests = questionsInTests;
@@ -51,15 +51,24 @@ public class Question implements Serializable {
     public void setOptions(Set<Option> options) {
         this.options = options;
     }
+    public Test getTestId() {
+        return testId;
+    }
+    public void setTestId(Test testId) {
+        this.testId = testId;
+    }
+    public double getMark_allocated() {
+        return mark_allocated;
+    }
+    public void setMark_allocated(Double mark_allocated) {
+        this.mark_allocated = mark_allocated;
+    }
     public long getQuestion_id() {
         return question_id;
     }
     public void setQuestion_id(long question_id) {
         this.question_id = question_id;
     }
-//   // public QuestionType getQuestionType() {
-//        return questionType;
-//    }
     public ValidAnswer getValidAnswer() {
         return validAnswer;
     }
@@ -72,10 +81,6 @@ public class Question implements Serializable {
     public void setQuestionsInTests(Set<QuestionsInTest> questionsInTests) {
         this.questionsInTests = questionsInTests;
     }
-//
-//    //public void setQuestionType(QuestionType questionType) {
-//        this.questionType = questionType;
-//    }
     public String getQuestion() {
         return question;
     }

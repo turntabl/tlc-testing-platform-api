@@ -3,7 +3,7 @@ package com.turntabl.testsystem.message;
 public class AddFeedbackResponse {
     private String message;
     private String student_name;
-    private Long id;
+    private long id;
     public AddFeedbackResponse() {
     }
     public AddFeedbackResponse(String message, String student_name, Long id) {
@@ -23,7 +23,7 @@ public class AddFeedbackResponse {
     public void setStudent_name(String student_name) {
         this.student_name = student_name;
     }
-    public Long getId() {
+    public long getId() {
         return id;
     }
     public void setId(Long id) {
