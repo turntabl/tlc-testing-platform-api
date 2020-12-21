@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -69,24 +70,43 @@ public class StudentAnswerController {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    @PostMapping("/multiple-choice/answers")
+    @PostMapping("/test-answer")
     public ResponseEntity<GeneralAddResponse> submitAnswers(@RequestBody StudentAnswerRequest answers){
         try{
-                List<StudentAnswer> studentAnswers = answers.getAnswers().stream().map(
-                        answer -> {
-                            StudentAnswer studentAnswer = new StudentAnswer();
-                            studentAnswer.assignStudent(studentDAO.get(answers.getStudent_id()));
-                            studentAnswer.assignTest(testDAO.get(answers.getTest_id()));
-                            studentAnswer.assignQuestion(questionDAO.get(answer.getQuestion_id()));
-                            if(answer.getOption_id() == (validAnswerDAO.getByQuestionId(answer.getQuestion_id()).getOption().getOptionId())){
-                                studentAnswer.setAnswer_mark(questionDAO.get(answer.getQuestion_id()).getMark_allocated());
-                            }else{
-                                studentAnswer.setAnswer_mark(0.0);
+            List<StudentAnswer> studentAnswers = new ArrayList<>();
+            switch (testDAO.get(answers.getTest_id()).getQuestionType().getCode()){
+                case ("MC"):
+                    studentAnswers = answers.getAnswers().stream().map(
+                            answer -> {
+                                StudentAnswer studentAnswer = new StudentAnswer();
+                                studentAnswer.assignStudent(studentDAO.get(answers.getStudent_id()));
+                                studentAnswer.assignTest(testDAO.get(answers.getTest_id()));
+                                studentAnswer.assignQuestion(questionDAO.get(answer.getQuestion_id()));
+                                if(answer.getOption_id() == (validAnswerDAO.getByQuestionId(answer.getQuestion_id()).getOption().getOptionId())){
+                                    studentAnswer.setAnswer_mark(questionDAO.get(answer.getQuestion_id()).getMark_allocated());
+                                }else{
+                                    studentAnswer.setAnswer_mark(0.0);
+                                }
+                                studentAnswer.setStudent_answer(answer.getAnswer());
+                                return studentAnswer;
                             }
-                            studentAnswer.setStudent_answer(answer.getAnswer());
-                            return studentAnswer;
-                        }
-                ).collect(Collectors.toList());
+                    ).collect(Collectors.toList());
+                    break;
+                case("E"):
+                case("CS"):
+                    studentAnswers = answers.getAnswers().stream().map(
+                            answer -> {
+                                StudentAnswer studentAnswer = new StudentAnswer();
+                                studentAnswer.assignStudent(studentDAO.get(answers.getStudent_id()));
+                                studentAnswer.assignTest(testDAO.get(answers.getTest_id()));
+                                studentAnswer.assignQuestion(questionDAO.get(answer.getQuestion_id()));
+                                studentAnswer.setAnswer_mark(0.0);
+                                studentAnswer.setStudent_answer(answer.getAnswer());
+                                return studentAnswer;
+                            }
+                    ).collect(Collectors.toList());
+                    break;
+            }
                             try{
                                 studentAnswerDAO.addAll(studentAnswers);
                                 return new ResponseEntity<>(new GeneralAddResponse("success"), HttpStatus.OK);
