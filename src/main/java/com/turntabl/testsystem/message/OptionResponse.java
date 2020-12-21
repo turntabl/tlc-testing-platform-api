@@ -1,10 +1,5 @@
 package com.turntabl.testsystem.message;
 
-import com.turntabl.testsystem.model.Question;
-import com.turntabl.testsystem.model.ValidAnswer;
-
-import javax.persistence.*;
-
 public class OptionResponse {
     private long optionId;
     private String option;

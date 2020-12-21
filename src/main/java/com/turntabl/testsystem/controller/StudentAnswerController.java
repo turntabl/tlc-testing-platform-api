@@ -1,9 +1,6 @@
 package com.turntabl.testsystem.controller;
 
-import com.turntabl.testsystem.dao.QuestionDAO;
-import com.turntabl.testsystem.dao.StudentAnswerDAO;
-import com.turntabl.testsystem.dao.StudentDAO;
-import com.turntabl.testsystem.dao.TestDAO;
+import com.turntabl.testsystem.dao.*;
 import com.turntabl.testsystem.message.AnswerResponse;
 import com.turntabl.testsystem.message.GeneralAddResponse;
 import com.turntabl.testsystem.message.StudentAnswerRequest;
@@ -27,11 +24,14 @@ public class StudentAnswerController {
     private final TestDAO testDAO;
     @Autowired
     private final StudentDAO studentDAO;
-    public StudentAnswerController(StudentAnswerDAO studentAnswerDAO, QuestionDAO questionDAO, TestDAO testDAO, StudentDAO studentDAO) {
+    @Autowired
+    private final ValidAnswerDAO validAnswerDAO;
+    public StudentAnswerController(StudentAnswerDAO studentAnswerDAO, QuestionDAO questionDAO, TestDAO testDAO, StudentDAO studentDAO, ValidAnswerDAO validAnswerDAO) {
         this.studentAnswerDAO = studentAnswerDAO;
         this.questionDAO = questionDAO;
         this.testDAO = testDAO;
         this.studentDAO = studentDAO;
+        this.validAnswerDAO = validAnswerDAO;
     }
     @GetMapping("/answers/get-by-student/{test_id}/{student_id}")
     public ResponseEntity<List<AnswerResponse>> getAllAnswersByStudent(@PathVariable Long test_id, @PathVariable UUID student_id ){
@@ -69,7 +69,7 @@ public class StudentAnswerController {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    @PostMapping("/answers")
+    @PostMapping("/multiple-choice/answers")
     public ResponseEntity<GeneralAddResponse> submitAnswers(@RequestBody StudentAnswerRequest answers){
         try{
                 List<StudentAnswer> studentAnswers = answers.getAnswers().stream().map(
@@ -78,6 +78,11 @@ public class StudentAnswerController {
                             studentAnswer.assignStudent(studentDAO.get(answers.getStudent_id()));
                             studentAnswer.assignTest(testDAO.get(answers.getTest_id()));
                             studentAnswer.assignQuestion(questionDAO.get(answer.getQuestion_id()));
+                            if(answer.getOption_id() == (validAnswerDAO.getByQuestionId(answer.getQuestion_id()).getOption().getOptionId())){
+                                studentAnswer.setAnswer_mark(questionDAO.get(answer.getQuestion_id()).getMark_allocated());
+                            }else{
+                                studentAnswer.setAnswer_mark(0.0);
+                            }
                             studentAnswer.setStudent_answer(answer.getAnswer());
                             return studentAnswer;
                         }

@@ -2,10 +2,12 @@ package com.turntabl.testsystem.message;
 
 public class Answer {
     private long question_id;
+    private long option_id;
     private String answer;
 
-    public Answer(long question_id, String answer) {
+    public Answer(long question_id, long option_id, String answer) {
         this.question_id = question_id;
+        this.option_id = option_id;
         this.answer = answer;
     }
 
@@ -20,11 +22,20 @@ public class Answer {
         this.question_id = question_id;
     }
 
+    public long getOption_id() {
+        return option_id;
+    }
+
     public String getAnswer() {
         return answer;
     }
 
-    public void setAnswer(String asnwer) {
-        this.answer = asnwer;
+    public void setAnswer(String answer) {
+        this.answer = answer;
+    }
+
+
+    public void setOption_id(long option_id) {
+        this.option_id = option_id;
     }
 }

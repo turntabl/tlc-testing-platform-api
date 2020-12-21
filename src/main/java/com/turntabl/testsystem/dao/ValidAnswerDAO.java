@@ -15,6 +15,9 @@ public class ValidAnswerDAO {
     public ValidAnswer get(Long id){
         return validAnswerRepository.findById(id).get();
     }
+    public ValidAnswer getByQuestionId(Long question_id){
+        return validAnswerRepository.findByQuestionId(question_id).get();
+    }
     public List<ValidAnswer> addAll(List<ValidAnswer> t){
         return validAnswerRepository.saveAll(t);
     }

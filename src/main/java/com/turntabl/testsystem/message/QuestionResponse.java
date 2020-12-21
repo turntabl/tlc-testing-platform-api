@@ -1,6 +1,5 @@
 package com.turntabl.testsystem.message;
 
-import com.turntabl.testsystem.model.Option;
 import java.util.HashSet;
 import java.util.Set;
 
