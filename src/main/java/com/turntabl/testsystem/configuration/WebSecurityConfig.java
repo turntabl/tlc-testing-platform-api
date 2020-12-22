@@ -1,6 +1,6 @@
 package com.turntabl.testsystem.configuration;
 import com.turntabl.testsystem.dao.*;
-import com.turntabl.testsystem.model.ValidAnswer;
+import com.turntabl.testsystem.service.EmailService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -44,5 +44,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public ValidAnswerDAO validAnswerDAO(){return new ValidAnswerDAO();}
     @Bean
     public StudentAnswerDAO studentAnswerDAO(){return new StudentAnswerDAO();}
+    @Bean
+    public EmailService emailService(){return  new EmailService();}
 
 }
