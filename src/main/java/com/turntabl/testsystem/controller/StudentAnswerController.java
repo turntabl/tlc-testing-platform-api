@@ -1,6 +1,7 @@
 package com.turntabl.testsystem.controller;
 
 import com.turntabl.testsystem.dao.*;
+import com.turntabl.testsystem.helper.StringToUserIdConverter;
 import com.turntabl.testsystem.message.AnswerResponse;
 import com.turntabl.testsystem.message.GeneralAddResponse;
 import com.turntabl.testsystem.message.StudentAnswerRequest;
@@ -18,6 +19,8 @@ import java.util.stream.Collectors;
 @RequestMapping("/api")
 public class StudentAnswerController {
     @Autowired
+    private final StringToUserIdConverter stringToUserIdConverter;
+    @Autowired
     private final StudentAnswerDAO studentAnswerDAO;
     @Autowired
     private final QuestionDAO questionDAO;
@@ -27,7 +30,8 @@ public class StudentAnswerController {
     private final StudentDAO studentDAO;
     @Autowired
     private final ValidAnswerDAO validAnswerDAO;
-    public StudentAnswerController(StudentAnswerDAO studentAnswerDAO, QuestionDAO questionDAO, TestDAO testDAO, StudentDAO studentDAO, ValidAnswerDAO validAnswerDAO) {
+    public StudentAnswerController(StringToUserIdConverter stringToUserIdConverter, StudentAnswerDAO studentAnswerDAO, QuestionDAO questionDAO, TestDAO testDAO, StudentDAO studentDAO, ValidAnswerDAO validAnswerDAO) {
+        this.stringToUserIdConverter = stringToUserIdConverter;
         this.studentAnswerDAO = studentAnswerDAO;
         this.questionDAO = questionDAO;
         this.testDAO = testDAO;
@@ -79,7 +83,7 @@ public class StudentAnswerController {
                     studentAnswers = answers.getAnswers().stream().map(
                             answer -> {
                                 StudentAnswer studentAnswer = new StudentAnswer();
-                                studentAnswer.assignStudent(studentDAO.get(answers.getStudent_id()));
+                                studentAnswer.assignStudent(studentDAO.get(stringToUserIdConverter.convert(answers.getStudent_id())));
                                 studentAnswer.assignTest(testDAO.get(answers.getTest_id()));
                                 studentAnswer.assignQuestion(questionDAO.get(answer.getQuestion_id()));
                                 if(answer.getOption_id() == (validAnswerDAO.getByQuestionId(answer.getQuestion_id()).getOption().getOptionId())){
@@ -97,7 +101,7 @@ public class StudentAnswerController {
                     studentAnswers = answers.getAnswers().stream().map(
                             answer -> {
                                 StudentAnswer studentAnswer = new StudentAnswer();
-                                studentAnswer.assignStudent(studentDAO.get(answers.getStudent_id()));
+                                studentAnswer.assignStudent(studentDAO.get(stringToUserIdConverter.convert(answers.getStudent_id())));
                                 studentAnswer.assignTest(testDAO.get(answers.getTest_id()));
                                 studentAnswer.assignQuestion(questionDAO.get(answer.getQuestion_id()));
                                 studentAnswer.setAnswer_mark(0.0);

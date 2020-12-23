@@ -1,5 +1,6 @@
 package com.turntabl.testsystem.configuration;
 import com.turntabl.testsystem.dao.*;
+import com.turntabl.testsystem.helper.StringToUserIdConverter;
 import com.turntabl.testsystem.service.EmailService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -46,5 +47,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public StudentAnswerDAO studentAnswerDAO(){return new StudentAnswerDAO();}
     @Bean
     public EmailService emailService(){return  new EmailService();}
+    @Bean
+    public StringToUserIdConverter stringToUserIdConverter(){return new StringToUserIdConverter();}
 
 }

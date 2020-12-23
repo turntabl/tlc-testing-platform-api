@@ -1,17 +1,16 @@
 package com.turntabl.testsystem.message;
 
 import java.util.List;
-import java.util.UUID;
 
 public class StudentAnswerRequest {
-    private UUID student_id;
+    private String student_id;
     private long test_id;
     private List<Answer> answers;
 
     public StudentAnswerRequest() {
     }
 
-    public StudentAnswerRequest(UUID student_id, long test_id, List<Answer> answers) {
+    public StudentAnswerRequest(String student_id, long test_id, List<Answer> answers) {
         this.student_id = student_id;
         this.test_id = test_id;
         this.answers = answers;
@@ -33,11 +32,11 @@ public class StudentAnswerRequest {
         this.answers = answers;
     }
 
-    public UUID getStudent_id() {
+    public String getStudent_id() {
         return student_id;
     }
 
-    public void setStudent_id(UUID student_id) {
+    public void setStudent_id(String student_id) {
         this.student_id = student_id;
     }
 }
