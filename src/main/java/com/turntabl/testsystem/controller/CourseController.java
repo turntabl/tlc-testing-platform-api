@@ -4,6 +4,7 @@ import com.turntabl.testsystem.dao.CourseDAO;
 import com.turntabl.testsystem.message.CourseRequest;
 import com.turntabl.testsystem.message.CourseResponse;
 import com.turntabl.testsystem.message.GeneralAddResponse;
+import com.turntabl.testsystem.message.CourseUpdateRequest;
 import com.turntabl.testsystem.model.Course;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -67,11 +68,12 @@ public class CourseController {
         }
     }
     @PostMapping("/course/update")
-    public ResponseEntity<CourseResponse> updateCourse(@RequestBody CourseRequest courseRequest){
+    public ResponseEntity<CourseResponse> updateCourse(@RequestBody CourseUpdateRequest courseUpdateRequest){
         try {
             Course course = new Course();
             CourseResponse courseResponse = new CourseResponse();
-            course.setCourse_name(courseRequest.getCourseName());
+            course.setCourse_id(courseUpdateRequest.getCourseId());
+            course.setCourse_name(courseUpdateRequest.getCourseName());
             course = courseDAO.update(course);
             courseResponse.setCourseId(course.getCourse_id());
             courseResponse.setCourseName(course.getCourse_name());
@@ -80,6 +82,7 @@ public class CourseController {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    @CrossOrigin
     @DeleteMapping("/course/delete/{id}")
     public ResponseEntity<Boolean> deleteCourse(@PathVariable long id){
         try {

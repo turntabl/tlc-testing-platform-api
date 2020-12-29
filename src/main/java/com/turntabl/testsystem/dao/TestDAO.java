@@ -34,6 +34,9 @@ public class TestDAO {
         testFromDatabase.setCourse(testFromUser.getCourse());
         testFromDatabase.setTest_title(testFromUser.getTest_title());
         testFromDatabase.setTest_rules(testFromUser.getTest_rules());
+        testFromDatabase.setTest_date(testFromUser.getTest_date());
+        testFromDatabase.setTest_time_start(testFromUser.getTest_time_start());
+        testFromDatabase.setTest_time_end(testFromUser.getTest_time_end());
         return this.testRepository.save(testFromDatabase);
 
     }
