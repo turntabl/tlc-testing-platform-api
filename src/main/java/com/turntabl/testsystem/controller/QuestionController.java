@@ -61,6 +61,10 @@ import java.util.stream.Collectors;
         @PostMapping("/question/add")
         public ResponseEntity<GeneralAddResponse> addQuestion(@RequestBody QuestionRequest addQuestionRequest){
         try {
+            System.out.println(addQuestionRequest.getQuestion());
+            System.out.println(addQuestionRequest.getMark_allocated());
+            System.out.println(addQuestionRequest.getValidAnswer());
+            System.out.println(addQuestionRequest.getTestId());
             Question questionSave = new Question();
             ValidAnswer validAnswer  = new ValidAnswer();
             Test test = testDAO.get(addQuestionRequest.getTestId());

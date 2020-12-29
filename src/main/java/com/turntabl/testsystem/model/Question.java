@@ -18,7 +18,7 @@ public class Question implements Serializable {
     @Column(name = "question")
     private String question;
     @Column(name = "mark_allocated")
-    private double mark_allocated;
+    private Double mark_allocated;
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "question")
     private StudentAnswer studentAnswer;
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "question")
@@ -57,7 +57,7 @@ public class Question implements Serializable {
     public void setTestId(Test testId) {
         this.testId = testId;
     }
-    public double getMark_allocated() {
+    public Double getMark_allocated() {
         return mark_allocated;
     }
     public void setMark_allocated(Double mark_allocated) {
