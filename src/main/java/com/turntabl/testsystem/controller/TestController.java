@@ -73,7 +73,7 @@ public class TestController {
            course = courseDAO.get(addTestRequest.getCourse_id());
            testSave.assignCourse(course);
            testSave.setTest_title(addTestRequest.getTest_title());
-           testSave.setTest_rules(addTestRequest.getTest_rule());
+           testSave.setTest_rules(addTestRequest.getTest_rules());
            testSave.setTest_date(addTestRequest.getTest_date());
            testSave.setTest_time_start(addTestRequest.getTest_time_start());
            testSave.setTest_time_end(addTestRequest.getTest_time_end());
@@ -100,8 +100,10 @@ public class TestController {
             test.assignCourse(course);
             test.setTest_id(testRequest.getTest_id());
             test.setTest_title(testRequest.getTest_title());
-            test.setTest_rules(testRequest.getTest_rule());
+            test.setTest_rules(testRequest.getTest_rules());
             test.setTest_date(testRequest.getTest_date());
+            test.setTest_time_start(testRequest.getTest_time_start());
+            test.setTest_time_end(testRequest.getTest_time_end());
             test = testDAO.update(test);
             testResponse.setTest_id(test.getTest_id());
             testResponse.setTest_title(test.getTest_title());
