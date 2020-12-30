@@ -61,37 +61,41 @@ import java.util.stream.Collectors;
         @PostMapping("/question/add")
         public ResponseEntity<GeneralAddResponse> addQuestion(@RequestBody QuestionRequest addQuestionRequest){
         try {
-            System.out.println(addQuestionRequest.getQuestion());
-            System.out.println(addQuestionRequest.getMark_allocated());
-            System.out.println(addQuestionRequest.getValidAnswer());
-            System.out.println(addQuestionRequest.getTestId());
-            Question questionSave = new Question();
-            ValidAnswer validAnswer  = new ValidAnswer();
-            Test test = testDAO.get(addQuestionRequest.getTestId());
-            questionSave.assignTest(test);
-            questionSave.setMark_allocated(addQuestionRequest.getMark_allocated());
-            questionSave.setQuestion(addQuestionRequest.getQuestion());
-            questionSave = questionDAO.add(questionSave);
-            List<Option> options = addQuestionRequest.getOption().stream()
-                    .map(optionRequest -> {
-                        Option option = new Option();
-                        option.setOption(optionRequest);
-                        return option;
-                    }).collect(Collectors.toList());
-            Question finalQuestionSave = questionSave;
-            List<Option> optionToSave = options.stream()
-                    .map(option -> {
-                        option.assignQuestion(finalQuestionSave);
-                        return option;
-                    }).collect(Collectors.toList());
-            optionDAO.addAll(optionToSave);
-           Option option = optionDAO.getValidAnswer(questionSave.getQuestion_id(), addQuestionRequest.getValidAnswer());
-            validAnswer.setQuestion(questionSave);
-            validAnswer.setOption(option);
-            validAnswerDAO.add(validAnswer);
-            GeneralAddResponse generalAddResponse = new GeneralAddResponse();
-            generalAddResponse.setMessage("Success");
-            return new ResponseEntity<>(generalAddResponse, HttpStatus.OK);
+            if(!questionDAO.getByName(addQuestionRequest.getQuestion())){
+                System.out.println(addQuestionRequest.getQuestion());
+                System.out.println(addQuestionRequest.getMark_allocated());
+                System.out.println(addQuestionRequest.getValidAnswer());
+                System.out.println(addQuestionRequest.getTestId());
+                Question questionSave = new Question();
+                ValidAnswer validAnswer  = new ValidAnswer();
+                Test test = testDAO.get(addQuestionRequest.getTestId());
+                questionSave.assignTest(test);
+                questionSave.setMark_allocated(addQuestionRequest.getMark_allocated());
+                questionSave.setQuestion(addQuestionRequest.getQuestion());
+                questionSave = questionDAO.add(questionSave);
+                List<Option> options = addQuestionRequest.getOption().stream()
+                        .map(optionRequest -> {
+                            Option option = new Option();
+                            option.setOption(optionRequest);
+                            return option;
+                        }).collect(Collectors.toList());
+                Question finalQuestionSave = questionSave;
+                List<Option> optionToSave = options.stream()
+                        .map(option -> {
+                            option.assignQuestion(finalQuestionSave);
+                            return option;
+                        }).collect(Collectors.toList());
+                optionDAO.addAll(optionToSave);
+                Option option = optionDAO.getValidAnswer(questionSave.getQuestion_id(), addQuestionRequest.getValidAnswer());
+                validAnswer.setQuestion(questionSave);
+                validAnswer.setOption(option);
+                validAnswerDAO.add(validAnswer);
+                GeneralAddResponse generalAddResponse = new GeneralAddResponse();
+                generalAddResponse.setMessage("Success");
+                return new ResponseEntity<>(generalAddResponse, HttpStatus.OK);
+            }else{
+                return new ResponseEntity<>(new GeneralAddResponse("Duplicate Question"), HttpStatus.OK);
+            }
         }catch (Exception e){
             return new ResponseEntity<>(new GeneralAddResponse(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }

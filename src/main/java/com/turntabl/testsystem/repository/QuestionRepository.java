@@ -11,4 +11,8 @@ import java.util.Optional;
 public interface QuestionRepository extends JpaRepository<Question, Long> {
     @Query("select q from Question q where q.testId.test_id = ?1")
     List<Question> findQuestionByTestId(long id);
+
+    @Query("select q from Question q where q.question = ?1")
+    Optional<Question> findByQuestion(String question);
+
 }
