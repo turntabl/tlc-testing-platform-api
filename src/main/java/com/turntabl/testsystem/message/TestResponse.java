@@ -3,6 +3,7 @@ package com.turntabl.testsystem.message;
 public class TestResponse {
     private long test_id;
     private long course_id;
+    private String course_name;
     private String test_title;
     private String test_rules;
     private String test_date;
@@ -10,15 +11,26 @@ public class TestResponse {
     private String test_time_end;
     public TestResponse() {
     }
-    public TestResponse(long test_id, long course_id, String test_title, String test_rules, String test_date, String test_time_start, String test_time_end) {
+
+    public TestResponse(long test_id, long course_id, String course_name, String test_title, String test_rules, String test_date, String test_time_start, String test_time_end) {
         this.test_id = test_id;
         this.course_id = course_id;
+        this.course_name = course_name;
         this.test_title = test_title;
         this.test_rules = test_rules;
         this.test_date = test_date;
         this.test_time_start = test_time_start;
         this.test_time_end = test_time_end;
     }
+
+    public String getCourse_name() {
+        return course_name;
+    }
+
+    public void setCourse_name(String course_name) {
+        this.course_name = course_name;
+    }
+
     public long getTest_id() {
         return test_id;
     }

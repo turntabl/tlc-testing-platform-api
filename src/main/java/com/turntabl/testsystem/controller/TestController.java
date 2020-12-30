@@ -34,6 +34,7 @@ public class TestController {
                         testResponse.setCourse_id(test.getCourse().getCourse_id());
                         testResponse.setTest_title(test.getTest_title());
                         testResponse.setTest_rules(test.getTest_rules());
+                        testResponse.setCourse_name(test.getCourse().getCourse_name());
                         testResponse.setTest_date(test.getTest_date());
                         testResponse.setTest_time_start(test.getTest_time_start());
                         testResponse.setTest_time_end(test.getTest_time_end());
@@ -115,6 +116,7 @@ public class TestController {
             testResponse.setTest_title(test.getTest_title());
             testResponse.setTest_rules(test.getTest_rules());
             testResponse.setCourse_id(test.getCourse().getCourse_id());
+            testResponse.setCourse_name(test.getCourse().getCourse_name());
             testResponse.setTest_date(test.getTest_date());
             testResponse.setTest_time_start(test.getTest_time_start());
             testResponse.setTest_time_end(test.getTest_time_end());
