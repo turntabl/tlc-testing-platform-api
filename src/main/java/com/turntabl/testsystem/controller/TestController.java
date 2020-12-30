@@ -111,6 +111,8 @@ public class TestController {
             test.setTest_title(testRequest.getTest_title());
             test.setTest_rules(testRequest.getTest_rule());
             test.setTest_date(testRequest.getTest_date());
+            test.setTest_time_end(testRequest.getTest_time_end());
+            test.setTest_time_start(testRequest.getTest_time_start());
             test = testDAO.update(test);
             testResponse.setTest_id(test.getTest_id());
             testResponse.setTest_title(test.getTest_title());
