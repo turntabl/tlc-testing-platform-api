@@ -39,9 +39,9 @@ public class StudentAnswerController {
         this.validAnswerDAO = validAnswerDAO;
     }
     @GetMapping("/answers/get-by-student/{test_id}/{student_id}")
-    public ResponseEntity<List<AnswerResponse>> getAllAnswersByStudent(@PathVariable Long test_id, @PathVariable UUID student_id ){
+    public ResponseEntity<List<AnswerResponse>> getAllAnswersByStudent(@PathVariable Long test_id, @PathVariable String student_id ){
         try{
-            List<AnswerResponse> answerResponses = studentAnswerDAO.getAllByStudentIdAndTestId(student_id, test_id)
+            List<AnswerResponse> answerResponses = studentAnswerDAO.getAllByStudentIdAndTestId(stringToUserIdConverter.convert(student_id), test_id)
                     .stream()
                     .map(studentAnswer -> {
                         AnswerResponse answerResponse = new AnswerResponse();
