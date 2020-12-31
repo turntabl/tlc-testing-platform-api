@@ -5,14 +5,16 @@ import com.turntabl.testsystem.helper.StringToUserIdConverter;
 import com.turntabl.testsystem.message.AnswerResponse;
 import com.turntabl.testsystem.message.GeneralAddResponse;
 import com.turntabl.testsystem.message.StudentAnswerRequest;
+import com.turntabl.testsystem.model.Student;
 import com.turntabl.testsystem.model.StudentAnswer;
+import com.turntabl.testsystem.model.Test;
+import com.turntabl.testsystem.model.TestResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
@@ -30,13 +32,16 @@ public class StudentAnswerController {
     private final StudentDAO studentDAO;
     @Autowired
     private final ValidAnswerDAO validAnswerDAO;
-    public StudentAnswerController(StringToUserIdConverter stringToUserIdConverter, StudentAnswerDAO studentAnswerDAO, QuestionDAO questionDAO, TestDAO testDAO, StudentDAO studentDAO, ValidAnswerDAO validAnswerDAO) {
+    @Autowired
+    private final TestResultDAO testResultDAO;
+    public StudentAnswerController(StringToUserIdConverter stringToUserIdConverter, StudentAnswerDAO studentAnswerDAO, QuestionDAO questionDAO, TestDAO testDAO, StudentDAO studentDAO, ValidAnswerDAO validAnswerDAO, TestResultDAO testResultDAO) {
         this.stringToUserIdConverter = stringToUserIdConverter;
         this.studentAnswerDAO = studentAnswerDAO;
         this.questionDAO = questionDAO;
         this.testDAO = testDAO;
         this.studentDAO = studentDAO;
         this.validAnswerDAO = validAnswerDAO;
+        this.testResultDAO = testResultDAO;
     }
     @GetMapping("/answers/get-by-student/{test_id}/{student_id}")
     public ResponseEntity<List<AnswerResponse>> getAllAnswersByStudent(@PathVariable Long test_id, @PathVariable String student_id ){
@@ -77,14 +82,18 @@ public class StudentAnswerController {
     @PostMapping("/test-answer")
     public ResponseEntity<GeneralAddResponse> submitAnswers(@RequestBody StudentAnswerRequest answers){
         try{
+            Student student = studentDAO.get(stringToUserIdConverter.convert(answers.getStudent_id()));
+            Test test = testDAO.get(answers.getTest_id());
+            List<StudentAnswer> studentAnswerList;
             List<StudentAnswer> studentAnswers = new ArrayList<>();
-            switch (testDAO.get(answers.getTest_id()).getQuestionType().getCode()){
+            String question_type = testDAO.get(answers.getTest_id()).getQuestionType().getCode();
+            switch (question_type){
                 case ("MC"):
                     studentAnswers = answers.getAnswers().stream().map(
                             answer -> {
                                 StudentAnswer studentAnswer = new StudentAnswer();
-                                studentAnswer.assignStudent(studentDAO.get(stringToUserIdConverter.convert(answers.getStudent_id())));
-                                studentAnswer.assignTest(testDAO.get(answers.getTest_id()));
+                                studentAnswer.assignStudent(student);
+                                studentAnswer.assignTest(test);
                                 studentAnswer.assignQuestion(questionDAO.get(answer.getQuestion_id()));
                                 if(answer.getOption_id() == (validAnswerDAO.getByQuestionId(answer.getQuestion_id()).getOption().getOptionId())){
                                     studentAnswer.setAnswer_mark(questionDAO.get(answer.getQuestion_id()).getMark_allocated());
@@ -112,7 +121,32 @@ public class StudentAnswerController {
                     break;
             }
                             try{
-                                studentAnswerDAO.addAll(studentAnswers);
+                                studentAnswerList = studentAnswerDAO.addAll(studentAnswers);
+                                if(question_type.matches("MC")){
+                                    TestResult testResult = new TestResult();
+                                   Double totalMark = 0.0;
+                                    for (StudentAnswer sa: studentAnswerList
+                                         ) {
+                                        totalMark+=sa.getAnswer_mark();
+                                    }
+                                    testResult.assignTest(test);
+                                    testResult.setTest_mark(totalMark);
+                                    testResult.assignStudent(student);
+                                    if(totalMark > 89 && totalMark <101){
+                                        testResult.setTest_grade('A');
+                                    }else if(totalMark > 79 && totalMark < 90){
+                                        testResult.setTest_grade('B');
+                                    }else if(totalMark > 69 && totalMark < 80){
+                                        testResult.setTest_grade('C');
+                                    }else if(totalMark > 59 && totalMark < 70){
+                                        testResult.setTest_grade('D');
+                                    }else if(totalMark > 49 && totalMark < 60){
+                                        testResult.setTest_grade('E');
+                                    }else if(totalMark < 49){
+                                        testResult.setTest_grade('F');
+                                    }
+                                    testResultDAO.add(testResult);
+                                }
                                 return new ResponseEntity<>(new GeneralAddResponse("success"), HttpStatus.OK);
                             }catch (Exception e){
                                 return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);

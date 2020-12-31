@@ -44,6 +44,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public ValidAnswerDAO validAnswerDAO(){return new ValidAnswerDAO();}
     @Bean
+    public TestResultDAO testResultDAO(){return new TestResultDAO();}
+    @Bean
     public StudentAnswerDAO studentAnswerDAO(){return new StudentAnswerDAO();}
     @Bean
     public EmailService emailService(){return  new EmailService();}

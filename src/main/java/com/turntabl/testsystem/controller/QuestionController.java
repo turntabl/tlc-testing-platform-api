@@ -39,6 +39,7 @@ import java.util.stream.Collectors;
         @GetMapping("/question/{test_id}")
         public ResponseEntity<List<QuestionResponse>> getQuestionByTestId(@PathVariable long test_id) {
             try {
+                System.out.println(test_id);
                  List<QuestionResponse> questionResponses = questionDAO.getQuestionsByTestId(test_id).stream()
                          .map(question1 -> {
                              QuestionResponse questionResponse =new QuestionResponse();

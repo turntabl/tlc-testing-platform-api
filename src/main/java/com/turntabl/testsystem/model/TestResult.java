@@ -71,4 +71,8 @@ public class TestResult implements Serializable {
     public void setTest_grade(Character test_grade) {
         this.test_grade = test_grade;
     }
+
+    public void assignTest(Test test){this.test = test; this.test.addTestResult(this);}
+
+    public void assignStudent(Student student){this.student = student; this.student.addTestResults(this);}
 }

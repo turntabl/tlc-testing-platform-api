@@ -105,4 +105,7 @@ public class Student implements Serializable {
     public void addStudentAnswer(StudentAnswer studentAnswer){
         this.studentAnswers.add(studentAnswer);
     }
+    public void addTestResults(TestResult testResult){
+        this.testResults.add(testResult);
+    }
 }
