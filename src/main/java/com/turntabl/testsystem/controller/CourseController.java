@@ -31,9 +31,6 @@ public class CourseController {
                         courseResponse.setCourseName(course.getCourse_name());
                         return courseResponse;
                     }).collect(Collectors.toList());
-            if (courses.isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            }
             return new ResponseEntity<>(courses, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
