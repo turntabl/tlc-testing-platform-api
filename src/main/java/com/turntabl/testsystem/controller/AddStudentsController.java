@@ -45,9 +45,6 @@ public class AddStudentsController {
     public ResponseEntity<List<StudentDetails>> getAllStudents() {
         try {
             List<StudentDetails> students = fileService.getStudents();
-            if (students.isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            }
             return new ResponseEntity<>(students, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
