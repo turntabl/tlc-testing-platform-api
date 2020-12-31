@@ -13,8 +13,8 @@ public class TestDAO {
     public TestDAO(TestRepository testRepository) {
         this.testRepository = testRepository;
     }
-    public  Test get(Long id){
-        return testRepository.findById(id).get();
+    public  Optional<Test> get(Long id){
+        return testRepository.findById(id);
     }
     public Boolean getByTestTitle(String test_title){
         return testRepository.findByTestTitle(test_title).isPresent();
@@ -30,7 +30,7 @@ public class TestDAO {
     }
     public Test update(Test testFromUser){
         Test testFromDatabase = new Test();
-        testFromDatabase = this.get(testFromUser.getTest_id());
+        testFromDatabase = this.get(testFromUser.getTest_id()).get();
         testFromDatabase.setCourse(testFromUser.getCourse());
         testFromDatabase.setTest_title(testFromUser.getTest_title());
         testFromDatabase.setTest_rules(testFromUser.getTest_rules());

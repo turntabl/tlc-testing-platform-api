@@ -44,7 +44,7 @@ public class QuestionDAO {
         }
         return isDeleted;
     }
-    public Boolean getByName(String question_name){
-        return questionRepository.findByQuestion(question_name).isPresent();
+    public Optional<Question> getByName(String question_name){
+        return questionRepository.findByQuestion(question_name);
     }
 }

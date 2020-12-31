@@ -19,6 +19,9 @@ public class Course implements Serializable {
     private String course_name;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "course")
     private Set<Test> tests = new HashSet<>(0);
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
     @UpdateTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "time_updated")
@@ -29,11 +32,16 @@ public class Course implements Serializable {
     private Date createdAt;
     public Course() {
     }
-    public Course(long course_id, String course_name, Set<Test> tests) {
+
+    public Course(long course_id, String course_name, Set<Test> tests, User user, Date updatedAt, Date createdAt) {
         this.course_id = course_id;
         this.course_name = course_name;
         this.tests = tests;
+        this.user = user;
+        this.updatedAt = updatedAt;
+        this.createdAt = createdAt;
     }
+
     public long getCourse_id() {
         return course_id;
     }
@@ -65,4 +73,18 @@ public class Course implements Serializable {
         this.tests = tests;
     }
     public void addTest(Test test){this.tests.add(test);}
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void assignUser(User user){
+        this.user = user;
+        this.user.addCourse(this);
+    }
+
 }

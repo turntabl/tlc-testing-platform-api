@@ -2,10 +2,13 @@ package com.turntabl.testsystem.controller;
 
 import com.turntabl.testsystem.dao.CourseDAO;
 import com.turntabl.testsystem.dao.TestDAO;
+import com.turntabl.testsystem.dao.UserDAO;
+import com.turntabl.testsystem.helper.StringToUserIdConverter;
 import com.turntabl.testsystem.message.*;
 import com.turntabl.testsystem.model.Course;
 import com.turntabl.testsystem.model.QuestionType;
 import com.turntabl.testsystem.model.Test;
+import com.turntabl.testsystem.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +23,15 @@ public class TestController {
     private final TestDAO testDAO;
     @Autowired
     private final CourseDAO courseDAO;
-    public TestController(TestDAO testDAO, CourseDAO courseDAO) {
+    @Autowired
+    private final UserDAO userDAO;
+    @Autowired
+    private final StringToUserIdConverter stringToUserIdConverter;
+    public TestController(TestDAO testDAO, CourseDAO courseDAO, UserDAO userDAO, StringToUserIdConverter stringToUserIdConverter) {
         this.testDAO = testDAO;
         this.courseDAO = courseDAO;
+        this.userDAO = userDAO;
+        this.stringToUserIdConverter = stringToUserIdConverter;
     }
     @GetMapping("/test/all")
     public ResponseEntity<List<TestResponse>> getAllTests(){
@@ -52,7 +61,7 @@ public class TestController {
     public ResponseEntity<TestResponse> getTest(@PathVariable long id) {
         try {
             Test test = new Test();
-            test = testDAO.get(id);
+            test = testDAO.get(id).get();
             TestResponse testResponse = new TestResponse();
             testResponse.setTest_id(test.getTest_id());
             testResponse.setTest_title(test.getTest_title());
@@ -69,6 +78,7 @@ public class TestController {
     @PostMapping("/test/add")
     public ResponseEntity<GeneralAddResponse> addTest(@RequestBody TestRequest addTestRequest){
        try {
+           User user = userDAO.get(stringToUserIdConverter.convert(addTestRequest.getUser_id())).get();
            if(!testDAO.getByTestTitle(addTestRequest.getTest_title())){
                Test testSave = new Test();
                Course course = new Course();
@@ -79,6 +89,7 @@ public class TestController {
                testSave.setTest_date(addTestRequest.getTest_date());
                testSave.setTest_time_start(addTestRequest.getTest_time_start());
                testSave.setTest_time_end(addTestRequest.getTest_time_end());
+               testSave.assignUser(user);
                switch(addTestRequest.getQuestions_type()){
                    case ("MC"):
                        testSave.setQuestionType(QuestionType.MULTIPLE_CHOICE);
@@ -132,7 +143,7 @@ public class TestController {
         try {
             Boolean check;
             Test test = new Test();
-            test = testDAO.get(id);
+            test = testDAO.get(id).get();
             check = testDAO.delete(test);
             return new ResponseEntity<>(check, HttpStatus.OK);
         }catch (Exception e){

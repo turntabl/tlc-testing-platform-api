@@ -2,6 +2,7 @@ package com.turntabl.testsystem.message;
 
 public class TestRequest {
     private long course_id;
+    private String user_id;
     private long test_id;
     private String test_title;
     private String questions_type;
@@ -11,15 +12,19 @@ public class TestRequest {
     private String test_time_end;
     public TestRequest() {
     }
-    public TestRequest(long course_id, long test_id, String test_title, String test_rules, String test_date, String test_time_start, String test_time_end) {
+
+    public TestRequest(long course_id, String user_id, long test_id, String test_title, String questions_type, String test_rule, String test_date, String test_time_start, String test_time_end) {
         this.course_id = course_id;
+        this.user_id = user_id;
         this.test_id = test_id;
         this.test_title = test_title;
-        this.test_rule = test_rules;
+        this.questions_type = questions_type;
+        this.test_rule = test_rule;
         this.test_date = test_date;
         this.test_time_start = test_time_start;
         this.test_time_end = test_time_end;
     }
+
     public long getCourse_id() {
         return course_id;
     }
@@ -67,5 +72,13 @@ public class TestRequest {
     }
     public void setQuestions_type(String questions_type) {
         this.questions_type = questions_type;
+    }
+
+    public String getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
     }
 }

@@ -51,5 +51,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public EmailService emailService(){return  new EmailService();}
     @Bean
     public StringToUserIdConverter stringToUserIdConverter(){return new StringToUserIdConverter();}
-
+    @Bean
+    public UserDAO userDAO(){return new UserDAO();}
 }

@@ -8,15 +8,19 @@ public class QuestionRequest {
     private List<String> option = new ArrayList<>(3);
     private String validAnswer;
     private Double mark_allocated;
+    private String user_id;
     public QuestionRequest() {
     }
-    public QuestionRequest(long testId, String question, List<String> option, String validAnswer, Double mark_allocated) {
+
+    public QuestionRequest(long testId, String question, List<String> option, String validAnswer, Double mark_allocated, String user_id) {
         this.testId = testId;
         this.question = question;
         this.option = option;
         this.validAnswer = validAnswer;
         this.mark_allocated = mark_allocated;
+        this.user_id = user_id;
     }
+
     public String getValidAnswer() {
         return validAnswer;
     }
@@ -46,5 +50,13 @@ public class QuestionRequest {
     }
     public void setOption(List<String> option) {
         this.option = option;
+    }
+
+    public String getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
     }
 }

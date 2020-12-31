@@ -1,11 +1,14 @@
 package com.turntabl.testsystem.controller;
 
 import com.turntabl.testsystem.dao.CourseDAO;
+import com.turntabl.testsystem.dao.UserDAO;
+import com.turntabl.testsystem.helper.StringToUserIdConverter;
 import com.turntabl.testsystem.message.CourseRequest;
 import com.turntabl.testsystem.message.CourseResponse;
 import com.turntabl.testsystem.message.GeneralAddResponse;
 import com.turntabl.testsystem.message.CourseUpdateRequest;
 import com.turntabl.testsystem.model.Course;
+import com.turntabl.testsystem.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,8 +21,14 @@ import java.util.stream.Collectors;
 public class CourseController {
     @Autowired
     private final CourseDAO courseDAO;
-    public CourseController(CourseDAO courseDAO) {
+    @Autowired
+    private final UserDAO userDAO;
+    @Autowired
+    private final StringToUserIdConverter stringToUserIdConverter;
+    public CourseController(CourseDAO courseDAO, UserDAO userDAO, StringToUserIdConverter stringToUserIdConverter) {
         this.courseDAO = courseDAO;
+        this.userDAO = userDAO;
+        this.stringToUserIdConverter = stringToUserIdConverter;
     }
     @GetMapping("/courses/get")
     public ResponseEntity<List<CourseResponse>> getAllCourses(){
@@ -52,9 +61,11 @@ public class CourseController {
     @PostMapping("/course/add")
     public ResponseEntity<GeneralAddResponse> addCourse(@RequestBody CourseRequest courseRequest) {
         try {
+            User user = userDAO.get(stringToUserIdConverter.convert(courseRequest.getUser_id())).get();
             if(!courseDAO.getByName(courseRequest.getCourseName())){
                 Course course = new Course();
                 course.setCourse_name(courseRequest.getCourseName());
+                course.assignUser(user);
                 courseDAO.add(course);
                 return new ResponseEntity<>(new GeneralAddResponse("success"), HttpStatus.OK);
             }else{

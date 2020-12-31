@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -83,17 +84,17 @@ public class StudentAnswerController {
     public ResponseEntity<GeneralAddResponse> submitAnswers(@RequestBody StudentAnswerRequest answers){
         try{
             Student student = studentDAO.get(stringToUserIdConverter.convert(answers.getStudent_id()));
-            Test test = testDAO.get(answers.getTest_id());
+            Optional<Test> test = testDAO.get(answers.getTest_id());
             List<StudentAnswer> studentAnswerList;
             List<StudentAnswer> studentAnswers = new ArrayList<>();
-            String question_type = testDAO.get(answers.getTest_id()).getQuestionType().getCode();
+            String question_type = testDAO.get(answers.getTest_id()).get().getQuestionType().getCode();
             switch (question_type){
                 case ("MC"):
                     studentAnswers = answers.getAnswers().stream().map(
                             answer -> {
                                 StudentAnswer studentAnswer = new StudentAnswer();
                                 studentAnswer.assignStudent(student);
-                                studentAnswer.assignTest(test);
+                                studentAnswer.assignTest(test.get());
                                 studentAnswer.assignQuestion(questionDAO.get(answer.getQuestion_id()));
                                 if(answer.getOption_id() == (validAnswerDAO.getByQuestionId(answer.getQuestion_id()).getOption().getOptionId())){
                                     studentAnswer.setAnswer_mark(questionDAO.get(answer.getQuestion_id()).getMark_allocated());
@@ -111,7 +112,7 @@ public class StudentAnswerController {
                             answer -> {
                                 StudentAnswer studentAnswer = new StudentAnswer();
                                 studentAnswer.assignStudent(studentDAO.get(stringToUserIdConverter.convert(answers.getStudent_id())));
-                                studentAnswer.assignTest(testDAO.get(answers.getTest_id()));
+                                studentAnswer.assignTest(testDAO.get(answers.getTest_id()).get());
                                 studentAnswer.assignQuestion(questionDAO.get(answer.getQuestion_id()));
                                 studentAnswer.setAnswer_mark(0.0);
                                 studentAnswer.setStudent_answer(answer.getAnswer());
@@ -129,7 +130,7 @@ public class StudentAnswerController {
                                          ) {
                                         totalMark+=sa.getAnswer_mark();
                                     }
-                                    testResult.assignTest(test);
+                                    testResult.assignTest(test.get());
                                     testResult.setTest_mark(totalMark);
                                     testResult.assignStudent(student);
                                     if(totalMark > 89 && totalMark <101){

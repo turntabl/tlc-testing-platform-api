@@ -19,6 +19,9 @@ public class Test implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "course_id", nullable = false)
     private Course course;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "test")
     private Set<StudentAnswer> studentAnswers  = new HashSet<>(0);
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "test")
@@ -185,5 +188,17 @@ public class Test implements Serializable {
     }
     public void addTestResult(TestResult testResult){
         this.testResults.add(testResult);
+    }
+    public void assignUser(User user){
+        this.user = user;
+        this.user.addTest(this);
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }
