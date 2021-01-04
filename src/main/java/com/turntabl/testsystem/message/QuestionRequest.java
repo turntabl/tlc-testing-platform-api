@@ -12,6 +12,13 @@ public class QuestionRequest {
     public QuestionRequest() {
     }
 
+    public QuestionRequest(String question, Double mark_allocated, String validAnswer, List<String> option) {
+        this.question = question;
+        this.option = option;
+        this.validAnswer = validAnswer;
+        this.mark_allocated = mark_allocated;
+    }
+
     public QuestionRequest(long testId, String question, List<String> option, String validAnswer, Double mark_allocated, String user_id) {
         this.testId = testId;
         this.question = question;

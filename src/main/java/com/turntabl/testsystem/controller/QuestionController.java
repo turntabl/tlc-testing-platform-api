@@ -1,16 +1,16 @@
 package com.turntabl.testsystem.controller;
 
 import com.turntabl.testsystem.dao.*;
+import com.turntabl.testsystem.helper.AddMultipleChoiceQuestionsCSVHelper;
 import com.turntabl.testsystem.helper.StringToUserIdConverter;
-import com.turntabl.testsystem.message.GeneralAddResponse;
-import com.turntabl.testsystem.message.OptionResponse;
-import com.turntabl.testsystem.message.QuestionRequest;
-import com.turntabl.testsystem.message.QuestionResponse;
+import com.turntabl.testsystem.message.*;
 import com.turntabl.testsystem.model.*;
+import com.turntabl.testsystem.service.AddMultipleChoiceQuestionsCSVService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -30,13 +30,16 @@ import java.util.stream.Collectors;
         private final UserDAO userDAO;
         @Autowired
         private final StringToUserIdConverter stringToUserIdConverter;
-        public QuestionController(QuestionDAO questionDAO, OptionDAO optionDAO, TestDAO testDAO, ValidAnswerDAO validAnswerDAO, UserDAO userDAO, StringToUserIdConverter stringToUserIdConverter) {
+        @Autowired
+        private final AddMultipleChoiceQuestionsCSVService addMultipleChoiceQuestionsCSVService;
+        public QuestionController(QuestionDAO questionDAO, OptionDAO optionDAO, TestDAO testDAO, ValidAnswerDAO validAnswerDAO, UserDAO userDAO, StringToUserIdConverter stringToUserIdConverter, AddMultipleChoiceQuestionsCSVService addMultipleChoiceQuestionsCSVService) {
             this.questionDAO = questionDAO;
             this.optionDAO = optionDAO;
             this.testDAO = testDAO;
             this.validAnswerDAO = validAnswerDAO;
             this.userDAO = userDAO;
             this.stringToUserIdConverter = stringToUserIdConverter;
+            this.addMultipleChoiceQuestionsCSVService = addMultipleChoiceQuestionsCSVService;
         }
         @GetMapping("/question/{test_id}")
         public ResponseEntity<List<QuestionResponse>> getQuestionByTestId(@PathVariable long test_id) {
@@ -105,4 +108,21 @@ import java.util.stream.Collectors;
             return new ResponseEntity<>(new GeneralAddResponse(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+        @PostMapping(value = "/questions/upload", consumes = {"multipart/form-data"})
+        public ResponseEntity<ResponseMessage> uploadFile(@RequestPart("file") MultipartFile file, @RequestParam(value = "test_id") Long test_id) {
+            String message = "";
+            AddStudentSaveResponse addStudentSaveResponse;
+            if (AddMultipleChoiceQuestionsCSVHelper.hasCSVFormat(file)) {
+                try {
+                    addStudentSaveResponse = addMultipleChoiceQuestionsCSVService.save(file, test_id);
+                    message = "Uploaded the file successfully: " + file.getOriginalFilename();
+                    return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message, 200, addStudentSaveResponse));
+                } catch (Exception e) {
+                    message = "Could not upload the file: " + file.getOriginalFilename() + "!";
+                    return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message, 203, null));
+                }
+            }
+            message = "Please upload an excel or csv file!";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage(message, 203, null));
+        }
     }

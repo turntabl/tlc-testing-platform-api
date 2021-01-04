@@ -1,9 +1,11 @@
 package com.turntabl.testsystem.configuration;
 import com.turntabl.testsystem.dao.*;
 import com.turntabl.testsystem.helper.StringToUserIdConverter;
+import com.turntabl.testsystem.service.AddMultipleChoiceQuestionsCSVService;
 import com.turntabl.testsystem.service.EmailService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableMBeanExport;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -53,4 +55,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public StringToUserIdConverter stringToUserIdConverter(){return new StringToUserIdConverter();}
     @Bean
     public UserDAO userDAO(){return new UserDAO();}
+    @Bean
+    public AddMultipleChoiceQuestionsCSVService addMultipleChoiceQuestionsCSVService(){
+        return new AddMultipleChoiceQuestionsCSVService(questionDAO(), testDAO(), optionDAO(), validAnswerDAO(), userDAO(), stringToUserIdConverter());
+    }
 }
