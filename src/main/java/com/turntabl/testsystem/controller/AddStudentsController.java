@@ -32,14 +32,14 @@ public class AddStudentsController {
             try {
                 addStudentSaveResponse = fileService.save(file);
                 message = "Uploaded the file successfully: " + file.getOriginalFilename();
-                return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message, 200, addStudentSaveResponse));
+                return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage<>(message, 200, addStudentSaveResponse));
             } catch (Exception e) {
                 message = "Could not upload the file: " + file.getOriginalFilename() + "!";
-                return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message, 203, null));
+                return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage<>(message, 203, null));
             }
         }
         message = "Please upload an excel or csv file!";
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage(message, 203, null));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage<>(message, 203, null));
     }
     @GetMapping("/students")
     public ResponseEntity<List<StudentDetails>> getAllStudents() {
