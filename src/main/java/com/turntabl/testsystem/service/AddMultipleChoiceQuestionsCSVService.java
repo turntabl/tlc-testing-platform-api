@@ -4,6 +4,7 @@ import com.turntabl.testsystem.dao.*;
 import com.turntabl.testsystem.helper.AddMultipleChoiceQuestionsCSVHelper;
 import com.turntabl.testsystem.helper.AddStudentsCSVHelper;
 import com.turntabl.testsystem.helper.StringToUserIdConverter;
+import com.turntabl.testsystem.message.AddQuestionsResponse;
 import com.turntabl.testsystem.message.AddStudentSaveResponse;
 import com.turntabl.testsystem.message.StudentDetails;
 import com.turntabl.testsystem.model.*;
@@ -46,14 +47,14 @@ public class AddMultipleChoiceQuestionsCSVService {
     }
 
 
-    public AddStudentSaveResponse save(MultipartFile file, Long test_id) {
+    public AddQuestionsResponse save(MultipartFile file, Long test_id) {
         Optional<Test> test = testDAO.get(test_id);
         AtomicInteger total_record_inserted = new AtomicInteger();
-        AddStudentSaveResponse addStudentSaveResponse = new AddStudentSaveResponse();
-        List<StudentDetails> students = new ArrayList<>();
+        AddQuestionsResponse addQuestionsResponse = new AddQuestionsResponse();
+        List<Question> questions = new ArrayList<>();
         if(AddStudentsCSVHelper.hasCSVFormat(file)){
             try {
-                AddMultipleChoiceQuestionsCSVHelper.csvToQuestions(file.getInputStream()).stream()
+                questions=AddMultipleChoiceQuestionsCSVHelper.csvToQuestions(file.getInputStream()).stream()
                         .map(questionRequest -> {
                             ValidAnswer validAnswer  = new ValidAnswer();
                             Question question = new Question();
@@ -85,8 +86,8 @@ public class AddMultipleChoiceQuestionsCSVService {
                 throw new RuntimeException("fail to store csv data: " + e.getMessage());
             }
         }
-        addStudentSaveResponse.setAtomicInteger(total_record_inserted);
-        addStudentSaveResponse.setStudentList(students);
-        return addStudentSaveResponse;
+        addQuestionsResponse.setAtomicInteger(total_record_inserted);
+        addQuestionsResponse.setQuestions(questions);
+        return addQuestionsResponse;
     }
 }
