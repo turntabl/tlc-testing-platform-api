@@ -111,18 +111,18 @@ import java.util.stream.Collectors;
         @PostMapping(value = "/questions/upload", consumes = {"multipart/form-data"})
         public ResponseEntity<ResponseMessage> uploadFile(@RequestPart("file") MultipartFile file, @RequestParam(value = "test_id") Long test_id) {
             String message = "";
-            AddStudentSaveResponse addStudentSaveResponse;
+            AddQuestionsResponse addQuestionsResponse;
             if (AddMultipleChoiceQuestionsCSVHelper.hasCSVFormat(file)) {
                 try {
-                    addStudentSaveResponse = addMultipleChoiceQuestionsCSVService.save(file, test_id);
+                    addQuestionsResponse = addMultipleChoiceQuestionsCSVService.save(file, test_id);
                     message = "Uploaded the file successfully: " + file.getOriginalFilename();
-                    return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message, 200, addStudentSaveResponse));
+                    return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage<>(message, 200, addQuestionsResponse));
                 } catch (Exception e) {
                     message = "Could not upload the file: " + file.getOriginalFilename() + "!";
-                    return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message, 203, null));
+                    return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage<>(message, 203, null));
                 }
             }
             message = "Please upload an excel or csv file!";
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage(message, 203, null));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage<>(message, 203, null));
         }
     }
