@@ -49,9 +49,6 @@ public class TestController {
                         testResponse.setTest_time_end(test.getTest_time_end());
                         return testResponse;
                     }).collect(Collectors.toList());
-            if (tests.isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            }
             return new ResponseEntity<>(tests, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);

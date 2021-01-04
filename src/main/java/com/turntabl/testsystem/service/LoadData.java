@@ -18,8 +18,6 @@ public class LoadData implements ApplicationRunner {
     }
 
     private void loadUserData() {
-        System.out.println(Role.SUPER_ADMIN);
-        System.out.println(Role.ADMIN);
         if (!userDAO.getByEmail("sam@turntabl.io").isPresent()) {
             User user = new User();
             user.setEmail("sam@turntabl.io");

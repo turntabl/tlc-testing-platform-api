@@ -8,9 +8,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class AddQuestionsResponse {
     private AtomicInteger atomicInteger;
-    private List<Question> questions = new ArrayList<>();
+    private List<QuestionDetails> questions = new ArrayList<>();
 
-    public AddQuestionsResponse(AtomicInteger atomicInteger, List<Question> questions) {
+    public AddQuestionsResponse(AtomicInteger atomicInteger, List<QuestionDetails> questions) {
         this.atomicInteger = atomicInteger;
         this.questions = questions;
     }
@@ -26,11 +26,11 @@ public class AddQuestionsResponse {
         this.atomicInteger = atomicInteger;
     }
 
-    public List<Question> getQuestions() {
+    public List<QuestionDetails> getQuestions() {
         return questions;
     }
 
-    public void setQuestions(List<Question> questions) {
+    public void setQuestions(List<QuestionDetails> questions) {
         this.questions = questions;
     }
 }

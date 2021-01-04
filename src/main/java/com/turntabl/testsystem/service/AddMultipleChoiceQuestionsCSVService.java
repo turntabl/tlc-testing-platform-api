@@ -6,6 +6,7 @@ import com.turntabl.testsystem.helper.AddStudentsCSVHelper;
 import com.turntabl.testsystem.helper.StringToUserIdConverter;
 import com.turntabl.testsystem.message.AddQuestionsResponse;
 import com.turntabl.testsystem.message.AddStudentSaveResponse;
+import com.turntabl.testsystem.message.QuestionDetails;
 import com.turntabl.testsystem.message.StudentDetails;
 import com.turntabl.testsystem.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,12 +52,13 @@ public class AddMultipleChoiceQuestionsCSVService {
         Optional<Test> test = testDAO.get(test_id);
         AtomicInteger total_record_inserted = new AtomicInteger();
         AddQuestionsResponse addQuestionsResponse = new AddQuestionsResponse();
-        List<Question> questions = new ArrayList<>();
+        List<QuestionDetails> questions = new ArrayList<>();
         if(AddStudentsCSVHelper.hasCSVFormat(file)){
             try {
                 questions=AddMultipleChoiceQuestionsCSVHelper.csvToQuestions(file.getInputStream()).stream()
                         .map(questionRequest -> {
                             ValidAnswer validAnswer  = new ValidAnswer();
+                            QuestionDetails questionDetails = new QuestionDetails();
                             Question question = new Question();
                             question.setQuestion(questionRequest.getQuestion());
                             question.setMark_allocated(questionRequest.getMark_allocated());
@@ -79,8 +81,13 @@ public class AddMultipleChoiceQuestionsCSVService {
                             validAnswer.setQuestion(question);
                             validAnswer.setOption(option);
                             validAnswerDAO.add(validAnswer);
+                            questionDetails.setQuestion(question.getQuestion());
+                            questionDetails.setQuestion_id(question.getQuestion_id());
+                            questionDetails.setMark_allocated(question.getMark_allocated());
+                            questionDetails.setTestId(question.getTestId().getTest_id());
+                            questionDetails.setValidAnswer(questionRequest.getValidAnswer());
                             total_record_inserted.addAndGet(1);
-                            return question;
+                            return questionDetails;
                         }).collect(Collectors.toList());
             } catch (IOException e) {
                 throw new RuntimeException("fail to store csv data: " + e.getMessage());
