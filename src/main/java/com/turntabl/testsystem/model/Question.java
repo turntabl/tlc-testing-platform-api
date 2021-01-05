@@ -19,13 +19,13 @@ public class Question implements Serializable {
     private String question;
     @Column(name = "mark_allocated")
     private Double mark_allocated;
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "question")
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true )
     private StudentAnswer studentAnswer;
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "question")
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true )
     private ValidAnswer validAnswer;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "question")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true )
     private Set<QuestionsInTest> questionsInTests = new HashSet<>(0);
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "question")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true )
     private Set<Option> options = new HashSet<>(0);
     public Question() {
     }

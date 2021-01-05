@@ -51,11 +51,31 @@ public class AddStudentsController {
         }
     }
     @GetMapping("/student/{id}")
-    public ResponseEntity<Student> getStudentById(@PathVariable UUID id) {
-            return new ResponseEntity<>(studentDAO.get(id), HttpStatus.OK);
+    public ResponseEntity<StudentDetails> getStudentById(@PathVariable UUID id) {
+        try{
+            Student student = studentDAO.get(id);
+            StudentDetails studentDetails = new StudentDetails();
+            studentDetails.setStudent_id(student.getStudent_id());
+            studentDetails.setEmail(student.getEmail());
+            studentDetails.setFirst_name(studentDetails.getFirst_name());
+            studentDetails.setLast_name(student.getLast_name());
+            return new ResponseEntity<>(studentDetails, HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
     @GetMapping("/student/find/{email}")
-    public ResponseEntity<Student> getStudentByEmail(@PathVariable String email) {
-        return new ResponseEntity<>(studentDAO.getByEmail(email), HttpStatus.OK);
+    public ResponseEntity<StudentDetails> getStudentByEmail(@PathVariable String email) {
+       try{
+           Student student = studentDAO.getByEmail(email);
+           StudentDetails studentDetails = new StudentDetails();
+           studentDetails.setStudent_id(student.getStudent_id());
+           studentDetails.setEmail(student.getEmail());
+           studentDetails.setFirst_name(studentDetails.getFirst_name());
+           studentDetails.setLast_name(student.getLast_name());
+           return new ResponseEntity<>(studentDetails, HttpStatus.OK);
+       }catch (Exception e){
+           return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

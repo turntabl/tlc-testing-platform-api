@@ -31,11 +31,11 @@ public class Student implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "time_created")
     private Date createdAt;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "student")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "student" )
     private Set<Feedback> feedbacks = new HashSet<>(0);
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "student")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "student" )
     private Set<StudentAnswer> studentAnswers = new HashSet<>(0);
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "student")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "student" )
     private Set<TestResult> testResults = new HashSet<>(0);
     public Student() {
     }

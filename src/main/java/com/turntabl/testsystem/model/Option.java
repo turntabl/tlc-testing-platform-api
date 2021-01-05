@@ -15,7 +15,7 @@ public class Option implements Serializable {
     private Question question;
     @Column(name = "option")
     private String option;
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "option")
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "option" )
     private ValidAnswer validAnswer;
     public Option() {
     }

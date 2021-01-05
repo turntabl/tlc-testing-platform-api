@@ -22,13 +22,13 @@ public class Test implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "test")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "test", cascade = CascadeType.ALL, orphanRemoval = true )
     private Set<StudentAnswer> studentAnswers  = new HashSet<>(0);
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "test")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "test", cascade = CascadeType.ALL, orphanRemoval = true )
     private Set<QuestionsInTest> questionsInTests  = new HashSet<>(0);
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "testId")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "testId", cascade = CascadeType.ALL, orphanRemoval = true )
     private Set<Question> questions  = new HashSet<>(0);
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "test")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "test", cascade = CascadeType.ALL, orphanRemoval = true )
     private Set<TestResult> testResults  = new HashSet<>(0);
     private QuestionType questionType;
     @Column(name = "test_title")

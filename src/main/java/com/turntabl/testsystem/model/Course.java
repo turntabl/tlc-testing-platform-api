@@ -17,7 +17,7 @@ public class Course implements Serializable {
     private long course_id;
     @Column(name = "course_name")
     private String course_name;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "course")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true )
     private Set<Test> tests = new HashSet<>(0);
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
