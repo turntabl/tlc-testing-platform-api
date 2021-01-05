@@ -36,9 +36,9 @@ public class CourseDAO {
     }
     public boolean delete(Course course) {
         boolean isDeleted = false;
-        Optional<Course> optionalTest = this.courseRepository.findById(course.getCourse_id());
-        if (optionalTest.isPresent()) {
-            this.courseRepository.delete(optionalTest.get());
+        Optional<Course> optionalCourse = this.courseRepository.findById(course.getCourse_id());
+        if (optionalCourse.isPresent()) {
+            this.courseRepository.delete(optionalCourse.get());
             isDeleted = true;
         }
         return isDeleted;

@@ -1,9 +1,10 @@
 package com.turntabl.testsystem.model;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "valid_answers")
@@ -18,6 +19,12 @@ public class ValidAnswer implements Serializable {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "option_id", nullable = false)
     private Option option;
+    @UpdateTimestamp
+    @Column(name = "time_updated")
+    private LocalDateTime updatedAt;
+    @CreationTimestamp
+    @Column(name = "time_created")
+    private LocalDateTime createdAt;
 
     public ValidAnswer() {
     }
@@ -50,5 +57,21 @@ public class ValidAnswer implements Serializable {
 
     public void setOption(Option option) {
         this.option = option;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 }

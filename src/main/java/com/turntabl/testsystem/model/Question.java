@@ -1,7 +1,10 @@
 package com.turntabl.testsystem.model;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -27,8 +30,15 @@ public class Question implements Serializable {
     private Set<QuestionsInTest> questionsInTests = new HashSet<>(0);
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true )
     private Set<Option> options = new HashSet<>(0);
+    @UpdateTimestamp
+    @Column(name = "time_updated")
+    private LocalDateTime updatedAt;
+    @CreationTimestamp
+    @Column(name = "time_created")
+    private LocalDateTime createdAt;
     public Question() {
     }
+
     public Question(long question_id, Test testId, String question, Double mark_allocated, StudentAnswer studentAnswer, ValidAnswer validAnswer, Set<QuestionsInTest> questionsInTests, Set<Option> options) {
         this.question_id = question_id;
         this.testId = testId;
@@ -39,6 +49,7 @@ public class Question implements Serializable {
         this.questionsInTests = questionsInTests;
         this.options = options;
     }
+
     public StudentAnswer getStudentAnswer() {
         return studentAnswer;
     }
@@ -89,4 +100,20 @@ public class Question implements Serializable {
     }
     public void addOption(Option option){this.options.add(option);}
     public void assignTest(Test test){this.testId = test; this.testId.addQuestion(this);}
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
 }

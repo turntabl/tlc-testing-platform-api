@@ -4,7 +4,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -24,13 +24,11 @@ public class Student implements Serializable {
     @Column(name = "email")
     private String email;
     @UpdateTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "time_updated")
-    private Date updatedAt;
+    private LocalDateTime updatedAt;
     @CreationTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "time_created")
-    private Date createdAt;
+    private LocalDateTime createdAt;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "student" )
     private Set<Feedback> feedbacks = new HashSet<>(0);
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "student" )
@@ -76,16 +74,16 @@ public class Student implements Serializable {
     public void setEmail(String email) {
         this.email = email;
     }
-    public Date getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
-    public Date getUpdatedAt() {
+    public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
-    public void setUpdatedAt(Date updatedAt) {
+    public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
     public Set<Feedback> getFeedbacks() {

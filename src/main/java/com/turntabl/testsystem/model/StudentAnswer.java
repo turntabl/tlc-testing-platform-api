@@ -3,7 +3,7 @@ package com.turntabl.testsystem.model;
 import org.hibernate.annotations.CreationTimestamp;
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "student_answers")
@@ -30,11 +30,10 @@ public class StudentAnswer implements Serializable {
     @Column(name = "comment")
     private String comment;
     @CreationTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "time_created")
-    private Date dateAnswered;
+    private LocalDateTime dateAnswered;
 
-    public StudentAnswer(long student_answer_id, Question question, Test test, Student student, Long student_answer_option_id, String student_answer, Double answer_mark, String comment, Date dateAnswered) {
+    public StudentAnswer(long student_answer_id, Question question, Test test, Student student, Long student_answer_option_id, String student_answer, Double answer_mark, String comment) {
         this.student_answer_id = student_answer_id;
         this.question = question;
         this.test = test;
@@ -43,7 +42,6 @@ public class StudentAnswer implements Serializable {
         this.student_answer = student_answer;
         this.answer_mark = answer_mark;
         this.comment = comment;
-        this.dateAnswered = dateAnswered;
     }
 
     public StudentAnswer() {
@@ -105,11 +103,11 @@ public class StudentAnswer implements Serializable {
         this.comment = comment;
     }
 
-    public Date getDateAnswered() {
+    public LocalDateTime getDateAnswered() {
         return dateAnswered;
     }
 
-    public void setDateAnswered(Date dateAnswered) {
+    public void setDateAnswered(LocalDateTime dateAnswered) {
         this.dateAnswered = dateAnswered;
     }
 

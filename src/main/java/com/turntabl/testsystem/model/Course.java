@@ -4,7 +4,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -23,23 +23,19 @@ public class Course implements Serializable {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
     @UpdateTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "time_updated")
-    private Date updatedAt;
+    private LocalDateTime updatedAt;
     @CreationTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "time_created")
-    private Date createdAt;
+    private LocalDateTime createdAt;
     public Course() {
     }
 
-    public Course(long course_id, String course_name, Set<Test> tests, User user, Date updatedAt, Date createdAt) {
+    public Course(long course_id, String course_name, Set<Test> tests, User user) {
         this.course_id = course_id;
         this.course_name = course_name;
         this.tests = tests;
         this.user = user;
-        this.updatedAt = updatedAt;
-        this.createdAt = createdAt;
     }
 
     public long getCourse_id() {
@@ -51,18 +47,23 @@ public class Course implements Serializable {
     public String getCourse_name() {
         return course_name;
     }
-    public Date getUpdatedAt() {
+
+    public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
-    public void setUpdatedAt(Date updatedAt) {
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
-    public Date getCreatedAt() {
+
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
-    public void setCreatedAt(Date createdAt) {
+
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
+
     public void setCourse_name(String course_name) {
         this.course_name = course_name;
     }

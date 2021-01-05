@@ -109,12 +109,12 @@ import java.util.stream.Collectors;
         }
     }
         @PostMapping(value = "/questions/upload", consumes = {"multipart/form-data"})
-        public ResponseEntity<ResponseMessage> uploadFile(@RequestPart("file") MultipartFile file, @RequestParam(value = "test_id") Long test_id) {
+        public ResponseEntity<ResponseMessage> uploadFile(@RequestPart("file") MultipartFile file, @RequestParam(value = "test_id") String test_id) {
             String message = "";
             AddQuestionsResponse addQuestionsResponse;
             if (AddMultipleChoiceQuestionsCSVHelper.hasCSVFormat(file)) {
                 try {
-                    addQuestionsResponse = addMultipleChoiceQuestionsCSVService.save(file, test_id);
+                    addQuestionsResponse = addMultipleChoiceQuestionsCSVService.save(file, Long.parseLong(test_id));
                     message = "Uploaded the file successfully: " + file.getOriginalFilename();
                     return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage<>(message, 200, addQuestionsResponse));
                 } catch (Exception e) {

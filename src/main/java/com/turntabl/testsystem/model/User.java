@@ -1,8 +1,10 @@
 package com.turntabl.testsystem.model;
 
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
-
+import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -27,6 +29,12 @@ public class User {
     private Set<Test> tests = new HashSet<>(0);
     @Column(name = "role")
     private Integer role;
+    @UpdateTimestamp
+    @Column(name = "time_updated")
+    private LocalDateTime updatedAt;
+    @CreationTimestamp
+    @Column(name = "time_created")
+    private LocalDateTime createdAt;
 
     public User() {
     }
@@ -99,5 +107,21 @@ public class User {
 
     public void setTests(Set<Test> tests) {
         this.tests = tests;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 }

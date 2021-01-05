@@ -95,8 +95,7 @@ public class CourseController {
     public ResponseEntity<Boolean> deleteCourse(@PathVariable long id){
         try {
             Boolean check;
-            Course course = new Course();
-            course = courseDAO.get(id);
+            Course course = courseDAO.get(id);
             check = courseDAO.delete(course);
             return new ResponseEntity<>(check, HttpStatus.OK);
         }catch (Exception e){

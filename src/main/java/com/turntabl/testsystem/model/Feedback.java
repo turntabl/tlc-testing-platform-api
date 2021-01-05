@@ -4,7 +4,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name="feedbacks")
@@ -19,13 +19,11 @@ public class Feedback implements Serializable {
     @Column(name = "feedback")
     private String feedback;
     @UpdateTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "time_updated")
-    private Date updatedAt;
+    private LocalDateTime updatedAt;
     @CreationTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "time_created")
-    private Date createdAt;
+    private LocalDateTime createdAt;
     //constructor
     public Feedback() {
     }
@@ -50,18 +48,23 @@ public class Feedback implements Serializable {
     public String getFeedback() {
         return feedback;
     }
-    public Date getUpdatedAt() {
+
+    public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
-    public void setUpdatedAt(Date updatedAt) {
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
-    public Date getCreatedAt() {
+
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
-    public void setCreatedAt(Date createdAt) {
+
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
+
     public void setFeedback(String feedback) {
         this.feedback = feedback;
     }

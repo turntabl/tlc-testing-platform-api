@@ -1,6 +1,9 @@
 package com.turntabl.testsystem.model;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name="student_test_records")
@@ -15,6 +18,12 @@ public class StudentTestRecord {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "test_id", nullable = false)
     private Test test;
+    @UpdateTimestamp
+    @Column(name = "time_updated")
+    private LocalDateTime updatedAt;
+    @CreationTimestamp
+    @Column(name = "time_created")
+    private LocalDateTime createdAt;
 
     public StudentTestRecord() {
     }
@@ -57,5 +66,21 @@ public class StudentTestRecord {
     public void assignTest(Test test){
         this.test = test;
         this.test.addStudentTestRecord(this);
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 }
