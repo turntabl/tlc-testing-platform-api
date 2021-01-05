@@ -5,10 +5,7 @@ import com.turntabl.testsystem.helper.StringToUserIdConverter;
 import com.turntabl.testsystem.message.AnswerResponse;
 import com.turntabl.testsystem.message.GeneralAddResponse;
 import com.turntabl.testsystem.message.StudentAnswerRequest;
-import com.turntabl.testsystem.model.Student;
-import com.turntabl.testsystem.model.StudentAnswer;
-import com.turntabl.testsystem.model.Test;
-import com.turntabl.testsystem.model.TestResult;
+import com.turntabl.testsystem.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +32,9 @@ public class StudentAnswerController {
     private final ValidAnswerDAO validAnswerDAO;
     @Autowired
     private final TestResultDAO testResultDAO;
-    public StudentAnswerController(StringToUserIdConverter stringToUserIdConverter, StudentAnswerDAO studentAnswerDAO, QuestionDAO questionDAO, TestDAO testDAO, StudentDAO studentDAO, ValidAnswerDAO validAnswerDAO, TestResultDAO testResultDAO) {
+    @Autowired
+    private final StudentTestRecordDAO studentTestRecordDAO;
+    public StudentAnswerController(StringToUserIdConverter stringToUserIdConverter, StudentAnswerDAO studentAnswerDAO, QuestionDAO questionDAO, TestDAO testDAO, StudentDAO studentDAO, ValidAnswerDAO validAnswerDAO, TestResultDAO testResultDAO, StudentTestRecordDAO studentTestRecordDAO) {
         this.stringToUserIdConverter = stringToUserIdConverter;
         this.studentAnswerDAO = studentAnswerDAO;
         this.questionDAO = questionDAO;
@@ -43,6 +42,7 @@ public class StudentAnswerController {
         this.studentDAO = studentDAO;
         this.validAnswerDAO = validAnswerDAO;
         this.testResultDAO = testResultDAO;
+        this.studentTestRecordDAO = studentTestRecordDAO;
     }
     @GetMapping("/answers/get-by-student/{test_id}/{student_id}")
     public ResponseEntity<List<AnswerResponse>> getAllAnswersByStudent(@PathVariable Long test_id, @PathVariable String student_id ){
@@ -83,8 +83,11 @@ public class StudentAnswerController {
     @PostMapping("/test-answer")
     public ResponseEntity<GeneralAddResponse> submitAnswers(@RequestBody StudentAnswerRequest answers){
         try{
+            StudentTestRecord studentTestRecord = new StudentTestRecord();
             Student student = studentDAO.get(stringToUserIdConverter.convert(answers.getStudent_id()));
+            studentTestRecord.assignStudent(student);
             Optional<Test> test = testDAO.get(answers.getTest_id());
+            studentTestRecord.assignTest(test.get());
             List<StudentAnswer> studentAnswerList;
             List<StudentAnswer> studentAnswers = new ArrayList<>();
             String question_type = testDAO.get(answers.getTest_id()).get().getQuestionType().getCode();
@@ -147,6 +150,7 @@ public class StudentAnswerController {
                                         testResult.setTest_grade('F');
                                     }
                                     testResultDAO.add(testResult);
+                                    studentTestRecordDAO.add(studentTestRecord);
                                 }
                                 return new ResponseEntity<>(new GeneralAddResponse("success"), HttpStatus.OK);
                             }catch (Exception e){

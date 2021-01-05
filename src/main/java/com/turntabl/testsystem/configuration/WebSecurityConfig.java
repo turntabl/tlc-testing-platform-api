@@ -56,6 +56,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public UserDAO userDAO(){return new UserDAO();}
     @Bean
+    public StudentTestRecordDAO studentTestRecordDAO(){return new StudentTestRecordDAO();}
+    @Bean
     public AddMultipleChoiceQuestionsCSVService addMultipleChoiceQuestionsCSVService(){
         return new AddMultipleChoiceQuestionsCSVService(questionDAO(), testDAO(), optionDAO(), validAnswerDAO(), userDAO(), stringToUserIdConverter());
     }

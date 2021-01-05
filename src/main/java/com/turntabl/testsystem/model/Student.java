@@ -37,6 +37,8 @@ public class Student implements Serializable {
     private Set<StudentAnswer> studentAnswers = new HashSet<>(0);
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "student" )
     private Set<TestResult> testResults = new HashSet<>(0);
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "student" )
+    private Set<StudentTestRecord> studentTestRecords = new HashSet<>(0);
     public Student() {
     }
     public Student(String first_name, String last_name, String email) {
@@ -101,6 +103,9 @@ public class Student implements Serializable {
                 ", last_name='" + last_name + '\'' +
                 ", email='" + email + '\'' +
                 '}';
+    }
+    public void addStudentTestRecord(StudentTestRecord studentTestRecord){
+        this.studentTestRecords.add(studentTestRecord);
     }
     public void addStudentAnswer(StudentAnswer studentAnswer){
         this.studentAnswers.add(studentAnswer);

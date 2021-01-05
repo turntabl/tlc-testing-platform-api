@@ -2,7 +2,6 @@ package com.turntabl.testsystem.model;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -30,6 +29,8 @@ public class Test implements Serializable {
     private Set<Question> questions  = new HashSet<>(0);
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "test", cascade = CascadeType.ALL, orphanRemoval = true )
     private Set<TestResult> testResults  = new HashSet<>(0);
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "test", cascade = CascadeType.ALL, orphanRemoval = true )
+    private Set<StudentTestRecord> studentTestRecords  = new HashSet<>(0);
     private QuestionType questionType;
     @Column(name = "test_title")
     private String test_title;
@@ -192,6 +193,10 @@ public class Test implements Serializable {
     public void assignUser(User user){
         this.user = user;
         this.user.addTest(this);
+    }
+
+    public void addStudentTestRecord(StudentTestRecord studentTestRecord){
+        this.studentTestRecords.add(studentTestRecord);
     }
 
     public User getUser() {
