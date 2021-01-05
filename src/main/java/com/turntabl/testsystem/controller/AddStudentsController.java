@@ -57,7 +57,7 @@ public class AddStudentsController {
             StudentDetails studentDetails = new StudentDetails();
             studentDetails.setStudent_id(student.getStudent_id());
             studentDetails.setEmail(student.getEmail());
-            studentDetails.setFirst_name(studentDetails.getFirst_name());
+            studentDetails.setFirst_name(student.getFirst_name());
             studentDetails.setLast_name(student.getLast_name());
             return new ResponseEntity<>(studentDetails, HttpStatus.OK);
         }catch (Exception e){
@@ -71,7 +71,7 @@ public class AddStudentsController {
            StudentDetails studentDetails = new StudentDetails();
            studentDetails.setStudent_id(student.getStudent_id());
            studentDetails.setEmail(student.getEmail());
-           studentDetails.setFirst_name(studentDetails.getFirst_name());
+           studentDetails.setFirst_name(student.getFirst_name());
            studentDetails.setLast_name(student.getLast_name());
            return new ResponseEntity<>(studentDetails, HttpStatus.OK);
        }catch (Exception e){
