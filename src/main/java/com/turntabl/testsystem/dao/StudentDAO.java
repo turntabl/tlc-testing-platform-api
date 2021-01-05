@@ -18,14 +18,6 @@ public class StudentDAO{
         this.studentRepository = studentRepository;
     }
 
-    public Student getByEmail(String email){
-        Student student = new Student();
-        Optional<Student> optionalStudent = studentRepository.findByEmail(email);
-        if (optionalStudent.isPresent()) {
-        student = optionalStudent.get();
-        }
-        return student;
-    }
 
     public Student get(UUID id) {
         Student student = new Student();
@@ -35,8 +27,8 @@ public class StudentDAO{
         }
         return student;
     }
-    public boolean findByEmail(String email){
-       return studentRepository.findByEmail(email).isPresent();
+    public Optional<Student> findByEmail(String email){
+       return studentRepository.findByEmail(email);
     }
 
     public List<Student> getAll() {

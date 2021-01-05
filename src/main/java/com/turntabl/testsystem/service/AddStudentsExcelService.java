@@ -28,7 +28,7 @@ public class AddStudentsExcelService {
             if(AddStudentsExcelHelper.hasExcelFormat(file)) {
                 try {
                     AddStudentsExcelHelper.excelToStudents(file.getInputStream()).stream()
-                        .map(student -> {if(!studentDAO.findByEmail(student.getEmail())){
+                        .map(student -> {if(studentDAO.findByEmail(student.getEmail()).isEmpty()){
                             StudentDetails studentDetails = new StudentDetails();
                             studentDAO.add(student);
                             studentDetails.setEmail(student.getEmail());
@@ -46,7 +46,7 @@ public class AddStudentsExcelService {
             }else if(AddStudentsCSVHelper.hasCSVFormat(file)){
                 try {
                     AddStudentsCSVHelper.csvToStudents(file.getInputStream()).stream()
-                            .map(student -> {if(!studentDAO.findByEmail(student.getEmail())){
+                            .map(student -> {if(studentDAO.findByEmail(student.getEmail()).isEmpty()){
                                 StudentDetails studentDetails = new StudentDetails();
                                 studentDAO.add(student);
                                 studentDetails.setEmail(student.getEmail());

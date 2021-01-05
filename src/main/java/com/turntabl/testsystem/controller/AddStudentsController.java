@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 @RestController
 @RequestMapping("/api")
@@ -67,13 +68,18 @@ public class AddStudentsController {
     @GetMapping("/student/find/{email}")
     public ResponseEntity<StudentDetails> getStudentByEmail(@PathVariable String email) {
        try{
-           Student student = studentDAO.getByEmail(email);
-           StudentDetails studentDetails = new StudentDetails();
-           studentDetails.setStudent_id(student.getStudent_id());
-           studentDetails.setEmail(student.getEmail());
-           studentDetails.setFirst_name(student.getFirst_name());
-           studentDetails.setLast_name(student.getLast_name());
-           return new ResponseEntity<>(studentDetails, HttpStatus.OK);
+           Optional<Student> optionalStudent = studentDAO.findByEmail(email);
+           if(optionalStudent.isPresent()){
+               StudentDetails studentDetails = new StudentDetails();
+               studentDetails.setStudent_id(optionalStudent.get().getStudent_id());
+               studentDetails.setEmail(optionalStudent.get().getEmail());
+               studentDetails.setMessage("yes");
+               studentDetails.setFirst_name(optionalStudent.get().getFirst_name());
+               studentDetails.setLast_name(optionalStudent.get().getLast_name());
+               return new ResponseEntity<>(studentDetails, HttpStatus.OK);
+           }else{
+               return new ResponseEntity<>(new StudentDetails("no"), HttpStatus.OK);
+           }
        }catch (Exception e){
            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }

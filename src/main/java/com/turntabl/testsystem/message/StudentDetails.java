@@ -3,6 +3,7 @@ package com.turntabl.testsystem.message;
 import java.util.UUID;
 
 public class StudentDetails {
+    private String message;
     private UUID student_id;
     private String first_name;
     private String last_name;
@@ -10,6 +11,19 @@ public class StudentDetails {
 
     public StudentDetails() {
     }
+
+    public StudentDetails(String message) {
+        this.message = message;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
     public UUID getStudent_id() {
         return student_id;
     }
