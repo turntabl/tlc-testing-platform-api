@@ -7,12 +7,14 @@ public class StudentTestRecordResponse {
 
     private long student_test_record_id;
     private long test_id;
+    private String test_date;
     private UUID student_id;
     private String test_title;
 
-    public StudentTestRecordResponse(long student_test_record_id, long test_id, UUID student_id, String test_title) {
+    public StudentTestRecordResponse(long student_test_record_id, long test_id, String test_date, UUID student_id, String test_title) {
         this.student_test_record_id = student_test_record_id;
         this.test_id = test_id;
+        this.test_date = test_date;
         this.student_id = student_id;
         this.test_title = test_title;
     }
@@ -50,5 +52,13 @@ public class StudentTestRecordResponse {
 
     public void setStudent_id(UUID student_id) {
         this.student_id = student_id;
+    }
+
+    public String getTest_date() {
+        return test_date;
+    }
+
+    public void setTest_date(String test_date) {
+        this.test_date = test_date;
     }
 }

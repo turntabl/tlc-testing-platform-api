@@ -34,6 +34,7 @@ public class StudentTestRecordDAO {
                     studentTestRecordResponse.setStudent_test_record_id(studentTestRecord.get().getStudent_test_record_id());
                     studentTestRecordResponse.setTest_title(studentTestRecord.get().getTest().getTest_title());
                     studentTestRecordResponse.setTest_id(studentTestRecord.get().getTest().getTest_id());
+                    studentTestRecordResponse.setTest_date(studentTestRecord.get().getTest().getTest_date());
                     studentTestRecordResponse.setStudent_id(studentTestRecord.get().getStudent().getStudent_id());
                     return studentTestRecordResponse;
                 }).collect(Collectors.toList());
@@ -46,6 +47,7 @@ public class StudentTestRecordDAO {
                     studentTestRecordResponse.setStudent_test_record_id(studentTestRecord.get().getStudent_test_record_id());
                     studentTestRecordResponse.setTest_title(studentTestRecord.get().getTest().getTest_title());
                     studentTestRecordResponse.setTest_id(studentTestRecord.get().getTest().getTest_id());
+                    studentTestRecordResponse.setTest_date(studentTestRecord.get().getTest().getTest_date());
                     studentTestRecordResponse.setStudent_id(studentTestRecord.get().getStudent().getStudent_id());
                     return studentTestRecordResponse;
                 }).collect(Collectors.toList());
