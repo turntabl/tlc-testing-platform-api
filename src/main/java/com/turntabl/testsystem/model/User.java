@@ -45,6 +45,13 @@ public class User {
         this.role = role;
     }
 
+    public User(String email, String first_name, String last_name, int role) {
+        this.role = role;
+        this.email = email;
+        this.first_name = first_name;
+        this.last_name = last_name;
+    }
+
     public UUID getUser_id() {
         return user_id;
     }

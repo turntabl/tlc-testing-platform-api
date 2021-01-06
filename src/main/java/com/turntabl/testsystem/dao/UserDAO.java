@@ -28,6 +28,9 @@ public class UserDAO {
     public User add(User user) {
         return userRepository.save(user);
     }
+    public List<User> addAll(List<User> users) {
+        return userRepository.saveAll(users);
+    }
     public User update(User user){
         User user1 = userRepository.findById(user.getUser_id()).get();
         user1.setEmail(user.getEmail());
