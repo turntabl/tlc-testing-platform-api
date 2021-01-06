@@ -1,5 +1,6 @@
 package com.turntabl.testsystem.dao;
 
+import com.turntabl.testsystem.message.GeneralAddResponse;
 import com.turntabl.testsystem.message.StudentTestRecordResponse;
 import com.turntabl.testsystem.model.StudentTestRecord;
 import com.turntabl.testsystem.repository.StudentTestRecordRepository;
@@ -50,7 +51,15 @@ public class StudentTestRecordDAO {
                 }).collect(Collectors.toList());
     }
 
-    public StudentTestRecord add(StudentTestRecord studentTestRecord) {
-        return studentTestRecordRepository.save(studentTestRecord);
+    public GeneralAddResponse add(StudentTestRecord studentTestRecord) {
+        GeneralAddResponse generalAddResponse = new GeneralAddResponse();
+        Optional<StudentTestRecord> optionalStudentTestRecord = studentTestRecordRepository.findTestTakenByStudentIdAndTestId(studentTestRecord.getStudent().getStudent_id(), studentTestRecord.getTest().getTest_id());
+        if(optionalStudentTestRecord.isEmpty()){
+             studentTestRecordRepository.save(studentTestRecord);
+             generalAddResponse.setMessage("success");
+        }else{
+            generalAddResponse.setMessage("already exists");
+        }
+        return  generalAddResponse;
     }
 }

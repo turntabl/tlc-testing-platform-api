@@ -1,5 +1,6 @@
 package com.turntabl.testsystem.dao;
 
+import com.turntabl.testsystem.message.GeneralAddResponse;
 import com.turntabl.testsystem.model.User;
 import com.turntabl.testsystem.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,13 +34,15 @@ public class UserDAO {
         user1.setRole(user.getRole());
         return  userRepository.save(user1);
     }
-    public boolean delete(User user) {
-        boolean isDeleted = false;
+    public GeneralAddResponse delete(User user) {
+        GeneralAddResponse generalAddResponse = new GeneralAddResponse();
         Optional<User> optionalUser = userRepository.findById(user.getUser_id());
         if (optionalUser.isPresent()) {
             userRepository.delete(optionalUser.get());
-            isDeleted = true;
+            generalAddResponse.setMessage("success");
+        }else{
+            generalAddResponse.setMessage("failed");
         }
-        return isDeleted;
+        return generalAddResponse;
     }
 }

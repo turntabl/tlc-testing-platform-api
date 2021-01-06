@@ -4,11 +4,13 @@ public class UserRequest {
     private String email;
     private String first_name;
     private String last_name;
+    private int role;
 
-    public UserRequest(String email, String first_name, String last_name) {
+    public UserRequest(String email, String first_name, String last_name, int role) {
         this.email = email;
         this.first_name = first_name;
         this.last_name = last_name;
+        this.role = role;
     }
 
     public UserRequest() {
@@ -36,5 +38,13 @@ public class UserRequest {
 
     public void setLast_name(String last_name) {
         this.last_name = last_name;
+    }
+
+    public int getRole() {
+        return role;
+    }
+
+    public void setRole(int role) {
+        this.role = role;
     }
 }

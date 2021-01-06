@@ -66,7 +66,7 @@ public class UserController {
                 return new ResponseEntity<>(new UserResponse("no", null, null, null, null, 0), HttpStatus.OK);
             }
         } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new UserResponse(e.getMessage(), null, null, null, null, 0), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -87,7 +87,7 @@ public class UserController {
                 return new ResponseEntity<>(new UserResponse("no", null, null, null, null, 0), HttpStatus.OK);
             }
         } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new UserResponse(e.getMessage(), null, null, null, null, 0), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -98,10 +98,24 @@ public class UserController {
             user.setEmail(userRequest.getEmail());
             user.setFirst_name(userRequest.getFirst_name());
             user.setLast_name(userRequest.getLast_name());
-            user.setRole(Role.ADMIN.getCode());
+            if(userRequest.getRole() == 1){
+                user.setRole(Role.SUPER_ADMIN.getCode());
+            }else if (userRequest.getRole() == 2){
+                user.setRole(Role.ADMIN.getCode());
+            }
             userDAO.add(user);
             return new ResponseEntity<>(new GeneralAddResponse("success"), HttpStatus.INTERNAL_SERVER_ERROR);
         }catch (Exception e){
+            return new ResponseEntity<>(new GeneralAddResponse(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/delete-user/{user_id}")
+    public ResponseEntity<GeneralAddResponse> deleteUser(@PathVariable String user_id){
+        Optional<User> user = userDAO.get(stringToUserIdConverter.convert(user_id));
+        try {
+            return new ResponseEntity<>(userDAO.delete(user.get()), HttpStatus.OK);
+        } catch (Exception e) {
             return new ResponseEntity<>(new GeneralAddResponse(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

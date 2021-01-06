@@ -14,4 +14,6 @@ public interface StudentTestRecordRepository extends JpaRepository<StudentTestRe
     List<Optional<StudentTestRecord>> findAllTestsTakenByStudentId(UUID student_id);
     @Query("select sr from StudentTestRecord sr where sr.test.test_id = ?1")
     List<Optional<StudentTestRecord>> findAllTestsTakenByTestId(long test_id);
+    @Query("select sr from StudentTestRecord sr where sr.student.student_id = ?1 and sr.test.test_id = ?2")
+    Optional<StudentTestRecord> findTestTakenByStudentIdAndTestId(UUID student_id, long test_id);
 }

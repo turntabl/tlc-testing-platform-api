@@ -11,7 +11,7 @@ import java.util.UUID;
 @Repository
 public interface TestResultRepository extends JpaRepository<TestResult, Long> {
     @Query("select r from TestResult r where r.student.student_id = ?1")
-    Optional<TestResult> findByStudentId(UUID student_id);
+    Optional<List<TestResult>> findByStudentId(UUID student_id);
     @Query("select r from TestResult r where r.test.test_id = ?1")
     Optional<List<TestResult>> findAllByTestId(long test_id);
 }

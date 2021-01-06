@@ -47,19 +47,20 @@ public class TestResultController {
     }
 
     @GetMapping("/results-student/{student_id}")
-    public ResponseEntity<TestResultResponse> getTestResultsByStudentId(@PathVariable String student_id){
+    public ResponseEntity<List<TestResultResponse>> getTestResultsByStudentId(@PathVariable String student_id){
         try {
-            System.out.println(student_id);
-            TestResultResponse testResultResponse =  new TestResultResponse();
-            TestResult testResult = testResultDAO.getByStudentId(stringToUserIdConverter.convert(student_id));
-            System.out.println(testResult.getTest_result_id());
-            testResultResponse.setStudent_name(testResult.getStudent().getFirst_name() + " " + testResult.getStudent().getLast_name());
-            testResultResponse.setTest_title(testResult.getTest().getTest_title());
-            testResultResponse.setTest_mark(testResult.getTest_mark());
-            testResultResponse.setTest_result_id(testResult.getTest_result_id());
-            testResultResponse.setTest_grade(testResult.getTest_grade());
-            testResultResponse.setStudent_id(testResult.getStudent().getStudent_id());
-            return new ResponseEntity<>(testResultResponse, HttpStatus.OK);
+           List<TestResultResponse> testResultResponses = testResultDAO.getByStudentId(stringToUserIdConverter.convert(student_id)).stream()
+                    .map(testResult -> {
+                        TestResultResponse testResultResponse =  new TestResultResponse();
+                        testResultResponse.setStudent_name(testResult.getStudent().getFirst_name() + " " + testResult.getStudent().getLast_name());
+                        testResultResponse.setTest_title(testResult.getTest().getTest_title());
+                        testResultResponse.setTest_mark(testResult.getTest_mark());
+                        testResultResponse.setTest_result_id(testResult.getTest_result_id());
+                        testResultResponse.setTest_grade(testResult.getTest_grade());
+                        testResultResponse.setStudent_id(testResult.getStudent().getStudent_id());
+                        return testResultResponse;
+                    }).collect(Collectors.toList());
+            return new ResponseEntity<>(testResultResponses, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }

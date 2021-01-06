@@ -17,7 +17,7 @@ public class TestResultDAO {
     public TestResult get(Long id){
         return testResultRepository.findById(id).get();
     }
-    public TestResult getByStudentId(UUID student_id){
+    public List<TestResult> getByStudentId(UUID student_id){
         return testResultRepository.findByStudentId(student_id).get();
     }
     public List<TestResult> getAllByTestId(long test_id){
