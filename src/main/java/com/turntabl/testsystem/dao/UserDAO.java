@@ -26,7 +26,13 @@ public class UserDAO {
         return userRepository.findAll();
     }
     public User add(User user) {
-        return userRepository.save(user);
+        User user1 = new User();
+        if(userRepository.findByEmail(user.getEmail()).isEmpty()){
+            user1 = userRepository.save(user);
+        }else{
+            user1 = user;
+        }
+        return user1;
     }
     public List<User> addAll(List<User> users) {
         return userRepository.saveAll(users);
