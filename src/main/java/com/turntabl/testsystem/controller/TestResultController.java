@@ -3,7 +3,6 @@ package com.turntabl.testsystem.controller;
 import com.turntabl.testsystem.dao.TestResultDAO;
 import com.turntabl.testsystem.helper.StringToUserIdConverter;
 import com.turntabl.testsystem.message.TestResultResponse;
-import com.turntabl.testsystem.model.TestResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

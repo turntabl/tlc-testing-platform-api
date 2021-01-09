@@ -23,6 +23,8 @@ public class TestResult implements Serializable {
     private double test_mark;
     @Column(name = "test_grade")
     private char test_grade;
+    @Column(name = "comment")
+    private String comment;
     @UpdateTimestamp
     @Column(name = "time_updated")
     private LocalDateTime updatedAt;
@@ -34,12 +36,15 @@ public class TestResult implements Serializable {
     public TestResult() {
     }
 
-    public TestResult(long test_result_id, Student student, Test test, double test_mark, char test_grade) {
+    public TestResult(long test_result_id, Student student, Test test, double test_mark, char test_grade, String comment, LocalDateTime updatedAt, LocalDateTime createdAt) {
         this.test_result_id = test_result_id;
         this.student = student;
         this.test = test;
         this.test_mark = test_mark;
         this.test_grade = test_grade;
+        this.comment = comment;
+        this.updatedAt = updatedAt;
+        this.createdAt = createdAt;
     }
 
     public long getTest_result_id() {
@@ -108,6 +113,14 @@ public class TestResult implements Serializable {
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     public void setCreatedAt(LocalDateTime createdAt) {

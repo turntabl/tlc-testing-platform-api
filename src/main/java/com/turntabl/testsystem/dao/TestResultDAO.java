@@ -1,5 +1,7 @@
 package com.turntabl.testsystem.dao;
 
+import com.turntabl.testsystem.message.GeneralAddResponse;
+import com.turntabl.testsystem.message.StudentResultComment;
 import com.turntabl.testsystem.model.TestResult;
 import com.turntabl.testsystem.repository.TestResultRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,5 +49,16 @@ public class TestResultDAO {
             isDeleted = true;
         }
         return isDeleted;
+    }
+
+    public GeneralAddResponse sendComment(StudentResultComment studentResultComment){
+        try{
+            TestResult testResult = testResultRepository.findByStudentIdAndTestId(studentResultComment.getTest_id(),studentResultComment.getStudent_id()).get();
+            testResult.setComment(studentResultComment.getComment());
+            testResultRepository.save(testResult);
+            return new GeneralAddResponse("success");
+        }catch (Exception e){
+            return new GeneralAddResponse(e.getMessage());
+        }
     }
 }
