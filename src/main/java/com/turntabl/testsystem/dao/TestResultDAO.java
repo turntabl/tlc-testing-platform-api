@@ -25,6 +25,14 @@ public class TestResultDAO {
     public List<TestResult> getAllByTestId(long test_id){
         return testResultRepository.findAllByTestId(test_id).get();
     }
+    public TestResult getByStudentIdTestId(UUID student_id, long test_id){
+        Optional<TestResult> optionalTestResult = testResultRepository.findByStudentIdAndTestId(test_id, student_id);
+        TestResult testResult = new TestResult();
+        if(optionalTestResult.isPresent()){
+            testResult = testResultRepository.findByStudentIdAndTestId(test_id, student_id).get();
+        }
+        return testResult;
+    }
     public List<TestResult> addAll(List<TestResult> t){
         return testResultRepository.saveAll(t);
     }

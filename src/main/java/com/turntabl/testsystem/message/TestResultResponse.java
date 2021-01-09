@@ -8,17 +8,19 @@ public class TestResultResponse {
     private String test_title;
     private double test_mark;
     private char test_grade;
+    private String comment;
 
     public TestResultResponse() {
     }
 
-    public TestResultResponse(long test_result_id, String student_name, UUID student_id, String test_title, double test_mark, char test_grade) {
+    public TestResultResponse(long test_result_id, String student_name, UUID student_id, String test_title, double test_mark, char test_grade, String comment) {
         this.test_result_id = test_result_id;
         this.student_name = student_name;
         this.student_id = student_id;
         this.test_title = test_title;
         this.test_mark = test_mark;
         this.test_grade = test_grade;
+        this.comment = comment;
     }
 
     public long getTest_result_id() {
@@ -67,5 +69,13 @@ public class TestResultResponse {
 
     public void setTest_grade(char test_grade) {
         this.test_grade = test_grade;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 }
