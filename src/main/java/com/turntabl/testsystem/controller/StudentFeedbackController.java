@@ -4,6 +4,7 @@ import com.turntabl.testsystem.dao.StudentFeedbackDAO;
 import com.turntabl.testsystem.helper.StringToUserIdConverter;
 import com.turntabl.testsystem.message.AddFeedbackRequest;
 import com.turntabl.testsystem.message.AddFeedbackResponse;
+import com.turntabl.testsystem.message.GeneralAddResponse;
 import com.turntabl.testsystem.model.Feedback;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -51,6 +52,15 @@ public class StudentFeedbackController {
         addFeedbackResponse.setId(feedback.getFeedbackId());
         addFeedbackResponse.setStudent_name(feedback.getStudent().getFirst_name() + " " + feedback.getStudent().getLast_name());
         return new ResponseEntity<>(addFeedbackResponse, HttpStatus.OK);
+    }
+    @GetMapping("/delete/feedback/{id}")
+    public ResponseEntity<GeneralAddResponse> deleteFeedbackById(@PathVariable long id) {
+        try{
+            GeneralAddResponse generalAddResponse = studentFeedbackDAO.delete(studentFeedbackDAO.get(id));
+            return new ResponseEntity<>(generalAddResponse, HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(new GeneralAddResponse(e.getMessage()), HttpStatus.OK);
+        }
     }
     @GetMapping("/feedback/find/{id}")
     public ResponseEntity<AddFeedbackResponse> getFeedbackByStudentId(@PathVariable String id) {

@@ -1,5 +1,6 @@
 package com.turntabl.testsystem.dao;
 
+import com.turntabl.testsystem.message.GeneralAddResponse;
 import com.turntabl.testsystem.model.Feedback;
 import com.turntabl.testsystem.repository.FeedbackRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,14 +44,16 @@ public class StudentFeedbackDAO{
         return feedbackRepository.save(feedback_from_db);
     }
 
-    public boolean delete(Feedback feedback) {
-        boolean isDeleted = false;
+    public GeneralAddResponse delete(Feedback feedback) {
+        GeneralAddResponse generalAddResponse = new GeneralAddResponse();
         Optional<Feedback> feedback_found = feedbackRepository.findById(feedback.getFeedbackId());
         if(feedback_found.isPresent()){
             feedbackRepository.delete(feedback);
-            isDeleted = true;
+            generalAddResponse.setMessage("success");
+        }else{
+            generalAddResponse.setMessage("failed");
         }
-        return isDeleted;
+        return generalAddResponse;
     }
     public Feedback getByStudent(UUID id){
         Feedback feedback = new Feedback();
