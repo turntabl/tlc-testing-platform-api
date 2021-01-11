@@ -44,6 +44,7 @@ public class TestController {
                         testResponse.setTest_title(test.getTest_title());
                         testResponse.setTest_rules(test.getTest_rules());
                         testResponse.setCourse_name(test.getCourse().getCourse_name());
+                        testResponse.setQuestion_type(test.getQuestionType().getCode());
                         testResponse.setTest_date(test.getTest_date());
                         testResponse.setTest_time_start(test.getTest_time_start());
                         testResponse.setTest_time_end(test.getTest_time_end());
@@ -121,6 +122,17 @@ public class TestController {
             test.setTest_date(testRequest.getTest_date());
             test.setTest_time_end(testRequest.getTest_time_end());
             test.setTest_time_start(testRequest.getTest_time_start());
+            switch(testRequest.getQuestions_type()){
+                case ("MC"):
+                    test.setQuestionType(QuestionType.MULTIPLE_CHOICE);
+                    break;
+                case("CS"):
+                    test.setQuestionType(QuestionType.CODE_SNIPPET);
+                    break;
+                case("E"):
+                    test.setQuestionType(QuestionType.ESSAY);
+                    break;
+            }
             test = testDAO.update(test);
             testResponse.setTest_id(test.getTest_id());
             testResponse.setTest_title(test.getTest_title());

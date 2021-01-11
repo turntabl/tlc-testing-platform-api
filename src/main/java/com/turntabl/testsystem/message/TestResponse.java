@@ -4,6 +4,7 @@ public class TestResponse {
     private long test_id;
     private long course_id;
     private String course_name;
+    private String question_type;
     private String test_title;
     private String test_rules;
     private String test_date;
@@ -12,10 +13,11 @@ public class TestResponse {
     public TestResponse() {
     }
 
-    public TestResponse(long test_id, long course_id, String course_name, String test_title, String test_rules, String test_date, String test_time_start, String test_time_end) {
+    public TestResponse(long test_id, long course_id, String course_name, String question_type, String test_title, String test_rules, String test_date, String test_time_start, String test_time_end) {
         this.test_id = test_id;
         this.course_id = course_id;
         this.course_name = course_name;
+        this.question_type = question_type;
         this.test_title = test_title;
         this.test_rules = test_rules;
         this.test_date = test_date;
@@ -29,6 +31,14 @@ public class TestResponse {
 
     public void setCourse_name(String course_name) {
         this.course_name = course_name;
+    }
+
+    public String getQuestion_type() {
+        return question_type;
+    }
+
+    public void setQuestion_type(String question_type) {
+        this.question_type = question_type;
     }
 
     public long getTest_id() {
