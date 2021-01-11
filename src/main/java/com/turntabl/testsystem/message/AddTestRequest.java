@@ -1,6 +1,6 @@
 package com.turntabl.testsystem.message;
 
-public class TestRequest {
+public class AddTestRequest {
     private long course_id;
     private String user_id;
     private long test_id;
@@ -10,10 +10,10 @@ public class TestRequest {
     private String test_date;
     private String test_time_start;
     private String test_time_end;
-    public TestRequest() {
+    public AddTestRequest() {
     }
 
-    public TestRequest(long course_id, String user_id, long test_id, String test_title, String questions_type, String test_rule, String test_date, String test_time_start, String test_time_end) {
+    public AddTestRequest(long course_id, String user_id, long test_id, String test_title, String questions_type, String test_rule, String test_date, String test_time_start, String test_time_end) {
         this.course_id = course_id;
         this.user_id = user_id;
         this.test_id = test_id;

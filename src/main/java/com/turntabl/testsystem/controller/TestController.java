@@ -75,7 +75,7 @@ public class TestController {
         }
     }
     @PostMapping("/test/add")
-    public ResponseEntity<GeneralAddResponse> addTest(@RequestBody TestRequest addTestRequest){
+    public ResponseEntity<GeneralAddResponse> addTest(@RequestBody AddTestRequest addTestRequest){
        try {
            User user = userDAO.get(stringToUserIdConverter.convert(addTestRequest.getUser_id())).get();
            if(!testDAO.getByTestTitle(addTestRequest.getTest_title())){
@@ -110,20 +110,17 @@ public class TestController {
        }
     }
     @PostMapping("/test/update")
-    public ResponseEntity<TestResponse> updateTest(@RequestBody TestRequest testRequest){
+    public ResponseEntity<GeneralAddResponse> updateTest(@RequestBody UpdateTestRequest addTestRequest){
+        GeneralAddResponse generalAddResponse;
         try {
             Test test = new Test();
-            TestResponse testResponse = new TestResponse();
-            Course course = new Course();
-            course = courseDAO.get(testRequest.getCourse_id());
-            test.setCourse(course);
-            test.setTest_id(testRequest.getTest_id());
-            test.setTest_title(testRequest.getTest_title());
-            test.setTest_rules(testRequest.getTest_rule());
-            test.setTest_date(testRequest.getTest_date());
-            test.setTest_time_end(testRequest.getTest_time_end());
-            test.setTest_time_start(testRequest.getTest_time_start());
-            switch(testRequest.getQuestions_type()){
+            test.setTest_id(addTestRequest.getTest_id());
+            test.setTest_title(addTestRequest.getTest_title());
+            test.setTest_rules(addTestRequest.getTest_rule());
+            test.setTest_date(addTestRequest.getTest_date());
+            test.setTest_time_end(addTestRequest.getTest_time_end());
+            test.setTest_time_start(addTestRequest.getTest_time_start());
+            switch(addTestRequest.getQuestions_type()){
                 case ("MC"):
                     test.setQuestionType(QuestionType.MULTIPLE_CHOICE);
                     break;
@@ -134,19 +131,10 @@ public class TestController {
                     test.setQuestionType(QuestionType.ESSAY);
                     break;
             }
-            test = testDAO.update(test);
-            testResponse.setTest_id(test.getTest_id());
-            testResponse.setTest_title(test.getTest_title());
-            testResponse.setTest_rules(test.getTest_rules());
-            testResponse.setCourse_id(test.getCourse().getCourse_id());
-            testResponse.setCourse_name(test.getCourse().getCourse_name());
-            testResponse.setTest_date(test.getTest_date());
-            testResponse.setQuestion_type(test.getQuestionType().getCode());
-            testResponse.setTest_time_start(test.getTest_time_start());
-            testResponse.setTest_time_end(test.getTest_time_end());
-            return new ResponseEntity<>(testResponse, HttpStatus.OK);
+           generalAddResponse = testDAO.update(test);
+            return new ResponseEntity<>(generalAddResponse, HttpStatus.OK);
         }catch (Exception e){
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new GeneralAddResponse(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     @DeleteMapping("/test/delete/{id}")

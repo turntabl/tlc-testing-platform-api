@@ -1,5 +1,6 @@
 package com.turntabl.testsystem.dao;
 
+import com.turntabl.testsystem.message.GeneralAddResponse;
 import com.turntabl.testsystem.model.Test;
 import com.turntabl.testsystem.repository.TestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +29,8 @@ public class TestDAO {
     public Test add(Test test) {
         return testRepository.save(test);
     }
-    public Test update(Test testFromUser){
-        Test test;
+    public GeneralAddResponse update(Test testFromUser){
+        GeneralAddResponse generalAddResponse = new GeneralAddResponse();
         Optional<Test> testFromDB = testRepository.findById(testFromUser.getTest_id());
         if(testFromDB.isPresent()){
             testFromDB.get().setQuestionType(testFromUser.getQuestionType());
@@ -38,12 +39,12 @@ public class TestDAO {
             testFromDB.get().setTest_date(testFromUser.getTest_date());
             testFromDB.get().setTest_title(testFromUser.getTest_title());
             testFromDB.get().setTest_rules(testFromUser.getTest_rules());
-            testFromDB.get().setCourse(testFromUser.getCourse());
-            test = testRepository.save(testFromDB.get());
+            testRepository.save(testFromDB.get());
+            generalAddResponse.setMessage("success");
         }else{
-            test = testFromUser;
+            generalAddResponse.setMessage("failed");
         }
-        return test;
+        return generalAddResponse;
     }
     public boolean delete(Test test) {
         boolean isDeleted = false;
