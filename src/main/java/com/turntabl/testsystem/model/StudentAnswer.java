@@ -23,6 +23,7 @@ public class StudentAnswer implements Serializable {
     private Student student;
     @Column(name = "multiple_choice_answer_option_id")
     private long student_answer_option_id;
+    @Lob
     @Column(name = "student_answer")
     private String student_answer;
     @Column(name = "answer_mark")

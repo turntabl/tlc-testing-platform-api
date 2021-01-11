@@ -29,16 +29,21 @@ public class TestDAO {
         return testRepository.save(test);
     }
     public Test update(Test testFromUser){
-        Test testFromDatabase = new Test();
-        testFromDatabase = this.get(testFromUser.getTest_id()).get();
-        testFromDatabase.setCourse(testFromUser.getCourse());
-        testFromDatabase.setTest_title(testFromUser.getTest_title());
-        testFromDatabase.setTest_rules(testFromUser.getTest_rules());
-        testFromDatabase.setTest_date(testFromUser.getTest_date());
-        testFromDatabase.setTest_time_start(testFromUser.getTest_time_start());
-        testFromDatabase.setTest_time_end(testFromUser.getTest_time_end());
-        return this.testRepository.save(testFromDatabase);
-
+        Test test;
+        Optional<Test> testFromDB = testRepository.findById(testFromUser.getTest_id());
+        if(testFromDB.isPresent()){
+            testFromDB.get().setQuestionType(testFromUser.getQuestionType());
+            testFromDB.get().setTest_time_start(testFromUser.getTest_time_start());
+            testFromDB.get().setTest_time_end(testFromUser.getTest_time_end());
+            testFromDB.get().setTest_date(testFromUser.getTest_date());
+            testFromDB.get().setTest_title(testFromUser.getTest_title());
+            testFromDB.get().setTest_rules(testFromUser.getTest_rules());
+            testFromDB.get().setCourse(testFromUser.getCourse());
+            test = testRepository.save(testFromDB.get());
+        }else{
+            test = testFromUser;
+        }
+        return test;
     }
     public boolean delete(Test test) {
         boolean isDeleted = false;

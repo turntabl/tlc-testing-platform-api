@@ -48,6 +48,7 @@ public class TestController {
                         testResponse.setTest_date(test.getTest_date());
                         testResponse.setTest_time_start(test.getTest_time_start());
                         testResponse.setTest_time_end(test.getTest_time_end());
+                        testResponse.setUser_id(test.getUser().getUser_id());
                         return testResponse;
                     }).collect(Collectors.toList());
             return new ResponseEntity<>(tests, HttpStatus.OK);
@@ -115,7 +116,7 @@ public class TestController {
             TestResponse testResponse = new TestResponse();
             Course course = new Course();
             course = courseDAO.get(testRequest.getCourse_id());
-            test.assignCourse(course);
+            test.setCourse(course);
             test.setTest_id(testRequest.getTest_id());
             test.setTest_title(testRequest.getTest_title());
             test.setTest_rules(testRequest.getTest_rule());
@@ -140,6 +141,7 @@ public class TestController {
             testResponse.setCourse_id(test.getCourse().getCourse_id());
             testResponse.setCourse_name(test.getCourse().getCourse_name());
             testResponse.setTest_date(test.getTest_date());
+            testResponse.setQuestion_type(test.getQuestionType().getCode());
             testResponse.setTest_time_start(test.getTest_time_start());
             testResponse.setTest_time_end(test.getTest_time_end());
             return new ResponseEntity<>(testResponse, HttpStatus.OK);

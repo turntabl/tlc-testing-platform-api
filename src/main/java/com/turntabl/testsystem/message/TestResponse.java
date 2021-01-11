@@ -1,5 +1,7 @@
 package com.turntabl.testsystem.message;
 
+import java.util.UUID;
+
 public class TestResponse {
     private long test_id;
     private long course_id;
@@ -10,10 +12,11 @@ public class TestResponse {
     private String test_date;
     private String test_time_start;
     private String test_time_end;
+    private UUID user_id;
     public TestResponse() {
     }
 
-    public TestResponse(long test_id, long course_id, String course_name, String question_type, String test_title, String test_rules, String test_date, String test_time_start, String test_time_end) {
+    public TestResponse(long test_id, long course_id, String course_name, String question_type, String test_title, String test_rules, String test_date, String test_time_start, String test_time_end, UUID user_id) {
         this.test_id = test_id;
         this.course_id = course_id;
         this.course_name = course_name;
@@ -23,6 +26,7 @@ public class TestResponse {
         this.test_date = test_date;
         this.test_time_start = test_time_start;
         this.test_time_end = test_time_end;
+        this.user_id = user_id;
     }
 
     public String getCourse_name() {
@@ -82,5 +86,13 @@ public class TestResponse {
     }
     public void setTest_time_end(String test_time_end) {
         this.test_time_end = test_time_end;
+    }
+
+    public UUID getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(UUID user_id) {
+        this.user_id = user_id;
     }
 }
