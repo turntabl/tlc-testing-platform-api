@@ -42,7 +42,7 @@ import java.util.stream.Collectors;
             this.addMultipleChoiceQuestionsCSVService = addMultipleChoiceQuestionsCSVService;
         }
         @GetMapping("/question/{test_id}")
-        public ResponseEntity<List<QuestionResponse>> getQuestionByTestId(@PathVariable long test_id) {
+        public ResponseEntity<GeneralAddResponse> getQuestionByTestId(@PathVariable long test_id) {
             try {
                 System.out.println(test_id);
                  List<QuestionResponse> questionResponses = questionDAO.getQuestionsByTestId(test_id).stream()
@@ -59,9 +59,9 @@ import java.util.stream.Collectors;
                              questionResponse.setMark_allocated(question1.getMark_allocated());
                              return questionResponse;
                          }).collect(Collectors.toList());
-                return new ResponseEntity<>(questionResponses, HttpStatus.OK);
+                return new ResponseEntity<>(null, HttpStatus.OK);
             } catch (Exception e) {
-                return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+                return new ResponseEntity<>(new GeneralAddResponse(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
         @PostMapping("/question/add")

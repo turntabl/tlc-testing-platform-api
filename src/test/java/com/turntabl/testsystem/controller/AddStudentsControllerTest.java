@@ -101,8 +101,8 @@ class AddStudentsControllerTest {
         Student student = new Student(stringToUserIdConverter.convert("dc1e6d1b-6551-4a36-8c97-87ff831d154b"),"William", "Kwakye", "william@gmail.com");
         Students students = new Students();
         students.setStudentList(Arrays.asList(student));
-        when(studentDAO.getByEmail("william@gmail.com")).thenReturn(students.getStudentByEmail("william@gmail.com"));
-        assertThat(studentDAO.getByEmail("william@gmail.com").getFirst_name())
+        when(studentDAO.get(stringToUserIdConverter.convert("65d5c96f-67ff-418b-9d9e-2b07ac96410e"))).thenReturn(students.getStudentByEmail("william@gmail.com"));
+        assertThat(studentDAO.get(stringToUserIdConverter.convert("65d5c96f-67ff-418b-9d9e-2b07ac96410e")).getFirst_name())
                 .isEqualTo(student.getFirst_name());
     }
 }

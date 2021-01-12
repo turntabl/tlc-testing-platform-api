@@ -83,7 +83,7 @@ class CourseControllerTest {
         courses.add(course1);
         when(courseDAO.add(course)).thenReturn(courses.get(0));
         // then
-        assertThat(courseDAO.add(course)).isEqualTo(course.getCourse_name());
+        assertThat(courseDAO.add(course).getCourse_name()).isEqualTo(course.getCourse_name());
     }
 
     @Test
