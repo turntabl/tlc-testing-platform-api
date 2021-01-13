@@ -18,8 +18,7 @@ public class Question implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "test_id", nullable = false)
     private Test testId;
-    @Lob
-    @Column(name = "question")
+    @Column(name = "question", columnDefinition="TEXT")
     private String question;
     @Column(name = "mark_allocated")
     private Double mark_allocated;
