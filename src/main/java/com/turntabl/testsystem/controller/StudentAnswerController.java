@@ -47,16 +47,21 @@ public class StudentAnswerController {
     @GetMapping("/answers/get-by-student/{test_id}/{student_id}")
     public ResponseEntity<List<AnswerResponse>> getAllAnswersByStudent(@PathVariable Long test_id, @PathVariable String student_id ){
         try{
-            List<AnswerResponse> answerResponses = studentAnswerDAO.getAllByStudentIdAndTestId(stringToUserIdConverter.convert(student_id), test_id)
-                    .stream()
-                    .map(studentAnswer -> {
-                        AnswerResponse answerResponse = new AnswerResponse();
-                        answerResponse.setStudent_answer(studentAnswer.getStudent_answer());
-                        answerResponse.setQuestion(studentAnswer.getQuestion().getQuestion());
-                        answerResponse.setStudent_answer_id(studentAnswer.getStudent_answer_id());
-                        return  answerResponse;
-                    })
-                    .collect(Collectors.toList());
+            List<AnswerResponse> answerResponses = new ArrayList<>();
+            List<StudentAnswer> studentAnswerList = studentAnswerDAO.getAllByStudentIdAndTestId(stringToUserIdConverter.convert(student_id), test_id);
+            if(!studentAnswerList.isEmpty()){
+                answerResponses = studentAnswerList
+                        .stream()
+                        .map(studentAnswer -> {
+                            AnswerResponse answerResponse = new AnswerResponse();
+                            answerResponse.setStudent_answer(studentAnswer.getStudent_answer());
+                            answerResponse.setQuestion(studentAnswer.getQuestion().getQuestion());
+                            answerResponse.setStudent_answer_id(studentAnswer.getStudent_answer_id());
+                            return  answerResponse;
+                        })
+                        .collect(Collectors.toList());
+                return new ResponseEntity<>(answerResponses, HttpStatus.OK);
+            }
             return new ResponseEntity<>(answerResponses, HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);

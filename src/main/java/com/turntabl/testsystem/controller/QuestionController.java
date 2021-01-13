@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -44,21 +46,25 @@ import java.util.stream.Collectors;
         @GetMapping("/question/{test_id}")
         public ResponseEntity<List<QuestionResponse>> getQuestionByTestId(@PathVariable long test_id) {
             try {
-                System.out.println(test_id);
-                 List<QuestionResponse> questionResponses = questionDAO.getQuestionsByTestId(test_id).stream()
-                         .map(question1 -> {
-                             QuestionResponse questionResponse =new QuestionResponse();
-                             questionResponse.setOptions(question1.getOptions().stream().map(option -> {
-                                 OptionResponse optionResponse = new OptionResponse();
-                                 optionResponse.setOption(option.getOption());
-                                 optionResponse.setOptionId(option.getOptionId());
-                                 return optionResponse;
-                             }).collect(Collectors.toSet()));
-                             questionResponse.setQuestion(question1.getQuestion());
-                             questionResponse.setQuestionId(question1.getQuestion_id());
-                             questionResponse.setMark_allocated(question1.getMark_allocated());
-                             return questionResponse;
-                         }).collect(Collectors.toList());
+                List<Question> questions = questionDAO.getQuestionsByTestId(test_id);
+                List<QuestionResponse> questionResponses = new ArrayList<>();
+                if(!questions.isEmpty()){
+                    questionResponses = questions.stream()
+                            .map(question1 -> {
+                                QuestionResponse questionResponse =new QuestionResponse();
+                                questionResponse.setOptions(question1.getOptions().stream().map(option -> {
+                                    OptionResponse optionResponse = new OptionResponse();
+                                    optionResponse.setOption(option.getOption());
+                                    optionResponse.setOptionId(option.getOptionId());
+                                    return optionResponse;
+                                }).collect(Collectors.toSet()));
+                                questionResponse.setQuestion(question1.getQuestion());
+                                questionResponse.setQuestionId(question1.getQuestion_id());
+                                questionResponse.setMark_allocated(question1.getMark_allocated());
+                                return questionResponse;
+                            }).collect(Collectors.toList());
+                    return new ResponseEntity<>(questionResponses, HttpStatus.OK);
+                }
                 return new ResponseEntity<>(questionResponses, HttpStatus.OK);
             } catch (Exception e) {
                 return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);

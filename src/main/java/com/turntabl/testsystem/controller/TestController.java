@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,21 +38,26 @@ public class TestController {
     @GetMapping("/test/all")
     public ResponseEntity<List<TestResponse>> getAllTests(){
         try {
-            List<TestResponse> tests = testDAO.getAll().stream()
-                    .map(test -> {
-                        TestResponse testResponse = new TestResponse();
-                        testResponse.setTest_id(test.getTest_id());
-                        testResponse.setCourse_id(test.getCourse().getCourse_id());
-                        testResponse.setTest_title(test.getTest_title());
-                        testResponse.setTest_rules(test.getTest_rules());
-                        testResponse.setCourse_name(test.getCourse().getCourse_name());
-                        testResponse.setQuestion_type(test.getQuestionType().getCode());
-                        testResponse.setTest_date(test.getTest_date());
-                        testResponse.setTest_time_start(test.getTest_time_start());
-                        testResponse.setTest_time_end(test.getTest_time_end());
-                        testResponse.setUser_id(test.getUser().getUser_id());
-                        return testResponse;
-                    }).collect(Collectors.toList());
+            List<TestResponse> tests = new ArrayList<>();
+            List<Test> testList = testDAO.getAll();
+            if(!testList.isEmpty()){
+                tests = testList.stream()
+                        .map(test -> {
+                            TestResponse testResponse = new TestResponse();
+                            testResponse.setTest_id(test.getTest_id());
+                            testResponse.setCourse_id(test.getCourse().getCourse_id());
+                            testResponse.setTest_title(test.getTest_title());
+                            testResponse.setTest_rules(test.getTest_rules());
+                            testResponse.setCourse_name(test.getCourse().getCourse_name());
+                            testResponse.setQuestion_type(test.getQuestionType().getCode());
+                            testResponse.setTest_date(test.getTest_date());
+                            testResponse.setTest_time_start(test.getTest_time_start());
+                            testResponse.setTest_time_end(test.getTest_time_end());
+                            testResponse.setUser_id(test.getUser().getUser_id());
+                            return testResponse;
+                        }).collect(Collectors.toList());
+                return new ResponseEntity<>(tests, HttpStatus.OK);
+            }
             return new ResponseEntity<>(tests, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);

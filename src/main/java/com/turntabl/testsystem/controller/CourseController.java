@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,13 +35,18 @@ public class CourseController {
     @GetMapping("/courses/get")
     public ResponseEntity<List<CourseResponse>> getAllCourses(){
         try {
-            List<CourseResponse> courses = courseDAO.getAll().stream()
-                    .map(course -> {
-                        CourseResponse courseResponse = new CourseResponse();
-                        courseResponse.setCourseId(course.getCourse_id()) ;
-                        courseResponse.setCourseName(course.getCourse_name());
-                        return courseResponse;
-                    }).collect(Collectors.toList());
+            List<Course> courseList = courseDAO.getAll();
+            List<CourseResponse> courses = new ArrayList<>();
+            if(!courseList.isEmpty()){
+                courses = courseList.stream()
+                        .map(course -> {
+                            CourseResponse courseResponse = new CourseResponse();
+                            courseResponse.setCourseId(course.getCourse_id()) ;
+                            courseResponse.setCourseName(course.getCourse_name());
+                            return courseResponse;
+                        }).collect(Collectors.toList());
+                return new ResponseEntity<>(courses, HttpStatus.OK);
+            }
             return new ResponseEntity<>(courses, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);

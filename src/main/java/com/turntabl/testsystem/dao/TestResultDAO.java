@@ -19,11 +19,11 @@ public class TestResultDAO {
     public TestResult get(Long id){
         return testResultRepository.findById(id).get();
     }
-    public List<TestResult> getByStudentId(UUID student_id){
-        return testResultRepository.findByStudentId(student_id).get();
+    public Optional<List<TestResult> >getByStudentId(UUID student_id){
+        return testResultRepository.findByStudentId(student_id);
     }
-    public List<TestResult> getAllByTestId(long test_id){
-        return testResultRepository.findAllByTestId(test_id).get();
+    public Optional<List<TestResult>> getAllByTestId(long test_id){
+        return testResultRepository.findAllByTestId(test_id);
     }
     public TestResult getByStudentIdTestId(UUID student_id, long test_id){
         Optional<TestResult> optionalTestResult = testResultRepository.findByStudentIdAndTestId(test_id, student_id);

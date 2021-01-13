@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -46,7 +48,10 @@ public class AddStudentsController {
     public ResponseEntity<List<StudentDetails>> getAllStudents() {
         try {
             List<StudentDetails> students = fileService.getStudents();
-            return new ResponseEntity<>(students, HttpStatus.OK);
+            if(!students.isEmpty()){
+                return new ResponseEntity<>(students, HttpStatus.OK);
+            }
+            return new ResponseEntity<>(new ArrayList<>(), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }

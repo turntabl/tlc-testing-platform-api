@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,18 +30,20 @@ public class StudentFeedbackController {
     @GetMapping("/feedbacks")
     public ResponseEntity<List<AddFeedbackResponse>> getAllFeedbacks() {
         try {
-            List<AddFeedbackResponse> feedbacks = studentFeedbackDAO.getAll().stream()
-                    .map(feedback -> {
-                        AddFeedbackResponse addFeedbackResponse = new AddFeedbackResponse();
-                        addFeedbackResponse.setMessage(feedback.getFeedback());
-                        addFeedbackResponse.setId(feedback.getFeedbackId());
-                        addFeedbackResponse.setStudent_name(feedback.getStudent().getFirst_name() + " " + feedback.getStudent().getLast_name());
-                        return addFeedbackResponse;
-                    }).collect(Collectors.toList());
-            if (feedbacks.isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            List<AddFeedbackResponse> addFeedbackResponses = new ArrayList<>();
+            List<Feedback> feedbacks = studentFeedbackDAO.getAll();
+            if(!feedbacks.isEmpty()){
+                addFeedbackResponses = feedbacks.stream()
+                        .map(feedback -> {
+                            AddFeedbackResponse addFeedbackResponse = new AddFeedbackResponse();
+                            addFeedbackResponse.setMessage(feedback.getFeedback());
+                            addFeedbackResponse.setId(feedback.getFeedbackId());
+                            addFeedbackResponse.setStudent_name(feedback.getStudent().getFirst_name() + " " + feedback.getStudent().getLast_name());
+                            return addFeedbackResponse;
+                        }).collect(Collectors.toList());
+                return new ResponseEntity<>(addFeedbackResponses, HttpStatus.OK);
             }
-            return new ResponseEntity<>(feedbacks, HttpStatus.OK);
+            return new ResponseEntity<>(addFeedbackResponses , HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }

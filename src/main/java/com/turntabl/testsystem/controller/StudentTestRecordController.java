@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -29,7 +31,10 @@ public class StudentTestRecordController {
     public ResponseEntity<List<StudentTestRecordResponse>> getAllTestTakenByStudentId(@PathVariable String student_id){
         try{
             List<StudentTestRecordResponse> studentTestRecordResponses = studentTestRecordDAO.getAllStudentTestsTakenById(stringToUserIdConverter.convert(student_id));
-            return new ResponseEntity<>(studentTestRecordResponses, HttpStatus.OK);
+            if(!studentTestRecordResponses.isEmpty()){
+                return new ResponseEntity<>(studentTestRecordResponses, HttpStatus.OK);
+            }
+            return new ResponseEntity<>(new ArrayList<>(0), HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -39,7 +44,10 @@ public class StudentTestRecordController {
     public ResponseEntity<List<StudentTestRecordResponse>> getAllTestTakenByTestId(@PathVariable long test_id){
         try{
             List<StudentTestRecordResponse> studentTestRecordResponses = studentTestRecordDAO.getAllStudentTestsTakenByTestId(test_id);
-            return new ResponseEntity<>(studentTestRecordResponses, HttpStatus.OK);
+            if(!studentTestRecordResponses.isEmpty()){
+                return new ResponseEntity<>(studentTestRecordResponses, HttpStatus.OK);
+            }
+            return new ResponseEntity<>(new ArrayList<>(0), HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
