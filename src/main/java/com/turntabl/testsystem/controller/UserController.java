@@ -103,8 +103,13 @@ public class UserController {
             }else if (userRequest.getRole() == 2){
                 user.setRole(Role.ADMIN.getCode());
             }
-            userDAO.add(user);
-            return new ResponseEntity<>(new GeneralAddResponse("success"), HttpStatus.OK);
+            user = userDAO.add(user);
+
+            if(user.getUser_id() != null){
+                return new ResponseEntity<>(new GeneralAddResponse("success"), HttpStatus.OK);
+            }
+
+            return new ResponseEntity<>(new GeneralAddResponse("user already exist"), HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(new GeneralAddResponse(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }

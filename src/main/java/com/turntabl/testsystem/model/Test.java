@@ -21,15 +21,15 @@ public class Test implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "test", cascade = CascadeType.ALL, orphanRemoval = true )
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "test", orphanRemoval = true )
     private Set<StudentAnswer> studentAnswers  = new HashSet<>(0);
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "test", cascade = CascadeType.ALL, orphanRemoval = true )
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "test", orphanRemoval = true )
     private Set<QuestionsInTest> questionsInTests  = new HashSet<>(0);
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "testId", cascade = CascadeType.ALL, orphanRemoval = true )
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "testId",  orphanRemoval = true )
     private Set<Question> questions  = new HashSet<>(0);
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "test", cascade = CascadeType.ALL, orphanRemoval = true )
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "test", orphanRemoval = true )
     private Set<TestResult> testResults  = new HashSet<>(0);
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "test", cascade = CascadeType.ALL, orphanRemoval = true )
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "test",  orphanRemoval = true )
     private Set<StudentTestRecord> studentTestRecords  = new HashSet<>(0);
     private QuestionType questionType;
     @Column(name = "test_title")
@@ -183,7 +183,9 @@ public class Test implements Serializable {
     }
 
     public void addQuestion(Question question){this.questions.add(question);}
-    public void assignCourse(Course course){this.course = course; this.course.addTest(this);}
+    public void assignCourse(Course course){
+        this.course = course;
+        this.course.addTest(this);}
     public void addStudentAnswer(StudentAnswer studentAnswer){
         this.studentAnswers.add(studentAnswer);
     }

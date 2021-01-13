@@ -29,8 +29,6 @@ public class UserDAO {
         User user1 = new User();
         if(userRepository.findByEmail(user.getEmail()).isEmpty()){
             user1 = userRepository.save(user);
-        }else{
-            user1 = user;
         }
         return user1;
     }

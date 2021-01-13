@@ -17,7 +17,7 @@ public class Course implements Serializable {
     private long course_id;
     @Column(name = "course_name")
     private String course_name;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true )
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "course", orphanRemoval = true )
     private Set<Test> tests = new HashSet<>(0);
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
@@ -73,7 +73,9 @@ public class Course implements Serializable {
     public void setTests(Set<Test> tests) {
         this.tests = tests;
     }
-    public void addTest(Test test){this.tests.add(test);}
+    public void addTest(Test test){
+        this.tests.add(test);
+    }
 
     public User getUser() {
         return user;

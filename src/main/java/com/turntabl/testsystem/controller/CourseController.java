@@ -13,9 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -99,14 +99,12 @@ public class CourseController {
     }
 
     @GetMapping("/course/delete/{id}")
-    public ResponseEntity<Boolean> deleteCourse(@PathVariable long id){
+    public ResponseEntity<GeneralAddResponse> deleteCourse(@PathVariable long id){
+        Course course = courseDAO.get(id);
         try {
-            Boolean check;
-            Course course = courseDAO.get(id);
-            check = courseDAO.delete(course);
-            return new ResponseEntity<>(check, HttpStatus.OK);
-        }catch (Exception e){
-            return new ResponseEntity<>(false, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(courseDAO.delete(course), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new GeneralAddResponse(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

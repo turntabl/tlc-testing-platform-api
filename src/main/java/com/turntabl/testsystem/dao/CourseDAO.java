@@ -1,6 +1,8 @@
 package com.turntabl.testsystem.dao;
 
+import com.turntabl.testsystem.message.GeneralAddResponse;
 import com.turntabl.testsystem.model.Course;
+import com.turntabl.testsystem.model.User;
 import com.turntabl.testsystem.repository.CourseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
@@ -34,13 +36,15 @@ public class CourseDAO {
         courseFromDatabase.setCourse_name(courseFromUser.getCourse_name());
         return this.courseRepository.save(courseFromDatabase);
     }
-    public boolean delete(Course course) {
-        boolean isDeleted = false;
-        Optional<Course> optionalCourse = this.courseRepository.findById(course.getCourse_id());
-        if (optionalCourse.isPresent()) {
-            this.courseRepository.delete(optionalCourse.get());
-            isDeleted = true;
+    public GeneralAddResponse delete(Course course) {
+        GeneralAddResponse generalAddResponse = new GeneralAddResponse();
+        Optional<Course> optionalUser = courseRepository.findById(course.getCourse_id());
+        if (optionalUser.isPresent()) {
+            courseRepository.delete(optionalUser.get());
+            generalAddResponse.setMessage("success");
+        }else{
+            generalAddResponse.setMessage("failed");
         }
-        return isDeleted;
+        return generalAddResponse;
     }
 }
