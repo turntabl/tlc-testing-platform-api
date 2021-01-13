@@ -90,8 +90,8 @@ public class CourseController {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    @CrossOrigin
-    @DeleteMapping("/course/delete/{id}")
+
+    @GetMapping("/course/delete/{id}")
     public ResponseEntity<Boolean> deleteCourse(@PathVariable long id){
         try {
             Boolean check;
@@ -99,7 +99,7 @@ public class CourseController {
             check = courseDAO.delete(course);
             return new ResponseEntity<>(check, HttpStatus.OK);
         }catch (Exception e){
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(false, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
