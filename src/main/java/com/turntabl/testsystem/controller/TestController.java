@@ -113,23 +113,23 @@ public class TestController {
                         break;
                 }
                 testSave = testDAO.add(testSave);
-                testResponse.setQuestions_type(testResponse.getQuestions_type());
-                testResponse.setTest_id(testResponse.getTest_id());
-                testResponse.setTest_date(testResponse.getTest_date());
-                testResponse.setTest_rule(testResponse.getTest_rule());
-                testResponse.setTest_title(testResponse.getTest_title());
+                testResponse.setQuestions_type(testSave.getQuestionType().getCode());
+                testResponse.setTest_id(testSave.getTest_id());
+                testResponse.setTest_date(testSave.getTest_date());
+                testResponse.setTest_rule(testSave.getTest_rules());
+                testResponse.setTest_title(testSave.getTest_title());
                 testResponse.setUser_id(testSave.getUser().getUser_id());
                 testResponse.setCourse_name(testSave.getCourse().getCourse_name());
                 testResponse.setCourse_id(testSave.getCourse().getCourse_id());
-                testResponse.setTest_time_start(testResponse.getTest_time_start());
-                testResponse.setTest_time_end(testResponse.getTest_time_end());
+                testResponse.setTest_time_start(testSave.getTest_time_start());
+                testResponse.setTest_time_end(testSave.getTest_time_end());
                 testResponse.setMessage("success");
                 return new ResponseEntity<>(testResponse, HttpStatus.OK);
             } else {
                 return new ResponseEntity<>(new TestResponse("duplicate", 0, 0, null, null, null, null, null, null, null, null), HttpStatus.OK);
             }
         } catch (Exception e) {
-            return new ResponseEntity<>(new TestResponse(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new TestResponse(e.getMessage(), 0, 0, null, null, null, null, null, null, null, null), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
