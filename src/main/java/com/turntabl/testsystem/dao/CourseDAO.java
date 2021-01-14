@@ -2,7 +2,6 @@ package com.turntabl.testsystem.dao;
 
 import com.turntabl.testsystem.message.GeneralAddResponse;
 import com.turntabl.testsystem.model.Course;
-import com.turntabl.testsystem.model.User;
 import com.turntabl.testsystem.repository.CourseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;

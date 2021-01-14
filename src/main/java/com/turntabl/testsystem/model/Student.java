@@ -29,13 +29,13 @@ public class Student implements Serializable {
     @CreationTimestamp
     @Column(name = "time_created")
     private LocalDateTime createdAt;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "student" )
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true )
     private Set<Feedback> feedbacks = new HashSet<>(0);
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "student" )
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "student",cascade = CascadeType.ALL, orphanRemoval = true )
     private Set<StudentAnswer> studentAnswers = new HashSet<>(0);
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "student" )
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true )
     private Set<TestResult> testResults = new HashSet<>(0);
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "student" )
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true )
     private Set<StudentTestRecord> studentTestRecords = new HashSet<>(0);
     public Student() {
     }
@@ -92,7 +92,10 @@ public class Student implements Serializable {
     public void setFeedbacks(Set<Feedback> feedbacks) {
         this.feedbacks = feedbacks;
     }
-    public void addFeedback(Feedback feedback){this.feedbacks.add(feedback);}
+    public void addFeedback(Feedback feedback){
+        this.feedbacks.add(feedback);
+        feedback.setStudent(this);
+    }
     @Override
     public String toString() {
         return "Student{" +
@@ -104,11 +107,14 @@ public class Student implements Serializable {
     }
     public void addStudentTestRecord(StudentTestRecord studentTestRecord){
         this.studentTestRecords.add(studentTestRecord);
+        studentTestRecord.setStudent(this);
     }
     public void addStudentAnswer(StudentAnswer studentAnswer){
         this.studentAnswers.add(studentAnswer);
+        studentAnswer.setStudent(this);
     }
     public void addTestResults(TestResult testResult){
         this.testResults.add(testResult);
+        testResult.setStudent(this);
     }
 }

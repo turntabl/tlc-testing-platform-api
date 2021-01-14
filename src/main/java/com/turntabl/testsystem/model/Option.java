@@ -18,7 +18,7 @@ public class Option implements Serializable {
     private Question question;
     @Column(name = "option")
     private String option;
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "option" )
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "option", cascade = CascadeType.ALL, orphanRemoval = true )
     private ValidAnswer validAnswer;
     @UpdateTimestamp
     @Column(name = "time_updated")
@@ -77,6 +77,7 @@ public class Option implements Serializable {
 
     public void setValidAnswer(ValidAnswer validAnswer) {
         this.validAnswer = validAnswer;
+        validAnswer.setOption(this);
     }
 
     public void assignQuestion(Question question){this.question = question; this.question.addOption(this);}

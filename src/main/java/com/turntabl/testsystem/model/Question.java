@@ -55,6 +55,7 @@ public class Question implements Serializable {
     }
     public void setStudentAnswer(StudentAnswer studentAnswer) {
         this.studentAnswer = studentAnswer;
+        studentAnswer.setQuestion(this);
     }
     public Set<Option> getOptions() {
         return options;
@@ -85,6 +86,7 @@ public class Question implements Serializable {
     }
     public void setValidAnswer(ValidAnswer validAnswer) {
         this.validAnswer = validAnswer;
+        validAnswer.setQuestion(this);
     }
     public Set<QuestionsInTest> getQuestionsInTests() {
         return questionsInTests;
@@ -98,7 +100,15 @@ public class Question implements Serializable {
     public void setQuestion(String question) {
         this.question = question;
     }
-    public void addOption(Option option){this.options.add(option);}
+    public void addOption(Option option){
+        this.options.add(option);
+        option.setQuestion(this);
+    }
+
+    public void removeOption(Option option){
+        this.options.remove(option);
+        option.setQuestion(null);
+    }
     public void assignTest(Test test){this.testId = test; this.testId.addQuestion(this);}
 
     public LocalDateTime getUpdatedAt() {

@@ -1,7 +1,10 @@
 package com.turntabl.testsystem.model;
 
+
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.engine.internal.Cascade;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -21,11 +24,11 @@ public class Test implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "test", orphanRemoval = true )
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "test", cascade = CascadeType.REMOVE, orphanRemoval = true )
     private Set<StudentAnswer> studentAnswers  = new HashSet<>(0);
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "test", orphanRemoval = true )
     private Set<QuestionsInTest> questionsInTests  = new HashSet<>(0);
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "testId",  orphanRemoval = true )
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "testId", cascade = CascadeType.REMOVE,  orphanRemoval = true )
     private Set<Question> questions  = new HashSet<>(0);
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "test", orphanRemoval = true )
     private Set<TestResult> testResults  = new HashSet<>(0);
