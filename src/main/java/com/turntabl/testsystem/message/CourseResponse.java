@@ -1,14 +1,26 @@
 package com.turntabl.testsystem.message;
 
 public class CourseResponse {
+    private String message;
     private long courseId;
     private String courseName;
     public CourseResponse() {
     }
-    public CourseResponse(long courseId, String courseName) {
+
+    public CourseResponse(String message, long courseId, String courseName) {
+        this.message = message;
         this.courseId = courseId;
         this.courseName = courseName;
     }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
     public long getCourseId() {
         return courseId;
     }

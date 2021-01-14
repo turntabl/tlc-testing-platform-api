@@ -49,9 +49,9 @@ public class TestController {
                             testResponse.setTest_id(test.getTest_id());
                             testResponse.setCourse_id(test.getCourse().getCourse_id());
                             testResponse.setTest_title(test.getTest_title());
-                            testResponse.setTest_rules(test.getTest_rules());
+                            testResponse.setTest_rule(test.getTest_rules());
                             testResponse.setCourse_name(test.getCourse().getCourse_name());
-                            testResponse.setQuestion_type(test.getQuestionType().getCode());
+                            testResponse.setQuestions_type(test.getQuestionType().getCode());
                             testResponse.setTest_date(test.getTest_date());
                             testResponse.setTest_time_start(test.getTest_time_start());
                             testResponse.setTest_time_end(test.getTest_time_end());
@@ -74,7 +74,7 @@ public class TestController {
             TestResponse testResponse = new TestResponse();
             testResponse.setTest_id(test.getTest_id());
             testResponse.setTest_title(test.getTest_title());
-            testResponse.setTest_rules(test.getTest_rules());
+            testResponse.setTest_rule(test.getTest_rules());
             testResponse.setTest_date(test.getTest_date());
             testResponse.setTest_time_start(test.getTest_time_start());
             testResponse.setTest_time_end(test.getTest_time_end());
@@ -86,10 +86,11 @@ public class TestController {
     }
 
     @PostMapping("/test/add")
-    public ResponseEntity<GeneralAddResponse> addTest(@RequestBody AddTestRequest addTestRequest) {
+    public ResponseEntity<TestResponse> addTest(@RequestBody AddTestRequest addTestRequest) {
         try {
             User user = userDAO.get(stringToUserIdConverter.convert(addTestRequest.getUser_id())).get();
             if (!testDAO.getByTestTitle(addTestRequest.getTest_title())) {
+                TestResponse testResponse = new TestResponse();
                 Test testSave = new Test();
                 Course course = new Course();
                 course = courseDAO.get(addTestRequest.getCourse_id());
@@ -111,13 +112,24 @@ public class TestController {
                         testSave.setQuestionType(QuestionType.ESSAY);
                         break;
                 }
-                testDAO.add(testSave);
-                return new ResponseEntity<>(new GeneralAddResponse("success"), HttpStatus.OK);
+                testSave = testDAO.add(testSave);
+                testResponse.setQuestions_type(testResponse.getQuestions_type());
+                testResponse.setTest_id(testResponse.getTest_id());
+                testResponse.setTest_date(testResponse.getTest_date());
+                testResponse.setTest_rule(testResponse.getTest_rule());
+                testResponse.setTest_title(testResponse.getTest_title());
+                testResponse.setUser_id(testSave.getUser().getUser_id());
+                testResponse.setCourse_name(testSave.getCourse().getCourse_name());
+                testResponse.setCourse_id(testSave.getCourse().getCourse_id());
+                testResponse.setTest_time_start(testResponse.getTest_time_start());
+                testResponse.setTest_time_end(testResponse.getTest_time_end());
+                testResponse.setMessage("success");
+                return new ResponseEntity<>(testResponse, HttpStatus.OK);
             } else {
-                return new ResponseEntity<>(new GeneralAddResponse("duplicate test title"), HttpStatus.OK);
+                return new ResponseEntity<>(new TestResponse("duplicate", 0, 0, null, null, null, null, null, null, null, null), HttpStatus.OK);
             }
         } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new TestResponse(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -150,7 +162,7 @@ public class TestController {
         }
     }
 
-    @DeleteMapping("/test/delete/{id}")
+    @GetMapping("/test/delete/{id}")
     public ResponseEntity<GeneralAddResponse> deleteTest(@PathVariable long id) {
         Test test = testDAO.get(id).get();
         try {
