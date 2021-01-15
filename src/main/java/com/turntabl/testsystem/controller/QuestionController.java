@@ -47,6 +47,7 @@ import java.util.stream.Collectors;
         @GetMapping("/question/{test_id}")
         public ResponseEntity<List<QuestionResponse>> getQuestionByTestId(@PathVariable long test_id) {
             try {
+                Optional<Test> test = testDAO.get(test_id);
                 List<Question> questions = questionDAO.getQuestionsByTestId(test_id);
                 List<QuestionResponse> questionResponses = new ArrayList<>();
                 if(!questions.isEmpty()){
@@ -59,7 +60,9 @@ import java.util.stream.Collectors;
                                     optionResponse.setOptionId(option.getOptionId());
                                     return optionResponse;
                                 }).collect(Collectors.toSet()));
-                                questionResponse.setQuestion(question1.getQuestion());
+                                questionResponse.setQuestion(
+                                       test.get().getQuestionType().getCode().matches("CS")?StringEscapeUtils.unescapeJava(question1.getQuestion()):question1.getQuestion()
+                                );
                                 questionResponse.setQuestionId(question1.getQuestion_id());
                                 questionResponse.setMark_allocated(question1.getMark_allocated());
                                 return questionResponse;
@@ -182,4 +185,14 @@ import java.util.stream.Collectors;
             message = "Please upload an excel or csv file!";
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage<>(message, 203, null));
         }
+
+    @GetMapping("/question/delete/{id}")
+    public ResponseEntity<GeneralAddResponse> deleteQuestion(@PathVariable long id){
+        Question question = questionDAO.get(id);
+        try {
+            return new ResponseEntity<>(questionDAO.delete(question), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new GeneralAddResponse(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
     }
