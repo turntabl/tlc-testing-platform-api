@@ -20,6 +20,9 @@ public class QuestionDAO {
     public List<Question> getQuestionsByTestId(Long test_id){
         return questionRepository.findQuestionByTestId(test_id);
     }
+    public Optional<Question> getQuestionsByQuestionTestId(String question, Long test_id){
+        return questionRepository.findByQuestionAndTestID(question, test_id);
+    }
     public List<Question> addAll(List<Question> t){
         return questionRepository.saveAll(t);
     }
