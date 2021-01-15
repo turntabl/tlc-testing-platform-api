@@ -1,5 +1,7 @@
 package com.turntabl.testsystem.dao;
 
+import com.turntabl.testsystem.message.GeneralAddResponse;
+import com.turntabl.testsystem.model.Course;
 import com.turntabl.testsystem.model.Question;
 import com.turntabl.testsystem.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,19 +35,22 @@ public class QuestionDAO {
         return questionRepository.save(question);
     }
     public Question update(Question questionFromUser){
-        Question questionFromDatabase = new Question();
+        Question questionFromDatabase;
         questionFromDatabase = this.get(questionFromUser.getQuestion_id());
         questionFromDatabase.setQuestion(questionFromUser.getQuestion());
         return this.questionRepository.save(questionFromDatabase);
     }
-    public boolean delete(Question question) {
-        boolean isDeleted = false;
-        Optional<Question> optionalTest = this.questionRepository.findById(question.getQuestion_id());
-        if (optionalTest.isPresent()) {
-            this.questionRepository.delete(optionalTest.get());
-            isDeleted = true;
+
+    public GeneralAddResponse delete(Question question) {
+        GeneralAddResponse generalAddResponse = new GeneralAddResponse();
+        Optional<Question> optionalQuestion = questionRepository.findById(question.getQuestion_id());
+        if (optionalQuestion.isPresent()) {
+            questionRepository.delete(optionalQuestion.get());
+            generalAddResponse.setMessage("success");
+        }else{
+            generalAddResponse.setMessage("failed");
         }
-        return isDeleted;
+        return generalAddResponse;
     }
     public Optional<Question> getByName(String question_name){
         return questionRepository.findByQuestion(question_name);
