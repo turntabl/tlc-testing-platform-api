@@ -1,10 +1,13 @@
 package com.turntabl.testsystem.controller;
 
 import com.turntabl.testsystem.dao.*;
+import com.turntabl.testsystem.helper.AddEssayQuestionsHelper;
 import com.turntabl.testsystem.helper.AddMultipleChoiceQuestionsCSVHelper;
 import com.turntabl.testsystem.helper.StringToUserIdConverter;
 import com.turntabl.testsystem.message.*;
 import com.turntabl.testsystem.model.*;
+import com.turntabl.testsystem.service.AddCodeSnippetSQuestionService;
+import com.turntabl.testsystem.service.AddEssayQuestionsService;
 import com.turntabl.testsystem.service.AddMultipleChoiceQuestionsCSVService;
 import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -35,7 +37,11 @@ import java.util.stream.Collectors;
         private final StringToUserIdConverter stringToUserIdConverter;
         @Autowired
         private final AddMultipleChoiceQuestionsCSVService addMultipleChoiceQuestionsCSVService;
-        public QuestionController(QuestionDAO questionDAO, OptionDAO optionDAO, TestDAO testDAO, ValidAnswerDAO validAnswerDAO, UserDAO userDAO, StringToUserIdConverter stringToUserIdConverter, AddMultipleChoiceQuestionsCSVService addMultipleChoiceQuestionsCSVService) {
+        @Autowired
+        private final AddEssayQuestionsService addEssayQuestionsService;
+        @Autowired
+        private final AddCodeSnippetSQuestionService addCodeSnippetSQuestionService;
+        public QuestionController(QuestionDAO questionDAO, OptionDAO optionDAO, TestDAO testDAO, ValidAnswerDAO validAnswerDAO, UserDAO userDAO, StringToUserIdConverter stringToUserIdConverter, AddMultipleChoiceQuestionsCSVService addMultipleChoiceQuestionsCSVService, AddEssayQuestionsService addEssayQuestionsService, AddCodeSnippetSQuestionService addCodeSnippetSQuestionService) {
             this.questionDAO = questionDAO;
             this.optionDAO = optionDAO;
             this.testDAO = testDAO;
@@ -43,6 +49,8 @@ import java.util.stream.Collectors;
             this.userDAO = userDAO;
             this.stringToUserIdConverter = stringToUserIdConverter;
             this.addMultipleChoiceQuestionsCSVService = addMultipleChoiceQuestionsCSVService;
+            this.addEssayQuestionsService = addEssayQuestionsService;
+            this.addCodeSnippetSQuestionService = addCodeSnippetSQuestionService;
         }
         @GetMapping("/question/{test_id}")
         public ResponseEntity<List<QuestionResponse>> getQuestionByTestId(@PathVariable long test_id) {
@@ -169,7 +177,7 @@ import java.util.stream.Collectors;
         }
     }
         @PostMapping(value = "/questions/upload", consumes = {"multipart/form-data"})
-        public ResponseEntity<ResponseMessage> uploadFile(@RequestPart("file") MultipartFile file, @RequestParam(value = "test_id") String test_id) {
+        public ResponseEntity<ResponseMessage> uploadMultipleChoiceQuestions(@RequestPart("file") MultipartFile file, @RequestParam(value = "test_id") String test_id) {
             String message = "";
             AddQuestionsResponse addQuestionsResponse;
             if (AddMultipleChoiceQuestionsCSVHelper.hasCSVFormat(file)) {
@@ -185,9 +193,42 @@ import java.util.stream.Collectors;
             message = "Please upload an excel or csv file!";
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage<>(message, 203, null));
         }
-
-    @GetMapping("/question/delete/{id}")
-    public ResponseEntity<GeneralAddResponse> deleteQuestion(@PathVariable long id){
+        @PostMapping(value = "/questions/essay/upload", consumes = {"multipart/form-data"})
+        public ResponseEntity<ResponseMessage> uploadEssayQuestions(@RequestPart("file") MultipartFile file, @RequestParam(value = "test_id") String test_id) {
+        String message = "";
+        AddEssayQuestionResponse addEssayQuestionResponse;
+        if (AddEssayQuestionsHelper.hasCSVFormat(file)) {
+            try {
+                addEssayQuestionResponse = addEssayQuestionsService.save(file, Long.parseLong(test_id));
+                message = "Uploaded the file successfully: " + file.getOriginalFilename();
+                return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage<>(message, 200, addEssayQuestionResponse));
+            } catch (Exception e) {
+                message = "Could not upload the file: " + file.getOriginalFilename() + "!";
+                return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage<>(message, 203, null));
+            }
+        }
+        message = "Please upload an excel or csv file!";
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage<>(message, 203, null));
+    }
+        @PostMapping(value = "/questions/code-snippet/upload", consumes = {"multipart/form-data"})
+        public ResponseEntity<ResponseMessage> uploadCodeSnippetQuestions(@RequestPart("file") MultipartFile file, @RequestParam(value = "test_id") String test_id) {
+            String message = "";
+            AddEssayQuestionResponse addEssayQuestionResponse;
+            if (AddEssayQuestionsHelper.hasCSVFormat(file)) {
+                try {
+                    addEssayQuestionResponse = addCodeSnippetSQuestionService.save(file, Long.parseLong(test_id));
+                    message = "Uploaded the file successfully: " + file.getOriginalFilename();
+                    return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage<>(message, 200, addEssayQuestionResponse));
+                } catch (Exception e) {
+                    message = "Could not upload the file: " + file.getOriginalFilename() + "!";
+                    return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage<>(message, 203, null));
+                }
+            }
+            message = "Please upload an excel or csv file!";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage<>(message, 203, null));
+    }
+        @GetMapping("/question/delete/{id}")
+        public ResponseEntity<GeneralAddResponse> deleteQuestion(@PathVariable long id){
         Question question = questionDAO.get(id);
         try {
             return new ResponseEntity<>(questionDAO.delete(question), HttpStatus.OK);
