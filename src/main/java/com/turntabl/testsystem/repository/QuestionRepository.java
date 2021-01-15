@@ -15,4 +15,7 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
     @Query("select q from Question q where q.question = ?1")
     Optional<Question> findByQuestion(String question);
 
+    @Query("select q from Question q where q.question = ?1 and q.testId.test_id = ?2")
+    Optional<Question> findByQuestionAndTestID(String question, long id);
+
 }

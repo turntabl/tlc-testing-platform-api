@@ -23,9 +23,9 @@ public class User {
     private String first_name;
     @Column(name = "last_name")
     private String last_name;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user",cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Course> courses = new HashSet<>(0);
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Test> tests = new HashSet<>(0);
     @Column(name = "role")
     private Integer role;
@@ -78,10 +78,12 @@ public class User {
 
     public void addCourse(Course course){
         this.courses.add(course);
+        course.setUser(this);
     }
 
     public void addTest(Test test){
         this.tests.add(test);
+        test.setUser(this);
     }
 
     public String getFirst_name() {

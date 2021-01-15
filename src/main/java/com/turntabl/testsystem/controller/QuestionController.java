@@ -6,6 +6,7 @@ import com.turntabl.testsystem.helper.StringToUserIdConverter;
 import com.turntabl.testsystem.message.*;
 import com.turntabl.testsystem.model.*;
 import com.turntabl.testsystem.service.AddMultipleChoiceQuestionsCSVService;
+import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -71,13 +72,13 @@ import java.util.stream.Collectors;
             }
         }
         @PostMapping("/question/add")
-        public ResponseEntity<GeneralAddResponse> addQuestion(@RequestBody QuestionRequest addQuestionRequest){
+        public ResponseEntity<GeneralAddResponse> addMultipleChoiceQuestion(@RequestBody QuestionRequest addQuestionRequest){
         try {
-            Optional<Question> question = questionDAO.getByName(addQuestionRequest.getQuestion());
+            Optional<Question> optionalQuestion = questionDAO.getQuestionsByQuestionTestId(addQuestionRequest.getQuestion(), addQuestionRequest.getTestId());
             Optional<Test> test = testDAO.get(addQuestionRequest.getTestId());
             User user = userDAO.get(stringToUserIdConverter.convert(addQuestionRequest.getUser_id())).get();
             if(test.get().getUser().getUser_id().equals(user.getUser_id())){
-                if(question.isPresent() && test.isPresent()){
+                if(optionalQuestion.isPresent()){
                     return new ResponseEntity<>(new GeneralAddResponse("Duplicate Question in Test"), HttpStatus.OK);
                 }else{
                     Question questionSave = new Question();
@@ -105,6 +106,56 @@ import java.util.stream.Collectors;
                     validAnswerDAO.add(validAnswer);
                     GeneralAddResponse generalAddResponse = new GeneralAddResponse();
                     generalAddResponse.setMessage("Success");
+                    return new ResponseEntity<>(generalAddResponse, HttpStatus.OK);
+                }
+            }else{
+                return new ResponseEntity<>(new GeneralAddResponse("Unauthorized user"), HttpStatus.OK);
+            }
+        }catch (Exception e){
+            return new ResponseEntity<>(new GeneralAddResponse(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        }
+        @PostMapping("/question/essay/add")
+        public ResponseEntity<GeneralAddResponse> addEssayQuestion(@RequestBody EssayQuestionRequest essayQuestionRequest){
+        try {
+            Optional<Question> optionalQuestion = questionDAO.getQuestionsByQuestionTestId(essayQuestionRequest.getQuestion(), essayQuestionRequest.getTest_id());
+            Optional<Test> test = testDAO.get(essayQuestionRequest.getTest_id());
+            User user = userDAO.get(stringToUserIdConverter.convert(essayQuestionRequest.getUser_id())).get();
+            if(test.get().getUser().getUser_id().equals(user.getUser_id())){
+                if(optionalQuestion.isPresent()){
+                    return new ResponseEntity<>(new GeneralAddResponse("Duplicate Question in Test"), HttpStatus.OK);
+                }else{
+                    Question questionSave = new Question();
+                    questionSave.assignTest(test.get());
+                    questionSave.setQuestion(essayQuestionRequest.getQuestion());
+                    questionSave.setMark_allocated(essayQuestionRequest.getMark_allocated());
+                    questionDAO.add(questionSave);
+                    GeneralAddResponse generalAddResponse = new GeneralAddResponse("Success");
+                    return new ResponseEntity<>(generalAddResponse, HttpStatus.OK);
+                }
+            }else{
+                return new ResponseEntity<>(new GeneralAddResponse("Unauthorized user"), HttpStatus.OK);
+            }
+        }catch (Exception e){
+            return new ResponseEntity<>(new GeneralAddResponse(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        }
+        @PostMapping("/question/code-snippet/add")
+        public ResponseEntity<GeneralAddResponse> addCodeSnippetQuestion(@RequestBody EssayQuestionRequest essayQuestionRequest){
+        try {
+            Optional<Question> optionalQuestion = questionDAO.getQuestionsByQuestionTestId(essayQuestionRequest.getQuestion(), essayQuestionRequest.getTest_id());
+            Optional<Test> test = testDAO.get(essayQuestionRequest.getTest_id());
+            User user = userDAO.get(stringToUserIdConverter.convert(essayQuestionRequest.getUser_id())).get();
+            if(test.get().getUser().getUser_id().equals(user.getUser_id())){
+                if(optionalQuestion.isPresent()){
+                    return new ResponseEntity<>(new GeneralAddResponse("Duplicate Question in Test"), HttpStatus.OK);
+                }else{
+                    Question questionSave = new Question();
+                    questionSave.assignTest(test.get());
+                    questionSave.setQuestion(StringEscapeUtils.escapeJava(essayQuestionRequest.getQuestion()));
+                    questionSave.setMark_allocated(essayQuestionRequest.getMark_allocated());
+                    questionDAO.add(questionSave);
+                    GeneralAddResponse generalAddResponse = new GeneralAddResponse("Success");
                     return new ResponseEntity<>(generalAddResponse, HttpStatus.OK);
                 }
             }else{

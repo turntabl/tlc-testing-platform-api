@@ -66,20 +66,24 @@ public class CourseController {
         }
     }
     @PostMapping("/course/add")
-    public ResponseEntity<GeneralAddResponse> addCourse(@RequestBody CourseRequest courseRequest) {
+    public ResponseEntity<CourseResponse> addCourse(@RequestBody CourseRequest courseRequest) {
         try {
             User user = userDAO.get(stringToUserIdConverter.convert(courseRequest.getUser_id())).get();
             if(!courseDAO.getByName(courseRequest.getCourseName())){
+                CourseResponse courseResponse = new CourseResponse();
                 Course course = new Course();
                 course.setCourse_name(courseRequest.getCourseName());
                 course.assignUser(user);
-                courseDAO.add(course);
-                return new ResponseEntity<>(new GeneralAddResponse("success"), HttpStatus.OK);
+                course = courseDAO.add(course);
+                courseResponse.setMessage("success");
+                courseResponse.setCourseId(course.getCourse_id());
+                courseResponse.setCourseName(course.getCourse_name());
+                return new ResponseEntity<>(courseResponse, HttpStatus.OK);
             }else{
-                return new ResponseEntity<>(new GeneralAddResponse("duplicate course name"), HttpStatus.OK);
+                return new ResponseEntity<>(new CourseResponse("duplicate", 0, null), HttpStatus.OK);
             }
         } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new CourseResponse(e.getMessage(), 0, null), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     @PostMapping("/course/update")
