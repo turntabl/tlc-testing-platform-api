@@ -94,7 +94,6 @@ public class Student implements Serializable {
     }
     public void addFeedback(Feedback feedback){
         this.feedbacks.add(feedback);
-        feedback.setStudent(this);
     }
     @Override
     public String toString() {
@@ -107,14 +106,11 @@ public class Student implements Serializable {
     }
     public void addStudentTestRecord(StudentTestRecord studentTestRecord){
         this.studentTestRecords.add(studentTestRecord);
-        studentTestRecord.setStudent(this);
     }
     public void addStudentAnswer(StudentAnswer studentAnswer){
         this.studentAnswers.add(studentAnswer);
-        studentAnswer.setStudent(this);
     }
     public void addTestResults(TestResult testResult){
         this.testResults.add(testResult);
-        testResult.setStudent(this);
     }
 }
