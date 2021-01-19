@@ -3,6 +3,7 @@ package com.turntabl.testsystem.controller;
 import com.turntabl.testsystem.dao.StudentTestRecordDAO;
 import com.turntabl.testsystem.helper.StringToUserIdConverter;
 import com.turntabl.testsystem.message.StudentTestRecordResponse;
+import com.turntabl.testsystem.model.StudentTestRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -52,4 +54,14 @@ public class StudentTestRecordController {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @GetMapping("/test-taken/test/{test_id}/{student_id}")
+    public ResponseEntity<Boolean> getStudentTestRecord(@PathVariable long test_id, @PathVariable String student_id){
+        try{
+            return new ResponseEntity<>(studentTestRecordDAO.hasStudentTakenTest(test_id, student_id), HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(false, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }
