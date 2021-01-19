@@ -31,7 +31,7 @@ public class AddStudentsController {
     public ResponseEntity<ResponseMessage> uploadFile(@RequestPart("file") MultipartFile file) {
         String message = "";
         AddStudentSaveResponse addStudentSaveResponse;
-        if (AddStudentsExcelHelper.hasExcelFormat(file) || AddStudentsCSVHelper.hasCSVFormat(file)) {
+        if (!file.isEmpty()) {
             try {
                 addStudentSaveResponse = fileService.save(file);
                 message = "Uploaded the file successfully: " + file.getOriginalFilename();
@@ -41,7 +41,7 @@ public class AddStudentsController {
                 return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage<>(message, 203, null));
             }
         }
-        message = "Please upload an excel or csv file!";
+        message = "Please select a CSV file for upload.";
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage<>(message, 203, null));
     }
     @GetMapping("/students")

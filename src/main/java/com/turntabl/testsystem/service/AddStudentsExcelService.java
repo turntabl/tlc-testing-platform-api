@@ -25,25 +25,25 @@ public class AddStudentsExcelService {
         AtomicInteger total_record_inserted = new AtomicInteger();
         AddStudentSaveResponse addStudentSaveResponse = new AddStudentSaveResponse();
         List<StudentDetails> students = new ArrayList<>();
-            if(AddStudentsExcelHelper.hasExcelFormat(file)) {
-                try {
-                    AddStudentsExcelHelper.excelToStudents(file.getInputStream()).stream()
-                        .map(student -> {if(studentDAO.findByEmail(student.getEmail()).isEmpty()){
-                            StudentDetails studentDetails = new StudentDetails();
-                            studentDAO.add(student);
-                            studentDetails.setEmail(student.getEmail());
-                            studentDetails.setFirst_name(student.getFirst_name());
-                            studentDetails.setStudent_id(student.getStudent_id());
-                            studentDetails.setLast_name(student.getLast_name());
-                            students.add(studentDetails);
-                            total_record_inserted.addAndGet(1);
-                        }
-                        return student;
-                        }).collect(Collectors.toList());
-                } catch (IOException e) {
-                    throw new RuntimeException("fail to store excel data: " + e.getMessage());
-                }
-            }else if(AddStudentsCSVHelper.hasCSVFormat(file)){
+
+//                try {
+//                    AddStudentsExcelHelper.excelToStudents(file.getInputStream()).stream()
+//                        .map(student -> {if(studentDAO.findByEmail(student.getEmail()).isEmpty()){
+//                            StudentDetails studentDetails = new StudentDetails();
+//                            studentDAO.add(student);
+//                            studentDetails.setEmail(student.getEmail());
+//                            studentDetails.setFirst_name(student.getFirst_name());
+//                            studentDetails.setStudent_id(student.getStudent_id());
+//                            studentDetails.setLast_name(student.getLast_name());
+//                            students.add(studentDetails);
+//                            total_record_inserted.addAndGet(1);
+//                        }
+//                        return student;
+//                        }).collect(Collectors.toList());
+//                } catch (IOException e) {
+//                    throw new RuntimeException("fail to store excel data: " + e.getMessage());
+//                }
+
                 try {
                     AddStudentsCSVHelper.csvToStudents(file.getInputStream()).stream()
                             .map(student -> {if(studentDAO.findByEmail(student.getEmail()).isEmpty()){
@@ -61,7 +61,7 @@ public class AddStudentsExcelService {
                 } catch (IOException e) {
                     throw new RuntimeException("fail to store csv data: " + e.getMessage());
                 }
-            }
+
             addStudentSaveResponse.setAtomicInteger(total_record_inserted);
             addStudentSaveResponse.setStudentList(students);
             return addStudentSaveResponse;
