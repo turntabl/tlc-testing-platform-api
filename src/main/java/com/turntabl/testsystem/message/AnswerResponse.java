@@ -1,14 +1,5 @@
 package com.turntabl.testsystem.message;
 
-import com.turntabl.testsystem.model.Question;
-import com.turntabl.testsystem.model.Student;
-import com.turntabl.testsystem.model.Test;
-import org.hibernate.annotations.CreationTimestamp;
-
-import javax.persistence.*;
-import java.util.Date;
-import java.util.UUID;
-
 public class AnswerResponse {
     private long student_answer_id;
     private String question;

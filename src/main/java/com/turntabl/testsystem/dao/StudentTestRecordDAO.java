@@ -1,5 +1,6 @@
 package com.turntabl.testsystem.dao;
 
+import com.turntabl.testsystem.helper.StringToUserIdConverter;
 import com.turntabl.testsystem.message.GeneralAddResponse;
 import com.turntabl.testsystem.message.StudentTestRecordResponse;
 import com.turntabl.testsystem.model.StudentTestRecord;
@@ -14,6 +15,8 @@ import java.util.stream.Collectors;
 public class StudentTestRecordDAO {
     @Autowired
     private  StudentTestRecordRepository studentTestRecordRepository;
+    @Autowired
+    private StringToUserIdConverter stringToUserIdConverter;
 
     public StudentTestRecordDAO() {
     }
@@ -63,5 +66,14 @@ public class StudentTestRecordDAO {
             generalAddResponse.setMessage("already exists");
         }
         return  generalAddResponse;
+    }
+
+    public Boolean hasStudentTakenTest(long test_id, String student_id){
+        Boolean isTaken = false;
+        Optional<StudentTestRecord> optionalStudentTestRecord = studentTestRecordRepository.findTestTakenByStudentIdAndTestId(stringToUserIdConverter.convert(student_id), test_id);
+        if(optionalStudentTestRecord.isPresent()){
+            isTaken = true;
+        }
+        return isTaken;
     }
 }

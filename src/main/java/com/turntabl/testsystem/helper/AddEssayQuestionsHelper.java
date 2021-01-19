@@ -13,13 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AddEssayQuestionsHelper {
-    public static String TYPE = "text/csv";
-    public static boolean hasCSVFormat(MultipartFile file) {
-        if (!TYPE.equals(file.getContentType())) {
-            return false;
-        }
-        return true;
-    }
     public static List<EssayQuestionRequest> csvToQuestions(InputStream is) {
         try (BufferedReader fileReader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
              CSVParser csvParser = new CSVParser(fileReader,

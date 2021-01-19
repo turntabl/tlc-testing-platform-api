@@ -52,7 +52,6 @@ public class AddCodeSnippetSQuestionService {
         AtomicInteger total_record_inserted = new AtomicInteger();
         AddEssayQuestionResponse addEssayQuestionResponse = new AddEssayQuestionResponse();
         List<EssayQuestionDetails> essayQuestionDetails = new ArrayList<>();
-        if(AddStudentsCSVHelper.hasCSVFormat(file)){
             try {
                 essayQuestionDetails = AddEssayQuestionsHelper.csvToQuestions(file.getInputStream()).stream()
                         .map(essayQuestionRequest -> {
@@ -71,7 +70,6 @@ public class AddCodeSnippetSQuestionService {
             } catch (IOException e) {
                 throw new RuntimeException("fail to store csv data: " + e.getMessage());
             }
-        }
         addEssayQuestionResponse.setAtomicInteger(total_record_inserted);
         addEssayQuestionResponse.setEssayQuestionDetails(essayQuestionDetails);
         return addEssayQuestionResponse;

@@ -78,12 +78,10 @@ public class User {
 
     public void addCourse(Course course){
         this.courses.add(course);
-        course.setUser(this);
     }
 
     public void addTest(Test test){
         this.tests.add(test);
-        test.setUser(this);
     }
 
     public String getFirst_name() {

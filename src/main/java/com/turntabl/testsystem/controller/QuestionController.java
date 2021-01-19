@@ -180,7 +180,7 @@ import java.util.stream.Collectors;
         public ResponseEntity<ResponseMessage> uploadMultipleChoiceQuestions(@RequestPart("file") MultipartFile file, @RequestParam(value = "test_id") String test_id) {
             String message = "";
             AddQuestionsResponse addQuestionsResponse;
-            if (AddMultipleChoiceQuestionsCSVHelper.hasCSVFormat(file)) {
+            if (!file.isEmpty()) {
                 try {
                     addQuestionsResponse = addMultipleChoiceQuestionsCSVService.save(file, Long.parseLong(test_id));
                     message = "Uploaded the file successfully: " + file.getOriginalFilename();
@@ -190,14 +190,14 @@ import java.util.stream.Collectors;
                     return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage<>(message, 203, null));
                 }
             }
-            message = "Please upload an excel or csv file!";
+            message = "Please select a file.";
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage<>(message, 203, null));
         }
         @PostMapping(value = "/questions/essay/upload", consumes = {"multipart/form-data"})
         public ResponseEntity<ResponseMessage> uploadEssayQuestions(@RequestPart("file") MultipartFile file, @RequestParam(value = "test_id") String test_id) {
         String message = "";
         AddEssayQuestionResponse addEssayQuestionResponse;
-        if (AddEssayQuestionsHelper.hasCSVFormat(file)) {
+        if (!file.isEmpty()) {
             try {
                 addEssayQuestionResponse = addEssayQuestionsService.save(file, Long.parseLong(test_id));
                 message = "Uploaded the file successfully: " + file.getOriginalFilename();
@@ -214,7 +214,7 @@ import java.util.stream.Collectors;
         public ResponseEntity<ResponseMessage> uploadCodeSnippetQuestions(@RequestPart("file") MultipartFile file, @RequestParam(value = "test_id") String test_id) {
             String message = "";
             AddEssayQuestionResponse addEssayQuestionResponse;
-            if (AddEssayQuestionsHelper.hasCSVFormat(file)) {
+            if (!file.isEmpty()) {
                 try {
                     addEssayQuestionResponse = addCodeSnippetSQuestionService.save(file, Long.parseLong(test_id));
                     message = "Uploaded the file successfully: " + file.getOriginalFilename();

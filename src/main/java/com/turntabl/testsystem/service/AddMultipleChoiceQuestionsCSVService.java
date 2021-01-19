@@ -53,7 +53,6 @@ public class AddMultipleChoiceQuestionsCSVService {
         AtomicInteger total_record_inserted = new AtomicInteger();
         AddQuestionsResponse addQuestionsResponse = new AddQuestionsResponse();
         List<QuestionDetails> questions = new ArrayList<>();
-        if(AddStudentsCSVHelper.hasCSVFormat(file)){
             try {
                 questions=AddMultipleChoiceQuestionsCSVHelper.csvToQuestions(file.getInputStream()).stream()
                         .map(questionRequest -> {
@@ -92,7 +91,6 @@ public class AddMultipleChoiceQuestionsCSVService {
             } catch (IOException e) {
                 throw new RuntimeException("fail to store csv data: " + e.getMessage());
             }
-        }
         addQuestionsResponse.setAtomicInteger(total_record_inserted);
         addQuestionsResponse.setQuestions(questions);
         return addQuestionsResponse;
